@@ -1,4 +1,5 @@
-﻿using ServerCore;
+﻿using ServerCore.Log;
+using ServerCore.Network;
 using System.Net;
 
 namespace ServerMain;
@@ -7,6 +8,8 @@ public class Program
 {
     static void Main(string[] args)
     {
+        LogHandler.SetLogManager(new LogManager());
+
         string host = Dns.GetHostName();
         IPHostEntry entry = Dns.GetHostEntry(host);
         IPAddress address = entry.AddressList[0];

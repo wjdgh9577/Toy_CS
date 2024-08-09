@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServerCore.Log;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -6,7 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServerCore;
+namespace ServerCore.Network;
 
 public class Listener
 {
@@ -41,7 +42,7 @@ public class Listener
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
+            LogHandler.LogError(LogCode.EXCEPTION, ex.ToString());
             RegisterAccept(args);
         }
     }
@@ -61,12 +62,12 @@ public class Listener
             }
             else
             {
-                Console.WriteLine($"SocketError: {args.SocketError.ToString()}");
+                LogHandler.LogError(LogCode.SOCKET_ERROR, args.SocketError.ToString());
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
+            LogHandler.LogError(LogCode.EXCEPTION, ex.ToString());
         }
         finally
         {

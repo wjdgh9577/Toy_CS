@@ -1,0 +1,12 @@
+D:\Runningboy\Unity\Toy_CS\Server\ServerCore\bin\Debug\net8.0\ServerCore.deps.json
+D:\Runningboy\Unity\Toy_CS\Server\ServerCore\bin\Debug\net8.0\ServerCore.dll
+D:\Runningboy\Unity\Toy_CS\Server\ServerCore\bin\Debug\net8.0\ServerCore.pdb
+D:\Runningboy\Unity\Toy_CS\Server\ServerCore\obj\Debug\net8.0\ServerCore.GeneratedMSBuildEditorConfig.editorconfig
+D:\Runningboy\Unity\Toy_CS\Server\ServerCore\obj\Debug\net8.0\ServerCore.AssemblyInfoInputs.cache
+D:\Runningboy\Unity\Toy_CS\Server\ServerCore\obj\Debug\net8.0\ServerCore.AssemblyInfo.cs
+D:\Runningboy\Unity\Toy_CS\Server\ServerCore\obj\Debug\net8.0\ServerCore.csproj.CoreCompileInputs.cache
+D:\Runningboy\Unity\Toy_CS\Server\ServerCore\obj\Debug\net8.0\ServerCore.sourcelink.json
+D:\Runningboy\Unity\Toy_CS\Server\ServerCore\obj\Debug\net8.0\ServerCore.dll
+D:\Runningboy\Unity\Toy_CS\Server\ServerCore\obj\Debug\net8.0\refint\ServerCore.dll
+D:\Runningboy\Unity\Toy_CS\Server\ServerCore\obj\Debug\net8.0\ServerCore.pdb
+D:\Runningboy\Unity\Toy_CS\Server\ServerCore\obj\Debug\net8.0\ref\ServerCore.dll

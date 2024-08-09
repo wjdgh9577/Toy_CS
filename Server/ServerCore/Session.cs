@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using ServerCore.Log;
+using ServerCore.Network;
 
 namespace ServerCore;
 
@@ -67,7 +69,7 @@ public abstract class Session
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
+            LogHandler.LogError(LogCode.EXCEPTION, ex.ToString());
             RegisterRecv(args);
         }
     }
@@ -95,7 +97,7 @@ public abstract class Session
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
+            LogHandler.LogError(LogCode.EXCEPTION, ex.ToString());
         }
         finally
         {
