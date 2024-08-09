@@ -12,43 +12,35 @@ public static class LogHandler
 
     public static void SetLogManager(LogBase manager) => Instance = manager;
 
-    public static void Log(LogCode code, params object[] args) => Instance?.Log(LogImportance.NONE, code, args);
-    public static void Log(LogCode code, params (object, object)[] args) => Instance?.Log(LogImportance.NONE, code, args);
-    public static void LogWarning(LogCode code, params object[] args) => Instance?.Log(LogImportance.WARNING, code, args);
-    public static void LogWarning(LogCode code, params (object, object)[] args) => Instance?.Log(LogImportance.WARNING, code, args);
-    public static void LogError(LogCode code, params object[] args) => Instance?.Log(LogImportance.ERROR, code, args);
-    public static void LogError(LogCode code, params (object, object)[] args) => Instance?.Log(LogImportance.ERROR, code, args);
+    public static void Log(LogCode code, params object[] args) => Instance?.Log(LogType.NONE, code, args);
+    public static void Log(LogCode code, params (object, object)[] args) => Instance?.Log(LogType.NONE, code, args);
+    public static void LogWarning(LogCode code, params object[] args) => Instance?.Log(LogType.WARNING, code, args);
+    public static void LogWarning(LogCode code, params (object, object)[] args) => Instance?.Log(LogType.WARNING, code, args);
+    public static void LogError(LogCode code, params object[] args) => Instance?.Log(LogType.ERROR, code, args);
+    public static void LogError(LogCode code, params (object, object)[] args) => Instance?.Log(LogType.ERROR, code, args);
 }
 
 public abstract class LogBase
 {
-    public abstract void Log(LogImportance importance, LogCode code, params object[] args);
-    public abstract void Log(LogImportance importance, LogCode code, params (object key, object value)[] args);
+    public abstract void Log(LogType type, LogCode code, params object[] args);
+    public abstract void Log(LogType type, LogCode code, params (object key, object value)[] args);
 
-    protected (string importance, string code) GetCommonMessage(LogImportance importance, LogCode code)
+    protected (string importance, string code) GetCommonMessage(LogType type, LogCode code)
     {
         string importanceMessage = "";
-        switch (importance)
+        switch (type)
         {
-            case LogImportance.NONE:
+            case LogType.NONE:
                 importanceMessage = "Level: 1";
                 break;
-            case LogImportance.WARNING:
+            case LogType.WARNING:
                 importanceMessage = "Level: 2";
                 break;
-            case LogImportance.ERROR:
+            case LogType.ERROR:
                 importanceMessage = "Level: 3";
                 break;
         }
 
-        string codeMessage = "";
-        switch (code)
-        {
-            case LogCode.SOCKET_ERROR:
-                codeMessage = "Socket Error!";
-                break;
-        }
-
-        return (importanceMessage, codeMessage);
+        return (importanceMessage, code.ToString());
     }
 }

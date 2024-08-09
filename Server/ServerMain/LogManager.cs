@@ -13,13 +13,13 @@ namespace ServerMain;
 /// </summary>
 public sealed class LogManager : LogBase
 {
-    public override void Log(LogImportance importance, LogCode code, params object[] args)
+    public override void Log(LogType type, LogCode code, params object[] args)
     {
         // TODO: DB 연동
 
         StringBuilder sb = new StringBuilder();
 
-        var common = GetCommonMessage(importance, code);
+        var common = GetCommonMessage(type, code);
 
         sb.Append($"{common.importance} / {common.code}");
         foreach (var arg in args)
@@ -28,13 +28,13 @@ public sealed class LogManager : LogBase
         Console.WriteLine(sb.ToString());
     }
 
-    public override void Log(LogImportance importance, LogCode code, params (object key, object value)[] args)
+    public override void Log(LogType type, LogCode code, params (object key, object value)[] args)
     {
         // TODO: DB 연동
 
         StringBuilder sb = new StringBuilder();
 
-        var common = GetCommonMessage(importance, code);
+        var common = GetCommonMessage(type, code);
 
         sb.Append($"{common.importance} / {common.code}");
         foreach (var arg in args)

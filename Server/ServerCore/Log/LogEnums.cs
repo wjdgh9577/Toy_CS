@@ -12,7 +12,7 @@ public enum LogCode
     EXCEPTION,
 }
 
-public enum LogImportance
+public enum LogType
 {
     NONE,
     WARNING,
