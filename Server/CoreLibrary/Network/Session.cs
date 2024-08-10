@@ -11,27 +11,35 @@ namespace CoreLibrary.Network;
 public abstract class Session
 {
     Socket _socket;
+
+    SendBuffer _sendBuffer;
     RecvBuffer _recvBuffer;
 
-    int _disconnected;
+    SocketAsyncEventArgs _sendArgs = new SocketAsyncEventArgs();
+    SocketAsyncEventArgs _recvArgs = new SocketAsyncEventArgs();
+
+    int _disconnected = 0;
+
+    object _lock = new object();
 
     public abstract void OnConnected();
     public abstract void OnDisconnected();
-    public abstract void OnSend();
+    public abstract void OnSend(int BytesTransferred);
     public abstract void OnRecv(ArraySegment<byte> buffer);
 
-    public void Init(Socket socket)
+    public void Init(Socket socket, int recvBufferSize = 65535)
     {
         _socket = socket;
-        _recvBuffer = new RecvBuffer(65535);
 
-        _disconnected = 0;
+        _sendBuffer = new SendBuffer();
+        _recvBuffer = new RecvBuffer(recvBufferSize);
 
         OnConnected();
 
-        SocketAsyncEventArgs args = new SocketAsyncEventArgs();
-        args.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
-        RegisterRecv(args);
+        _sendArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendComplete);
+        _recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
+
+        RegisterRecv();
     }
 
     public void Disconnect()
@@ -46,30 +54,95 @@ public abstract class Session
     }
 
     #region Send
-    #endregion
 
-    #region Recv
+    public void Send(ArraySegment<byte> data)
+    {
+        lock (_lock)
+        {
+            _sendBuffer.Add(data);
 
-    void RegisterRecv(SocketAsyncEventArgs args)
+            if (_sendBuffer.BufferList.Count > 0)
+            {
+                RegisterSend();
+            }
+        }
+    }
+
+    void RegisterSend()
     {
         if (_disconnected == 1)
             return;
 
-        _recvBuffer.Clear();
-        args.SetBuffer(_recvBuffer.WriteSegment);
+        _sendArgs.BufferList = _sendBuffer.BufferList;
 
         try
         {
-            bool pending = _socket.ReceiveAsync(args);
+            bool pending = _socket.SendAsync(_sendArgs);
             if (pending == false)
             {
-                OnRecvCompleted(null, args);
+                OnSendComplete(null, _sendArgs);
             }
         }
         catch (Exception ex)
         {
             LogHandler.LogError(LogCode.EXCEPTION, ex.ToString());
-            RegisterRecv(args);
+        }
+    }
+
+    void OnSendComplete(object? sender, SocketAsyncEventArgs args)
+    {
+        if (_disconnected == 1)
+            return;
+
+        if (args.BytesTransferred == 0 || args.SocketError != SocketError.Success)
+        {
+            Disconnect();
+            return;
+        }
+
+        try
+        {
+            lock (_lock)
+            {
+                _sendArgs.BufferList = null;
+
+                OnSend(args.BytesTransferred);
+
+                bool pending = _sendBuffer.CheckPending();
+                if (pending)
+                    RegisterSend();
+            }
+        }
+        catch (Exception ex)
+        {
+            LogHandler.LogError(LogCode.EXCEPTION, ex.ToString());
+        }
+    }
+
+    #endregion
+
+    #region Recv
+
+    void RegisterRecv()
+    {
+        if (_disconnected == 1)
+            return;
+
+        _recvBuffer.Clear();
+        _recvArgs.SetBuffer(_recvBuffer.WriteSegment);
+
+        try
+        {
+            bool pending = _socket.ReceiveAsync(_recvArgs);
+            if (pending == false)
+            {
+                OnRecvCompleted(null, _recvArgs);
+            }
+        }
+        catch (Exception ex)
+        {
+            LogHandler.LogError(LogCode.EXCEPTION, ex.ToString());
+            RegisterRecv();
         }
     }
 
@@ -100,7 +173,7 @@ public abstract class Session
         }
         finally
         {
-            RegisterRecv(args);
+            RegisterRecv();
         }
     }
 
@@ -127,4 +200,14 @@ public abstract class Session
     }
 
     #endregion
+}
+
+public abstract class TcpSession : Session
+{
+
+}
+
+public abstract class UdpSession : Session
+{
+
 }

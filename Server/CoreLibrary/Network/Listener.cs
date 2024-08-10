@@ -12,6 +12,7 @@ namespace CoreLibrary.Network;
 public class Listener
 {
     Socket _listenSocket;
+
     Func<Session> _sessionFunc;
 
     public void Init(IPEndPoint endPoint, Func<Session> sessionFunc, int backlog = int.MaxValue)
