@@ -16,14 +16,16 @@ public class Program
         IPEndPoint endPoint = new IPEndPoint(address, 7777);
 
         Listener listener = new Listener();
-        //listener.Init(endPoint, () =>
-        //{
-        //    return new Session();
-        //});
+
+        listener.Init(endPoint, () =>
+        {
+            return null;
+        });
+
+        LogHandler.Log(LogCode.CONSOLE, "Listen...");
 
         while (true)
         {
-            LogHandler.Log(LogCode.CONSOLE, "Listen...");
             Thread.Sleep(1000);
         }
     }
