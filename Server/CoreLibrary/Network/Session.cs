@@ -4,10 +4,9 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using ServerCore.Log;
-using ServerCore.Network;
+using CoreLibrary.Log;
 
-namespace ServerCore;
+namespace CoreLibrary.Network;
 
 public abstract class Session
 {

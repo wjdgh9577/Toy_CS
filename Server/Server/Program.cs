@@ -1,8 +1,8 @@
-﻿using ServerCore.Log;
-using ServerCore.Network;
+﻿using CoreLibrary.Log;
+using CoreLibrary.Network;
 using System.Net;
 
-namespace ServerMain;
+namespace Server;
 
 public class Program
 {
@@ -23,7 +23,8 @@ public class Program
 
         while (true)
         {
-            Thread.Sleep(0);
+            LogHandler.Log(LogCode.CONSOLE, "Listen...");
+            Thread.Sleep(1000);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using ServerCore.Log;
+﻿using CoreLibrary.Log;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServerCore.Network;
+namespace CoreLibrary.Network;
 
 public class Listener
 {
