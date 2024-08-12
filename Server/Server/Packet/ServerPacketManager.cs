@@ -37,4 +37,21 @@ public class PacketManager
         if (_handlers.TryGetValue(id, out var handler))
             handler.Invoke(session, packet);
 	}
+
+	public ArraySegment<byte> Serialize(IMessage message)
+	{
+		string msgName = message.Descriptor.Name.Replace("_", string.Empty);
+		MsgId msgId = (MsgId)Enum.Parse(typeof(MsgId), msgName);
+
+        ushort size = (ushort)message.CalculateSize();
+		ushort fullSize = (ushort)(size + sizeof(ushort) * 2);
+        ushort id = (ushort)msgId;
+
+		byte[] buffer = new byte[fullSize];
+		Array.Copy(BitConverter.GetBytes(fullSize), 0, buffer, 0, sizeof(ushort));
+		Array.Copy(BitConverter.GetBytes(id), 0, buffer, sizeof(ushort), sizeof(ushort));
+		Array.Copy(message.ToByteArray(), 0, buffer, sizeof(ushort) * 2, size);
+
+		return new ArraySegment<byte>(buffer, 0, fullSize);
+	}
 }
