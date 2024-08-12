@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TestClient;
 
-public class LogManager : LogBase
+public sealed class LogManager : LogBase
 {
     public override void Log(LogType type, LogCode code, params object[] args)
     {

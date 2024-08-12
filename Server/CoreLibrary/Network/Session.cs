@@ -8,54 +8,32 @@ using CoreLibrary.Log;
 
 namespace CoreLibrary.Network;
 
-public abstract class Session
+public abstract class SessionBase
 {
-    Socket _socket;
+    protected Socket _socket;
 
-    SendBuffer _sendBuffer;
-    RecvBuffer _recvBuffer;
+    protected SendBuffer _sendBuffer;
+    protected RecvBuffer _recvBuffer;
 
-    SocketAsyncEventArgs _sendArgs = new SocketAsyncEventArgs();
-    SocketAsyncEventArgs _recvArgs = new SocketAsyncEventArgs();
+    protected SocketAsyncEventArgs _sendArgs = new SocketAsyncEventArgs();
+    protected SocketAsyncEventArgs _recvArgs = new SocketAsyncEventArgs();
 
-    int _disconnected = 0;
+    protected int _disconnected = 0;
 
     object _lock = new object();
 
-    public abstract void OnConnected();
-    public abstract void OnDisconnected();
+    public int SessionId { get; set; }
+
     public abstract void OnSend(int BytesTransferred);
     public abstract void OnRecv(ArraySegment<byte> buffer);
 
-    public void Init(Socket socket, int recvBufferSize = 65535)
-    {
-        _socket = socket;
+    public virtual void Init(Socket socket, int recvBufferSize = 65535) { }
 
-        _sendBuffer = new SendBuffer();
-        _recvBuffer = new RecvBuffer(recvBufferSize);
-
-        OnConnected();
-
-        _sendArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendComplete);
-        _recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
-
-        RegisterRecv();
-    }
-
-    public void Disconnect()
-    {
-        if (Interlocked.Exchange(ref _disconnected, 1) == 1)
-            return;
-
-        OnDisconnected();
-
-        _socket.Shutdown(SocketShutdown.Both);
-        _socket.Close();
-    }
+    public virtual void Disconnect() { }
 
     #region Send
 
-    public void Send(ArraySegment<byte> data)
+    protected void Send(ArraySegment<byte> data)
     {
         lock (_lock)
         {
@@ -68,7 +46,7 @@ public abstract class Session
         }
     }
 
-    void RegisterSend()
+    protected void RegisterSend()
     {
         if (_disconnected == 1)
             return;
@@ -89,7 +67,7 @@ public abstract class Session
         }
     }
 
-    void OnSendComplete(object? sender, SocketAsyncEventArgs args)
+    protected void OnSendComplete(object? sender, SocketAsyncEventArgs args)
     {
         if (_disconnected == 1)
             return;
@@ -123,7 +101,7 @@ public abstract class Session
 
     #region Recv
 
-    void RegisterRecv()
+    protected void RegisterRecv()
     {
         if (_disconnected == 1)
             return;
@@ -146,7 +124,7 @@ public abstract class Session
         }
     }
 
-    void OnRecvCompleted(object? sender, SocketAsyncEventArgs args)
+    protected void OnRecvCompleted(object? sender, SocketAsyncEventArgs args)
     {
         if (_disconnected == 1)
             return;
@@ -202,12 +180,39 @@ public abstract class Session
     #endregion
 }
 
-public abstract class TcpSession : Session
+public abstract class TcpSession : SessionBase
 {
+    public abstract void OnConnected();
+    public abstract void OnDisconnected();
 
+    public sealed override void Init(Socket socket, int recvBufferSize = 65535)
+    {
+        _socket = socket;
+
+        _sendBuffer = new SendBuffer();
+        _recvBuffer = new RecvBuffer(recvBufferSize);
+
+        OnConnected();
+
+        _sendArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendComplete);
+        _recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
+
+        RegisterRecv();
+    }
+
+    public sealed override void Disconnect()
+    {
+        if (Interlocked.Exchange(ref _disconnected, 1) == 1)
+            return;
+
+        OnDisconnected();
+
+        _socket.Shutdown(SocketShutdown.Both);
+        _socket.Close();
+    }
 }
 
-public abstract class UdpSession : Session
+public abstract class UdpSession : SessionBase
 {
 
 }
