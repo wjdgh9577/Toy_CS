@@ -1,0 +1,22 @@
+syntax = "proto3";
+package Protocol;
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Google.Protobuf.Protocol";
+
+enum MsgId
+{
+	S_PING = 0;
+	C_PONG = 1;
+}
+
+message S_Ping
+{
+
+}
+
+message C_Pong
+{
+
+}
