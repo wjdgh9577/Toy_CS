@@ -13,12 +13,12 @@ public class Connector
 {
     Socket _connectSocket;
 
-    Func<Session> _sessionFunc;
+    Action<SocketAsyncEventArgs> _onConnected;
 
-    public void Init(IPEndPoint endPoint, Func<Session> sessionFunc)
+    public void Init(IPEndPoint endPoint, Action<SocketAsyncEventArgs> onConnected)
     {
         _connectSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-        _sessionFunc = sessionFunc;
+        _onConnected = onConnected;
 
         SocketAsyncEventArgs args = new SocketAsyncEventArgs();
         args.Completed += new EventHandler<SocketAsyncEventArgs>(OnCompleted);
@@ -48,12 +48,7 @@ public class Connector
         {
             if (args.SocketError == SocketError.Success)
             {
-                Socket? connectSocket = args.ConnectSocket;
-                Session? session = _sessionFunc?.Invoke();
-                if (connectSocket != null && session != null)
-                {
-                    session.Init(connectSocket);
-                }
+                _onConnected?.Invoke(args);
             }
             else
             {

@@ -13,12 +13,12 @@ public class Listener
 {
     Socket _listenSocket;
 
-    Func<Session> _sessionFunc;
+    Action<SocketAsyncEventArgs> _onAccepted;
 
-    public void Init(IPEndPoint endPoint, Func<Session> sessionFunc, int backlog = int.MaxValue)
+    public void Init(IPEndPoint endPoint, Action<SocketAsyncEventArgs> onAccepted, int backlog = int.MaxValue)
     {
         _listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-        _sessionFunc = sessionFunc;
+        _onAccepted = onAccepted;
 
         _listenSocket.Bind(endPoint);
 
@@ -54,12 +54,7 @@ public class Listener
         {
             if (args.SocketError == SocketError.Success)
             {
-                Socket? acceptSocket = args.AcceptSocket;
-                Session? session = _sessionFunc?.Invoke();
-                if (acceptSocket != null && session != null)
-                {
-                    session.Init(acceptSocket);
-                }
+                _onAccepted?.Invoke(args);
             }
             else
             {

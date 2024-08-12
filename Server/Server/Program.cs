@@ -1,6 +1,8 @@
 ﻿using CoreLibrary.Log;
 using CoreLibrary.Network;
+using Server.Session;
 using System.Net;
+using System.Net.Sockets;
 
 namespace Server;
 
@@ -17,9 +19,14 @@ public class Program
 
         Listener listener = new Listener();
 
-        listener.Init(endPoint, () =>
+        listener.Init(endPoint, args =>
         {
-            return null;
+            Socket? acceptSocket = args.AcceptSocket;
+            SessionBase? session = SessionManager.Instance.Generate<GameSession>();
+            if (acceptSocket != null && session != null)
+            {
+                session.Init(acceptSocket);
+            }
         });
 
         LogHandler.Log(LogCode.CONSOLE, "Listen...");

@@ -1,6 +1,8 @@
 ﻿using CoreLibrary.Log;
 using CoreLibrary.Network;
 using System.Net;
+using System.Net.Sockets;
+using TestClient.Session;
 
 namespace TestClient;
 
@@ -19,9 +21,14 @@ internal class Program
 
         Connector connector = new Connector();
 
-        connector.Init(endPoint, () =>
+        connector.Init(endPoint, args =>
         {
-            return null;
+            Socket? connectSocket = args.ConnectSocket;
+            SessionBase? session = SessionManager.Instance.Generate<GameSession>();
+            if (connectSocket != null && session != null)
+            {
+                session.Init(connectSocket);
+            }
         });
 
         while (true)
