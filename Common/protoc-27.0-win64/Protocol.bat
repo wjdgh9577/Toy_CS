@@ -21,19 +21,19 @@ if exist "Protocol.cs" (
 )
 
 :client_packet
-if exist "ClientPacketManager.cs" (
-:: 	XCOPY /Y ClientPacketManager.cs %CLIENT_PACKET_PATH% >nul
-	XCOPY /Y ClientPacketManager.cs %DUMMY_PACKET_PATH% >nul
-	DEL ClientPacketManager.cs
+if exist "ClientPacketHandler.cs" (
+:: 	XCOPY /Y ClientPacketHandler.cs %CLIENT_PACKET_PATH% >nul
+	XCOPY /Y ClientPacketHandler.cs %DUMMY_PACKET_PATH% >nul
+	DEL ClientPacketHandler.cs
 ) else (
 echo 颇老 积己吝...
  	timeout /t 1 /nobreak >nul
  	goto :client_packet
 )
 :server_packet
-if exist "ServerPacketManager.cs" (
-	XCOPY /Y ServerPacketManager.cs %SERVER_PACKET_PATH% >nul
-	DEL ServerPacketManager.cs
+if exist "ServerPacketHandler.cs" (
+	XCOPY /Y ServerPacketHandler.cs %SERVER_PACKET_PATH% >nul
+	DEL ServerPacketHandler.cs
 ) else (
 	echo 颇老 积己吝...
 	timeout /t 1 /nobreak >nul

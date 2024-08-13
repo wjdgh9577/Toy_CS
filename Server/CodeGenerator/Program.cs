@@ -40,7 +40,7 @@ public class Program
                     msgName += FirstCharToUpper(word);
 
                 string packetName = $"S_{msgName.Substring(1)}";
-                clientRegister += string.Format(PacketManagerFormat.managerRegisterFormat, msgName, packetName);
+                clientRegister += string.Format(PacketHandlerFormat.handlerRegisterFormat, msgName, packetName);
             }
             else if (name.StartsWith("C_"))
             {
@@ -51,14 +51,14 @@ public class Program
                     msgName += FirstCharToUpper(word);
 
                 string packetName = $"C_{msgName.Substring(1)}";
-                serverRegister += string.Format(PacketManagerFormat.managerRegisterFormat, msgName, packetName);
+                serverRegister += string.Format(PacketHandlerFormat.handlerRegisterFormat, msgName, packetName);
             }
         }
 
-        string clientManagerText = string.Format(PacketManagerFormat.managerFormat, clientRegister);
-        File.WriteAllText("ClientPacketManager.cs", clientManagerText);
-        string serverManagerText = string.Format(PacketManagerFormat.managerFormat, serverRegister);
-        File.WriteAllText("ServerPacketManager.cs", serverManagerText);
+        string clientHandlerText = string.Format(PacketHandlerFormat.handlerFormat, clientRegister);
+        File.WriteAllText("ClientPacketHandler.cs", clientHandlerText);
+        string serverHandlerText = string.Format(PacketHandlerFormat.handlerFormat, serverRegister);
+        File.WriteAllText("ServerPacketHandler.cs", serverHandlerText);
     }
 
     public static string FirstCharToUpper(string input)

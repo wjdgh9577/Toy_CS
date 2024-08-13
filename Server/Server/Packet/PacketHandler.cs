@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public class PacketHandler
+public partial class PacketHandler
 {
-    public static void HandleCPong(SessionBase session, IMessage message)
+    void HandleCPong(SessionBase session, IMessage message)
     {
 
     }

@@ -8,9 +8,9 @@ namespace CoreLibrary.Log;
 
 public static class LogHandler
 {
-    static LogBase? Instance;
+    static LogModuleBase? Instance;
 
-    public static void SetLogManager(LogBase manager) => Instance = manager;
+    public static void SetModule(LogModuleBase module) => Instance = module;
 
     public static void Log(LogCode code, params object[] args) => Instance?.Log(LogType.NONE, code, args);
     public static void Log(LogCode code, params (object, object)[] args) => Instance?.Log(LogType.NONE, code, args);
@@ -20,12 +20,12 @@ public static class LogHandler
     public static void LogError(LogCode code, params (object, object)[] args) => Instance?.Log(LogType.ERROR, code, args);
 }
 
-public abstract class LogBase
+public abstract class LogModuleBase
 {
     public abstract void Log(LogType type, LogCode code, params object[] args);
     public abstract void Log(LogType type, LogCode code, params (object key, object value)[] args);
 
-    protected (string importance, string code) GetCommonMessage(LogType type, LogCode code)
+    protected virtual (string importance, string code) GetCommonMessage(LogType type, LogCode code)
     {
         string importanceMessage = "";
         switch (type)

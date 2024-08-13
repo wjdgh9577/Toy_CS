@@ -1,16 +1,13 @@
-﻿using System;
+﻿using CoreLibrary.Log;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CoreLibrary.Log;
 
-namespace Server;
+namespace TestClient;
 
-/// <summary>
-/// LogHandler를 통해 접근
-/// </summary>
-public sealed class LogManager : LogBase
+public sealed class LogModule : LogModuleBase
 {
     public override void Log(LogType type, LogCode code, params object[] args)
     {
@@ -28,7 +25,7 @@ public sealed class LogManager : LogBase
         }
         else
         {
-            // TODO: DB 연동
+            // TODO: log 파일 출력
 
             StringBuilder sb = new StringBuilder();
 
@@ -58,7 +55,7 @@ public sealed class LogManager : LogBase
         }
         else
         {
-            // TODO: DB 연동
+            // TODO: log 파일 출력
 
             StringBuilder sb = new StringBuilder();
 

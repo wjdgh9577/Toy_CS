@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public class PacketHandler
+public partial class PacketHandler
 {
-    public static void HandleSPing(SessionBase session, IMessage message)
+    void HandleSPing(SessionBase session, IMessage message)
     {
 
     }

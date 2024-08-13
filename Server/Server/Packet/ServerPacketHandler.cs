@@ -2,11 +2,11 @@ using CoreLibrary.Network;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
 
-public class PacketManager
+public partial class PacketHandler
 {
-	public static PacketManager Instance { get; private set; } = new PacketManager();
+	public static PacketHandler Instance { get; private set; } = new PacketHandler();
 
-	PacketManager()
+	PacketHandler()
 	{
 		Register();
 	}
@@ -16,8 +16,8 @@ public class PacketManager
 		
 	public void Register()
 	{		
-		_deserializers.Add((ushort)MsgId.SPing, Deserialize<S_Ping>);
-        _handlers.Add((ushort)MsgId.SPing, PacketHandler.HandleSPing);
+		_deserializers.Add((ushort)MsgId.CPong, Deserialize<C_Pong>);
+        _handlers.Add((ushort)MsgId.CPong, HandleCPong);
 	}
 
 	public void HandlePacket(SessionBase session, ArraySegment<byte> buffer)

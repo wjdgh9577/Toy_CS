@@ -1,56 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CodeGenerator;
-
-internal class PacketHandlerFormat
-{
-    // {0} 패킷 등록
-    public static string handlerFormat =
-@"using CoreLibrary.Network;
+using CoreLibrary.Network;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
 
 public partial class PacketHandler
-{{
-	public static PacketHandler Instance {{ get; private set; }} = new PacketHandler();
+{
+	public static PacketHandler Instance { get; private set; } = new PacketHandler();
 
 	PacketHandler()
-	{{
+	{
 		Register();
-	}}
+	}
 
 	Dictionary<ushort, Action<SessionBase, ushort, ArraySegment<byte>>> _deserializers = new Dictionary<ushort, Action<SessionBase, ushort, ArraySegment<byte>>>();
     Dictionary<ushort, Action<SessionBase, IMessage>> _handlers = new Dictionary<ushort, Action<SessionBase, IMessage>>();
 		
 	public void Register()
-	{{{0}
-	}}
+	{		
+		_deserializers.Add((ushort)MsgId.SPing, Deserialize<S_Ping>);
+        _handlers.Add((ushort)MsgId.SPing, HandleSPing);
+	}
 
 	public void HandlePacket(SessionBase session, ArraySegment<byte> buffer)
-	{{
+	{
 		ushort size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
         ushort id = BitConverter.ToUInt16(buffer.Array, buffer.Offset + sizeof(ushort));
 
 		if (_deserializers.TryGetValue(id, out var deserializer))
             deserializer.Invoke(session, id, buffer);
-	}}
+	}
 
 	void Deserialize<T>(SessionBase session, ushort id, ArraySegment<byte> buffer) where T : IMessage, new()
-	{{
+	{
 		T packet = new T();
         packet.MergeFrom(buffer.Array, buffer.Offset + sizeof(ushort) * 2, buffer.Count - sizeof(ushort) * 2);
 
         if (_handlers.TryGetValue(id, out var handler))
             handler.Invoke(session, packet);
-	}}
+	}
 
 	public ArraySegment<byte> Serialize(IMessage message)
-	{{
-		string msgName = message.Descriptor.Name.Replace(""_"", string.Empty);
+	{
+		string msgName = message.Descriptor.Name.Replace("_", string.Empty);
 		MsgId msgId = (MsgId)Enum.Parse(typeof(MsgId), msgName);
 
         ushort size = (ushort)message.CalculateSize();
@@ -63,14 +53,5 @@ public partial class PacketHandler
 		Array.Copy(message.ToByteArray(), 0, buffer, sizeof(ushort) * 2, size);
 
 		return new ArraySegment<byte>(buffer, 0, fullSize);
-	}}
-}}";
-
-    // {0} MsgId
-    // {1} 패킷 이름
-    public static string handlerRegisterFormat =
-@"		
-		_deserializers.Add((ushort)MsgId.{0}, Deserialize<{1}>);
-        _handlers.Add((ushort)MsgId.{0}, Handle{0});";
-
+	}
 }

@@ -10,7 +10,7 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        LogHandler.SetLogManager(new LogManager());
+        LogHandler.SetModule(new LogModule());
 
         Thread.Sleep(3000);
 

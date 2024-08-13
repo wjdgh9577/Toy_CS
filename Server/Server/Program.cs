@@ -10,7 +10,7 @@ public class Program
 {
     static void Main(string[] args)
     {
-        LogHandler.SetLogManager(new LogManager());
+        LogHandler.SetModule(new LogModule());
 
         string host = Dns.GetHostName();
         IPHostEntry entry = Dns.GetHostEntry(host);
@@ -22,7 +22,8 @@ public class Program
         listener.Init(endPoint, args =>
         {
             Socket? acceptSocket = args.AcceptSocket;
-            SessionBase? session = SessionManager.Instance.Generate<GameSession>();
+            int suid = SessionManager.Instance.NewSUID;
+            SessionBase? session = SessionManager.Instance.Generate<GameSession>(suid);
             if (acceptSocket != null && session != null)
             {
                 session.Init(acceptSocket);
