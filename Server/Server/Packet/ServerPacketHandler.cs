@@ -4,7 +4,7 @@ using Google.Protobuf.Protocol;
 
 public partial class PacketHandler
 {
-	public static PacketHandler Instance { get; private set; } = new PacketHandler();
+	static PacketHandler _instance { get; } = new PacketHandler();
 
 	PacketHandler()
 	{
@@ -14,18 +14,18 @@ public partial class PacketHandler
 	Dictionary<ushort, Action<SessionBase, ushort, ArraySegment<byte>>> _deserializers = new Dictionary<ushort, Action<SessionBase, ushort, ArraySegment<byte>>>();
     Dictionary<ushort, Action<SessionBase, IMessage>> _handlers = new Dictionary<ushort, Action<SessionBase, IMessage>>();
 		
-	public void Register()
+	void Register()
 	{		
 		_deserializers.Add((ushort)MsgId.CPong, Deserialize<C_Pong>);
         _handlers.Add((ushort)MsgId.CPong, HandleCPong);
 	}
 
-	public void HandlePacket(SessionBase session, ArraySegment<byte> buffer)
+	public static void HandlePacket(SessionBase session, ArraySegment<byte> buffer)
 	{
 		ushort size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
         ushort id = BitConverter.ToUInt16(buffer.Array, buffer.Offset + sizeof(ushort));
 
-		if (_deserializers.TryGetValue(id, out var deserializer))
+		if (_instance._deserializers.TryGetValue(id, out var deserializer))
             deserializer.Invoke(session, id, buffer);
 	}
 
@@ -38,7 +38,7 @@ public partial class PacketHandler
             handler.Invoke(session, packet);
 	}
 
-	public ArraySegment<byte> Serialize(IMessage message)
+	public static ArraySegment<byte> Serialize(IMessage message)
 	{
 		string msgName = message.Descriptor.Name.Replace("_", string.Empty);
 		MsgId msgId = (MsgId)Enum.Parse(typeof(MsgId), msgName);
