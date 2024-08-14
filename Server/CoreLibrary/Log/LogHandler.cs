@@ -13,17 +13,21 @@ public static class LogHandler
     public static void SetModule(LogModuleBase module) => Instance = module;
 
     public static void Log(LogCode code, params object[] args) => Instance?.Log(LogType.NONE, code, args);
-    public static void Log(LogCode code, params (object, object)[] args) => Instance?.Log(LogType.NONE, code, args);
+    public static void Log(LogCode code, params (LogKey, object)[] args) => Instance?.Log(LogType.NONE, code, args);
+    public static void Log(LogCode code, params (string, object)[] args) => Instance?.Log(LogType.NONE, code, args);
     public static void LogWarning(LogCode code, params object[] args) => Instance?.Log(LogType.WARNING, code, args);
-    public static void LogWarning(LogCode code, params (object, object)[] args) => Instance?.Log(LogType.WARNING, code, args);
+    public static void LogWarning(LogCode code, params (LogKey, object)[] args) => Instance?.Log(LogType.WARNING, code, args);
+    public static void LogWarning(LogCode code, params (string, object)[] args) => Instance?.Log(LogType.WARNING, code, args);
     public static void LogError(LogCode code, params object[] args) => Instance?.Log(LogType.ERROR, code, args);
-    public static void LogError(LogCode code, params (object, object)[] args) => Instance?.Log(LogType.ERROR, code, args);
+    public static void LogError(LogCode code, params (LogKey, object)[] args) => Instance?.Log(LogType.ERROR, code, args);
+    public static void LogError(LogCode code, params (string, object)[] args) => Instance?.Log(LogType.ERROR, code, args);
 }
 
 public abstract class LogModuleBase
 {
     public abstract void Log(LogType type, LogCode code, params object[] args);
-    public abstract void Log(LogType type, LogCode code, params (object key, object value)[] args);
+    public abstract void Log(LogType type, LogCode code, params (LogKey key, object value)[] args);
+    public abstract void Log(LogType type, LogCode code, params (string key, object value)[] args);
 
     protected virtual (string importance, string code) GetCommonMessage(LogType type, LogCode code)
     {

@@ -42,7 +42,37 @@ public sealed class LogModule : LogModuleBase
         }
     }
 
-    public override void Log(LogType type, LogCode code, params (object key, object value)[] args)
+    public override void Log(LogType type, LogCode code, params (LogKey key, object value)[] args)
+    {
+        if (code == LogCode.CONSOLE)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            var common = GetCommonMessage(type, code);
+
+            sb.Append($"{common.importance}");
+            foreach (var arg in args)
+                sb.Append($" / ({arg.key}, {arg.value})");
+
+            Console.WriteLine(sb.ToString());
+        }
+        else
+        {
+            // TODO: DB 연동
+
+            StringBuilder sb = new StringBuilder();
+
+            var common = GetCommonMessage(type, code);
+
+            sb.Append($"{common.importance} / {common.code}");
+            foreach (var arg in args)
+                sb.Append($" / ({arg.key}, {arg.value})");
+
+            Console.WriteLine(sb.ToString());
+        }
+    }
+
+    public override void Log(LogType type, LogCode code, params (string key, object value)[] args)
     {
         if (code == LogCode.CONSOLE)
         {

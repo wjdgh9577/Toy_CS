@@ -21,3 +21,8 @@ public enum LogType
     WARNING,
     ERROR,
 }
+
+public enum LogKey
+{
+
+}
