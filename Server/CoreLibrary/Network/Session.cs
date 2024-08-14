@@ -22,7 +22,7 @@ public abstract class SessionBase
 
     object _lock = new object();
 
-    public int SessionId { get; set; }
+    public int SUID { get; set; }
 
     public abstract void OnSend(int BytesTransferred);
     public abstract void OnRecv(ArraySegment<byte> buffer);

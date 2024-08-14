@@ -10,24 +10,44 @@ namespace Server.Session;
 public class SessionManager
 {
     public static SessionManager Instance { get; } = new SessionManager();
+    SessionManager() { }
 
-    Dictionary<int, SessionBase> _sessions = new Dictionary<int, SessionBase>();
+    Dictionary<int, List<SessionBase>> _sessions = new Dictionary<int, List<SessionBase>>();
 
-    int _sessionIdGen = 0;
+    public int NewSUID => _suid++;
+    int _suid = 0;
 
     object _lock = new object();
 
-    public T Generate<T>() where T : SessionBase, new()
+    public T Generate<T>(int suid) where T : SessionBase, new()
     {
         lock (_lock)
         {
-            int sessionId = _sessionIdGen++;
-
             T session = new T();
-            session.SessionId = sessionId;
-            _sessions.Add(sessionId, session);
+            session.SUID = suid;
 
-            return session as T;
+            if (_sessions.TryGetValue(suid, out var sessionList))
+                sessionList.Add(session);
+            else
+                _sessions.Add(suid, new List<SessionBase>() { session });
+
+            return session;
+        }
+    }
+
+    public T? Find<T>(int suid) where T : SessionBase
+    {
+        lock ( _lock)
+        {
+            if (_sessions.TryGetValue(suid, out var sessionList))
+            {
+                T? session = sessionList.Find(s => s is T) as T;
+
+                if (session != null)
+                    return session;
+            }
+
+            return default;
         }
     }
 
@@ -35,7 +55,16 @@ public class SessionManager
     {
         lock (_lock)
         {
-            _sessions.Remove(session.SessionId);
+            int suid = session.SUID;
+
+            if (_sessions.TryGetValue(suid, out var sessionList))
+            {
+                sessionList.Remove(session);
+
+                if (sessionList.Count == 0)
+                    _sessions.Remove(suid);
+            }
+
         }
     }
 }

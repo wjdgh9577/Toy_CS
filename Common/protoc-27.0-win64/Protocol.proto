@@ -9,14 +9,20 @@ enum MsgId
 {
 	S_PING = 0;
 	C_PONG = 1;
+	S_CONNECTED = 2;
 }
 
 message S_Ping
 {
-	int32 test = 1;
+	google.protobuf.Timestamp serverTime = 1;
 }
 
 message C_Pong
 {
 
+}
+
+message S_Connected
+{
+	google.protobuf.Timestamp serverTime = 1;
 }
