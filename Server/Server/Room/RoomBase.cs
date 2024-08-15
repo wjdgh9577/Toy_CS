@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Server.Room;
 
-public struct RoomInfo
+public struct RoomInfo : IEqualityComparer<RoomInfo>
 {
     /// <summary>
     /// Room의 고유식별자
@@ -40,6 +40,16 @@ public struct RoomInfo
     public void Leave()
     {
         this.ccu = Math.Max(this.ccu - 1, 0);
+    }
+
+    public bool Equals(RoomInfo x, RoomInfo y)
+    {
+        return x.uniqueId == y.uniqueId && x.id == y.id;
+    }
+
+    public int GetHashCode([DisallowNull] RoomInfo obj)
+    {
+        return obj.uniqueId.GetHashCode();
     }
 }
 
