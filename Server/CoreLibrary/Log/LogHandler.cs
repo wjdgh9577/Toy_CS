@@ -29,6 +29,45 @@ public abstract class LogModuleBase
     public abstract void Log(LogType type, LogCode code, params (LogKey key, object value)[] args);
     public abstract void Log(LogType type, LogCode code, params (string key, object value)[] args);
 
+    protected virtual string ConsoleMessageTemplate(LogType type, LogCode code, params object[] args)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        var common = GetCommonMessage(type, code);
+
+        sb.Append($"{common.importance}");
+        foreach (var arg in args)
+            sb.Append($" / ({arg})");
+
+        return sb.ToString();
+    }
+
+    protected virtual string ConsoleMessageTemplate(LogType type, LogCode code, params (LogKey key, object value)[] args)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        var common = GetCommonMessage(type, code);
+
+        sb.Append($"{common.importance}");
+        foreach (var arg in args)
+            sb.Append($" / ({arg.key}, {arg.value})");
+
+        return sb.ToString();
+    }
+
+    protected virtual string ConsoleMessageTemplate(LogType type, LogCode code, params (string key, object value)[] args)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        var common = GetCommonMessage(type, code);
+
+        sb.Append($"{common.importance}");
+        foreach (var arg in args)
+            sb.Append($" / ({arg.key}, {arg.value})");
+
+        return sb.ToString();
+    }
+
     protected virtual (string importance, string code) GetCommonMessage(LogType type, LogCode code)
     {
         string importanceMessage = "";

@@ -52,27 +52,17 @@ public abstract class RoomBase
         Info = info;
     }
 
-    public virtual void OnUpdate()
-    {
-        if (_destroyed == 0)
-            return;
-    }
+    public virtual void OnUpdate() { }
 
     public virtual void OnDestroy() { }
 
     public virtual void OnEnter(SessionBase session)
     {
-        if (_destroyed == 0)
-            return;
-
         Info.Enter();
     }
 
     public virtual void OnLeave(SessionBase session)
     {
-        if (_destroyed == 0)
-            return;
-
         Info.Leave();
     }
 }

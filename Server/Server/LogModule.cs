@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CoreLibrary.Log;
+using CoreLibrary.Utility;
 
 namespace Server;
 
@@ -16,29 +17,20 @@ public sealed class LogModule : LogModuleBase
     {
         if (code == LogCode.CONSOLE)
         {
-            StringBuilder sb = new StringBuilder();
+            string template = ConsoleMessageTemplate(type, code, args);
 
-            var common = GetCommonMessage(type, code);
-
-            sb.Append($"{common.importance}");
-            foreach (var arg in args)
-                sb.Append($" / ({arg})");
-
-            Console.WriteLine(sb.ToString());
+            Console.WriteLine(template.ToString());
         }
         else
         {
             // TODO: DB 연동
+            ArgumentContainer container = new ArgumentContainer();
+            for (int i = 0; i < args.Length; i++)
+                container[$"key{i}"] = args[i].ToString();
 
-            StringBuilder sb = new StringBuilder();
+            string template = ConsoleMessageTemplate(type, code, args);
 
-            var common = GetCommonMessage(type, code);
-
-            sb.Append($"{common.importance} / {common.code}");
-            foreach (var arg in args)
-                sb.Append($" / ({arg})");
-
-            Console.WriteLine(sb.ToString());
+            Console.WriteLine(template.ToString());
         }
     }
 
@@ -46,29 +38,20 @@ public sealed class LogModule : LogModuleBase
     {
         if (code == LogCode.CONSOLE)
         {
-            StringBuilder sb = new StringBuilder();
+            string template = ConsoleMessageTemplate(type, code, args);
 
-            var common = GetCommonMessage(type, code);
-
-            sb.Append($"{common.importance}");
-            foreach (var arg in args)
-                sb.Append($" / ({arg.key}, {arg.value})");
-
-            Console.WriteLine(sb.ToString());
+            Console.WriteLine(template.ToString());
         }
         else
         {
             // TODO: DB 연동
-
-            StringBuilder sb = new StringBuilder();
-
-            var common = GetCommonMessage(type, code);
-
-            sb.Append($"{common.importance} / {common.code}");
+            ArgumentContainer container = new ArgumentContainer();
             foreach (var arg in args)
-                sb.Append($" / ({arg.key}, {arg.value})");
+                container[arg.key.ToString()] = arg.value.ToString();
 
-            Console.WriteLine(sb.ToString());
+            string template = ConsoleMessageTemplate(type, code, args);
+
+            Console.WriteLine(template.ToString());
         }
     }
 
@@ -76,29 +59,20 @@ public sealed class LogModule : LogModuleBase
     {
         if (code == LogCode.CONSOLE)
         {
-            StringBuilder sb = new StringBuilder();
+            string template = ConsoleMessageTemplate(type, code, args);
 
-            var common = GetCommonMessage(type, code);
-
-            sb.Append($"{common.importance}");
-            foreach (var arg in args)
-                sb.Append($" / ({arg.key}, {arg.value})");
-
-            Console.WriteLine(sb.ToString());
+            Console.WriteLine(template.ToString());
         }
         else
         {
             // TODO: DB 연동
-
-            StringBuilder sb = new StringBuilder();
-
-            var common = GetCommonMessage(type, code);
-
-            sb.Append($"{common.importance} / {common.code}");
+            ArgumentContainer container = new ArgumentContainer();
             foreach (var arg in args)
-                sb.Append($" / ({arg.key}, {arg.value})");
+                container[arg.key.ToString()] = arg.value.ToString();
 
-            Console.WriteLine(sb.ToString());
+            string template = ConsoleMessageTemplate(type, code, args);
+
+            Console.WriteLine(template.ToString());
         }
     }
 }
