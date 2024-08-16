@@ -11,25 +11,21 @@ internal class Program
     static void Main(string[] args)
     {
         LogHandler.SetModule(new LogModule());
-
+        
         Thread.Sleep(3000);
 
-        string host = Dns.GetHostName();
-        IPHostEntry entry = Dns.GetHostEntry(host);
-        IPAddress address = entry.AddressList[0];
-        IPEndPoint endPoint = new IPEndPoint(address, 7777);
-
-        Connector connector = new Connector();
-
-        connector.Init(endPoint, args =>
+        NetworkHandler.TcpConnector(out var connector);
+        connector.Connected += args =>
         {
             Socket? connectSocket = args.ConnectSocket;
             SessionBase? session = SessionManager.Instance.Generate<GameSession>();
             if (connectSocket != null && session != null)
             {
-                session.Init(connectSocket);
+                session.Start(connectSocket);
             }
-        });
+        };
+
+        connector.Start();
 
         while (true)
         {

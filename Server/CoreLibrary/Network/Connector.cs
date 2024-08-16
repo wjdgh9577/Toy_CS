@@ -12,17 +12,21 @@ namespace CoreLibrary.Network;
 public class Connector
 {
     Socket _connectSocket;
+    IPEndPoint _endPoint;
 
-    Action<SocketAsyncEventArgs> _onConnected;
+    public event Action<SocketAsyncEventArgs> Connected;
 
-    public void Init(IPEndPoint endPoint, Action<SocketAsyncEventArgs> onConnected)
+    public Connector(IPEndPoint endPoint)
     {
         _connectSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-        _onConnected = onConnected;
+        _endPoint = endPoint;
+    }
 
+    public void Start()
+    {
         SocketAsyncEventArgs args = new SocketAsyncEventArgs();
         args.Completed += new EventHandler<SocketAsyncEventArgs>(OnCompleted);
-        args.RemoteEndPoint = endPoint;
+        args.RemoteEndPoint = _endPoint;
         RegisterConnect(args);
     }
 
@@ -48,7 +52,7 @@ public class Connector
         {
             if (args.SocketError == SocketError.Success)
             {
-                _onConnected?.Invoke(args);
+                Connected?.Invoke(args);
             }
             else
             {

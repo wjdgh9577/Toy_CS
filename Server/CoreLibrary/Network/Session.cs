@@ -27,7 +27,7 @@ public abstract class SessionBase
     public abstract void OnSend(int BytesTransferred);
     public abstract void OnRecv(ArraySegment<byte> buffer);
 
-    public abstract void Init(Socket socket, int recvBufferSize = 65535);
+    public abstract void Start(Socket socket, int recvBufferSize = 65535);
 
     public virtual void Disconnect() { }
 
@@ -185,7 +185,7 @@ public abstract class TcpSession : SessionBase
     public abstract void OnConnected();
     public abstract void OnDisconnected();
 
-    public sealed override void Init(Socket socket, int recvBufferSize = 65535)
+    public sealed override void Start(Socket socket, int recvBufferSize = 65535)
     {
         _socket = socket;
 
@@ -214,7 +214,7 @@ public abstract class TcpSession : SessionBase
 
 public abstract class UdpSession : SessionBase
 {
-    public sealed override void Init(Socket socket, int recvBufferSize = 65535)
+    public sealed override void Start(Socket socket, int recvBufferSize = 65535)
     {
         _socket = socket;
 

@@ -12,23 +12,19 @@ public class Program
     {
         LogHandler.SetModule(new LogModule());
 
-        string host = Dns.GetHostName();
-        IPHostEntry entry = Dns.GetHostEntry(host);
-        IPAddress address = entry.AddressList[0];
-        IPEndPoint endPoint = new IPEndPoint(address, 7777);
-
-        Listener listener = new Listener();
-
-        listener.Init(endPoint, args =>
+        NetworkHandler.TcpListener(out var listener);
+        listener.Accepted += args =>
         {
             Socket? acceptSocket = args.AcceptSocket;
             int suid = SessionManager.Instance.NewSUID;
             SessionBase? session = SessionManager.Instance.Generate<GameSession>(suid);
             if (acceptSocket != null && session != null)
             {
-                session.Init(acceptSocket);
+                session.Start(acceptSocket);
             }
-        });
+        };
+        
+        listener.Start();
 
         LogHandler.Log(LogCode.CONSOLE, "Listen...");
 

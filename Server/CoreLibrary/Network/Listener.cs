@@ -12,15 +12,19 @@ namespace CoreLibrary.Network;
 public class Listener
 {
     Socket _listenSocket;
+    IPEndPoint _endPoint;
 
-    Action<SocketAsyncEventArgs> _onAccepted;
+    public event Action<SocketAsyncEventArgs> Accepted;
 
-    public void Init(IPEndPoint endPoint, Action<SocketAsyncEventArgs> onAccepted, int backlog = int.MaxValue)
+    public Listener(IPEndPoint endPoint)
     {
         _listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-        _onAccepted = onAccepted;
+        _endPoint = endPoint;
+    }
 
-        _listenSocket.Bind(endPoint);
+    public void Start(int backlog = int.MaxValue)
+    {
+        _listenSocket.Bind(_endPoint);
 
         _listenSocket.Listen(backlog);
 
@@ -54,7 +58,7 @@ public class Listener
         {
             if (args.SocketError == SocketError.Success)
             {
-                _onAccepted?.Invoke(args);
+                Accepted?.Invoke(args);
             }
             else
             {
