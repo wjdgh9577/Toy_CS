@@ -13,9 +13,11 @@ public sealed class LogModule : LogModuleBase
     {
         if (code == LogCode.CONSOLE)
         {
+#if DEBUG
             string template = ConsoleMessageTemplate(type, code, args);
 
             Console.WriteLine(template.ToString());
+#endif
         }
         else
         {
@@ -32,9 +34,11 @@ public sealed class LogModule : LogModuleBase
     {
         if (code == LogCode.CONSOLE)
         {
+#if DEBUG
             string template = ConsoleMessageTemplate(type, code, args);
 
             Console.WriteLine(template.ToString());
+#endif
         }
         else
         {
@@ -51,9 +55,11 @@ public sealed class LogModule : LogModuleBase
     {
         if (code == LogCode.CONSOLE)
         {
+#if DEBUG
             string template = ConsoleMessageTemplate(type, code, args);
 
             Console.WriteLine(template.ToString());
+#endif
         }
         else
         {
