@@ -28,9 +28,11 @@ public sealed class LogModule : LogModuleBase
             for (int i = 0; i < args.Length; i++)
                 container[$"key{i}"] = args[i].ToString();
 
+#if DEBUG
             string template = ConsoleMessageTemplate(type, code, args);
 
             Console.WriteLine(template.ToString());
+#endif
         }
     }
 
@@ -49,9 +51,11 @@ public sealed class LogModule : LogModuleBase
             foreach (var arg in args)
                 container[arg.key.ToString()] = arg.value.ToString();
 
+#if DEBUG
             string template = ConsoleMessageTemplate(type, code, args);
 
             Console.WriteLine(template.ToString());
+#endif
         }
     }
 
@@ -70,9 +74,11 @@ public sealed class LogModule : LogModuleBase
             foreach (var arg in args)
                 container[arg.key.ToString()] = arg.value.ToString();
 
+#if DEBUG
             string template = ConsoleMessageTemplate(type, code, args);
 
             Console.WriteLine(template.ToString());
+#endif
         }
     }
 }

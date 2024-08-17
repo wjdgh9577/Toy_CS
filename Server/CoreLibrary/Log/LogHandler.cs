@@ -37,7 +37,7 @@ public abstract class LogModuleBase
 
         sb.Append($"{common.importance}");
         foreach (var arg in args)
-            sb.Append($" / ({arg})");
+            sb.Append($" / {arg}");
 
         return sb.ToString();
     }

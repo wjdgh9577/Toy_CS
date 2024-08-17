@@ -13,29 +13,18 @@ public sealed class LogModule : LogModuleBase
     {
         if (code == LogCode.CONSOLE)
         {
-            StringBuilder sb = new StringBuilder();
+            string template = ConsoleMessageTemplate(type, code, args);
 
-            var common = GetCommonMessage(type, code);
-
-            sb.Append($"{common.importance}");
-            foreach (var arg in args)
-                sb.Append($" / ({arg})");
-
-            Console.WriteLine(sb.ToString());
+            Console.WriteLine(template.ToString());
         }
         else
         {
             // TODO: log 파일 출력
+#if DEBUG
+            string template = ConsoleMessageTemplate(type, code, args);
 
-            StringBuilder sb = new StringBuilder();
-
-            var common = GetCommonMessage(type, code);
-
-            sb.Append($"{common.importance} / {common.code}");
-            foreach (var arg in args)
-                sb.Append($" / ({arg})");
-
-            Console.WriteLine(sb.ToString());
+            Console.WriteLine(template.ToString());
+#endif
         }
     }
 
@@ -43,29 +32,18 @@ public sealed class LogModule : LogModuleBase
     {
         if (code == LogCode.CONSOLE)
         {
-            StringBuilder sb = new StringBuilder();
+            string template = ConsoleMessageTemplate(type, code, args);
 
-            var common = GetCommonMessage(type, code);
-
-            sb.Append($"{common.importance}");
-            foreach (var arg in args)
-                sb.Append($" / ({arg.key}, {arg.value})");
-
-            Console.WriteLine(sb.ToString());
+            Console.WriteLine(template.ToString());
         }
         else
         {
             // TODO: log 파일 출력
+#if DEBUG
+            string template = ConsoleMessageTemplate(type, code, args);
 
-            StringBuilder sb = new StringBuilder();
-
-            var common = GetCommonMessage(type, code);
-
-            sb.Append($"{common.importance} / {common.code}");
-            foreach (var arg in args)
-                sb.Append($" / ({arg.key}, {arg.value})");
-
-            Console.WriteLine(sb.ToString());
+            Console.WriteLine(template.ToString());
+#endif
         }
     }
 
@@ -73,29 +51,18 @@ public sealed class LogModule : LogModuleBase
     {
         if (code == LogCode.CONSOLE)
         {
-            StringBuilder sb = new StringBuilder();
+            string template = ConsoleMessageTemplate(type, code, args);
 
-            var common = GetCommonMessage(type, code);
-
-            sb.Append($"{common.importance}");
-            foreach (var arg in args)
-                sb.Append($" / ({arg.key}, {arg.value})");
-
-            Console.WriteLine(sb.ToString());
+            Console.WriteLine(template.ToString());
         }
         else
         {
             // TODO: log 파일 출력
+#if DEBUG
+            string template = ConsoleMessageTemplate(type, code, args);
 
-            StringBuilder sb = new StringBuilder();
-
-            var common = GetCommonMessage(type, code);
-
-            sb.Append($"{common.importance} / {common.code}");
-            foreach (var arg in args)
-                sb.Append($" / ({arg.key}, {arg.value})");
-
-            Console.WriteLine(sb.ToString());
+            Console.WriteLine(template.ToString());
+#endif
         }
     }
 }

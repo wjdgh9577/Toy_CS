@@ -8,10 +8,17 @@ namespace CoreLibrary.Log;
 
 public enum LogCode
 {
+    // Debug
     CONSOLE,
 
+    // Socket
     SOCKET_ERROR,
 
+    // Room
+    ROOM_NOT_EXIST,
+    INVALID_SESSION_TYPE,
+
+    // Exception
     EXCEPTION,
 }
 
