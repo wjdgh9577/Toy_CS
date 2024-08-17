@@ -22,7 +22,8 @@ public class JobTimer
         element.SetTimer((s, e) =>
         {
             job.Excute();
-            _pool.Release(element);
+            if (!autoReset)
+                _pool.Release(element);
         }, interval, autoReset);
 
         element.Start();
