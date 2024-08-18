@@ -30,7 +30,7 @@ public sealed class LogModule : LogModuleBase
         }
     }
 
-    public override void Log(LogType type, LogCode code, params (LogKey key, object value)[] args)
+    public override void Log(LogType type, LogCode code, params (LogKey, object)[] args)
     {
         if (code == LogCode.CONSOLE)
         {
@@ -51,7 +51,7 @@ public sealed class LogModule : LogModuleBase
         }
     }
 
-    public override void Log(LogType type, LogCode code, params (string key, object value)[] args)
+    public override void Log(LogType type, LogCode code, params (string, object)[] args)
     {
         if (code == LogCode.CONSOLE)
         {

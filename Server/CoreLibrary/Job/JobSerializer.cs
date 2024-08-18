@@ -5,51 +5,52 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CoreLibrary.Job;
-
-public abstract class JobSerializer
+namespace CoreLibrary.Job
 {
-    Queue<IJob> _jobQueue = new Queue<IJob>();
-    object _lock = new object();
-    bool _flush = false;
-
-    public void Push(Action action) { Push(new Job(action)); }
-    public void Push<T1>(Action<T1> action, T1 t1) { Push(new Job<T1>(action, t1)); }
-    public void Push<T1, T2>(Action<T1, T2> action, T1 t1, T2 t2) { Push(new Job<T1, T2>(action, t1, t2)); }
-    public void Push<T1, T2, T3>(Action<T1, T2, T3> action, T1 t1, T2 t2, T3 t3) { Push(new Job<T1, T2, T3>(action, t1, t2, t3)); }
-
-    void Push(IJob job)
+    public abstract class JobSerializer
     {
-        lock (_lock)
-        {
-            _jobQueue.Enqueue(job);
-        }
-    }
+        Queue<IJob> _jobQueue = new Queue<IJob>();
+        object _lock = new object();
+        bool _flush = false;
 
-    protected void Flush()
-    {
-        while (true)
-        {
-            IJob job = Pop();
-            if (job == null)
-                return;
+        public void Push(Action action) { Push(new Job(action)); }
+        public void Push<T1>(Action<T1> action, T1 t1) { Push(new Job<T1>(action, t1)); }
+        public void Push<T1, T2>(Action<T1, T2> action, T1 t1, T2 t2) { Push(new Job<T1, T2>(action, t1, t2)); }
+        public void Push<T1, T2, T3>(Action<T1, T2, T3> action, T1 t1, T2 t2, T3 t3) { Push(new Job<T1, T2, T3>(action, t1, t2, t3)); }
 
-            job.Excute();
-        }
-    }
-
-    IJob Pop()
-    {
-        lock (_lock)
+        void Push(IJob job)
         {
-            if (_jobQueue.Count == 0)
+            lock (_lock)
             {
-                _flush = false;
-                return null;
+                _jobQueue.Enqueue(job);
             }
-            return _jobQueue.Dequeue();
         }
-    }
 
-    public abstract void Update();
+        protected void Flush()
+        {
+            while (true)
+            {
+                IJob job = Pop();
+                if (job == null)
+                    return;
+
+                job.Excute();
+            }
+        }
+
+        IJob Pop()
+        {
+            lock (_lock)
+            {
+                if (_jobQueue.Count == 0)
+                {
+                    _flush = false;
+                    return null;
+                }
+                return _jobQueue.Dequeue();
+            }
+        }
+
+        public abstract void Update();
+    }
 }

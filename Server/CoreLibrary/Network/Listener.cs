@@ -7,71 +7,72 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CoreLibrary.Network;
-
-public class Listener
+namespace CoreLibrary.Network
 {
-    Socket _listenSocket;
-    IPEndPoint _endPoint;
-
-    public event Action<SocketAsyncEventArgs> Accepted;
-
-    public Listener(IPEndPoint endPoint)
+    public class Listener
     {
-        _listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-        _endPoint = endPoint;
-    }
+        Socket _listenSocket;
+        IPEndPoint _endPoint;
 
-    public void Start(int backlog = int.MaxValue)
-    {
-        _listenSocket.Bind(_endPoint);
+        public event Action<SocketAsyncEventArgs> Accepted;
 
-        _listenSocket.Listen(backlog);
-
-        SocketAsyncEventArgs args = new SocketAsyncEventArgs();
-        args.Completed += new EventHandler<SocketAsyncEventArgs>(OnCompleted);
-        RegisterAccept(args);
-    }
-
-    void RegisterAccept(SocketAsyncEventArgs args)
-    {
-        args.AcceptSocket = null;
-
-        try
+        public Listener(IPEndPoint endPoint)
         {
-            bool pending = _listenSocket.AcceptAsync(args);
-            if (pending == false)
-            {
-                OnCompleted(null, args);
-            }
+            _listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            _endPoint = endPoint;
         }
-        catch (Exception ex)
+
+        public void Start(int backlog = int.MaxValue)
         {
-            LogHandler.LogError(LogCode.EXCEPTION, ex.ToString());
+            _listenSocket.Bind(_endPoint);
+
+            _listenSocket.Listen(backlog);
+
+            SocketAsyncEventArgs args = new SocketAsyncEventArgs();
+            args.Completed += new EventHandler<SocketAsyncEventArgs>(OnCompleted);
             RegisterAccept(args);
         }
-    }
 
-    void OnCompleted(object? sender, SocketAsyncEventArgs args)
-    {
-        try
+        void RegisterAccept(SocketAsyncEventArgs args)
         {
-            if (args.SocketError == SocketError.Success)
+            args.AcceptSocket = null;
+
+            try
             {
-                Accepted?.Invoke(args);
+                bool pending = _listenSocket.AcceptAsync(args);
+                if (pending == false)
+                {
+                    OnCompleted(null, args);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                LogHandler.LogError(LogCode.SOCKET_ERROR, args.SocketError.ToString());
+                LogHandler.LogError(LogCode.EXCEPTION, ex.ToString());
+                RegisterAccept(args);
             }
         }
-        catch (Exception ex)
+
+        void OnCompleted(object sender, SocketAsyncEventArgs args)
         {
-            LogHandler.LogError(LogCode.EXCEPTION, ex.ToString());
-        }
-        finally
-        {
-            RegisterAccept(args);
+            try
+            {
+                if (args.SocketError == SocketError.Success)
+                {
+                    Accepted?.Invoke(args);
+                }
+                else
+                {
+                    LogHandler.LogError(LogCode.SOCKET_ERROR, args.SocketError.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHandler.LogError(LogCode.EXCEPTION, ex.ToString());
+            }
+            finally
+            {
+                RegisterAccept(args);
+            }
         }
     }
 }

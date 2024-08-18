@@ -1,6 +1,8 @@
 using CoreLibrary.Network;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using System;
+using System.Collections.Generic;
 
 public partial class PacketHandler
 {

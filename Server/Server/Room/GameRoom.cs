@@ -29,7 +29,7 @@ public class GameRoom : RoomBase
     public override void OnEnter(GameSession session)
     {
         base.OnEnter(session);
-
+        
         if (_sessions.TryAdd(session.SUID, session) == false)
             LogHandler.LogError(LogCode.ROOM_SESSION_INVALID_UID, $"SUID ({session.SUID}) is already used.");
     }
@@ -37,7 +37,7 @@ public class GameRoom : RoomBase
     public override void OnLeave(GameSession session)
     {
         base.OnLeave(session);
-
+        
         if (_sessions.Remove(session.SUID) == false)
             LogHandler.LogError(LogCode.ROOM_SESSION_NOT_EXIST, $"Session_{session.SUID} is not exist.");
     }

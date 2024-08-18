@@ -6,90 +6,90 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace CoreLibrary.Job;
-
-public class JobTimer
+namespace CoreLibrary.Job
 {
-    public static JobTimer Instance = new JobTimer();
-    JobTimer() { }
-
-    JobTimerPool _pool = new JobTimerPool();
-
-    public void Push(IJob job, int interval, bool autoReset)
+    public class JobTimer
     {
-        var element = _pool.Get();
+        public static JobTimer Instance = new JobTimer();
+        JobTimer() { }
 
-        element.SetTimer((s, e) =>
+        JobTimerPool _pool = new JobTimerPool();
+
+        public void Push(IJob job, int interval, bool autoReset)
         {
-            job.Excute();
-            if (!autoReset)
-                _pool.Release(element);
-        }, interval, autoReset);
+            var element = _pool.Get();
 
-        element.Start();
-    }
-}
+            element.SetTimer((s, e) =>
+            {
+                job.Excute();
+                if (!autoReset)
+                    _pool.Release(element);
+            }, interval, autoReset);
 
-struct JobTimerElement
-{
-    System.Timers.Timer _timer;
-
-    ElapsedEventHandler? _handler;
-
-    public JobTimerElement()
-    {
-        _timer = new System.Timers.Timer();
-        _handler = null;
-        Reset();
+            element.Start();
+        }
     }
 
-    public void Reset()
+    struct JobTimerElement
     {
-        _timer.Enabled = false;
-        _timer.Elapsed -= _handler;
-    }
+        System.Timers.Timer _timer;
 
-    public void SetTimer(ElapsedEventHandler handler, int interval, bool autoReset)
-    {
-        _handler = handler;
-        _timer.Interval = interval;
-        _timer.AutoReset = autoReset;
-    }
+        ElapsedEventHandler _handler;
 
-    public void Start()
-    {
-        _timer.Elapsed += _handler;
-        _timer.Enabled = true;
-        _timer.Start();
-    }
-}
-
-class JobTimerPool
-{
-    Queue<JobTimerElement> _timers = new Queue<JobTimerElement>();
-    object _lock = new object();
-
-    public JobTimerElement Get()
-    {
-        JobTimerElement timer;
-
-        lock (_lock)
+        public void Reset()
         {
-            if (_timers.Count == 0)
-                timer = new JobTimerElement();
-            else
-                timer = _timers.Dequeue();
+            _timer.Enabled = false;
+            _timer.Elapsed -= _handler;
         }
 
-        return timer;
+        public void SetTimer(ElapsedEventHandler handler, int interval, bool autoReset)
+        {
+            if (_timer == null)
+            {
+                _timer = new System.Timers.Timer();
+                Reset();
+            }
+
+            _handler = handler;
+            _timer.Interval = interval;
+            _timer.AutoReset = autoReset;
+        }
+
+        public void Start()
+        {
+            _timer.Elapsed += _handler;
+            _timer.Enabled = true;
+            _timer.Start();
+        }
     }
 
-    public void Release(JobTimerElement element)
+    class JobTimerPool
     {
-        lock (_lock)
+        Queue<JobTimerElement> _timers = new Queue<JobTimerElement>();
+        object _lock = new object();
+
+        public JobTimerElement Get()
         {
-            element.Reset();
-            _timers.Enqueue(element);
+            JobTimerElement timer;
+
+            lock (_lock)
+            {
+                if (_timers.Count == 0)
+                    timer = new JobTimerElement();
+                else
+                    timer = _timers.Dequeue();
+            }
+
+            return timer;
+        }
+
+        public void Release(JobTimerElement element)
+        {
+            lock (_lock)
+            {
+                element.Reset();
+                _timers.Enqueue(element);
+            }
         }
     }
 }

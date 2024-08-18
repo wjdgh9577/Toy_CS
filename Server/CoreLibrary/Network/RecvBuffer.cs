@@ -4,61 +4,62 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CoreLibrary.Network;
-
-public class RecvBuffer
+namespace CoreLibrary.Network
 {
-    ArraySegment<byte> _buffer;
-    int _readOffset;
-    int _writeOffset;
-
-    public RecvBuffer() : this(65535) { }
-
-    public RecvBuffer(int bufferSize)
+    public class RecvBuffer
     {
-        _buffer = new ArraySegment<byte>(new byte[bufferSize], 0, bufferSize);
-        _readOffset = _writeOffset = 0;
-    }
+        ArraySegment<byte> _buffer;
+        int _readOffset;
+        int _writeOffset;
 
-    public int DataSize => _writeOffset - _readOffset;
-    public int FreeSize => _buffer.Count - _writeOffset;
+        public RecvBuffer() : this(65535) { }
 
-    public ArraySegment<byte> ReadSegment => new ArraySegment<byte>(_buffer.Array, _buffer.Offset + _readOffset, DataSize);
-    public ArraySegment<byte> WriteSegment => new ArraySegment<byte>(_buffer.Array, _buffer.Offset + _writeOffset, FreeSize);
-
-    public void Clear()
-    {
-        int dataSize = DataSize;
-
-        if (dataSize == 0)
+        public RecvBuffer(int bufferSize)
         {
+            _buffer = new ArraySegment<byte>(new byte[bufferSize], 0, bufferSize);
             _readOffset = _writeOffset = 0;
         }
-        else
+
+        public int DataSize => _writeOffset - _readOffset;
+        public int FreeSize => _buffer.Count - _writeOffset;
+
+        public ArraySegment<byte> ReadSegment => new ArraySegment<byte>(_buffer.Array, _buffer.Offset + _readOffset, DataSize);
+        public ArraySegment<byte> WriteSegment => new ArraySegment<byte>(_buffer.Array, _buffer.Offset + _writeOffset, FreeSize);
+
+        public void Clear()
         {
-            Array.Copy(_buffer.Array, _buffer.Offset + _readOffset, _buffer.Array, _buffer.Offset, dataSize);
-            _readOffset = 0;
-            _writeOffset = dataSize;
+            int dataSize = DataSize;
+
+            if (dataSize == 0)
+            {
+                _readOffset = _writeOffset = 0;
+            }
+            else
+            {
+                Array.Copy(_buffer.Array, _buffer.Offset + _readOffset, _buffer.Array, _buffer.Offset, dataSize);
+                _readOffset = 0;
+                _writeOffset = dataSize;
+            }
         }
-    }
 
-    public bool OnRead(int bytes)
-    {
-        if (bytes > DataSize)
-            return false;
+        public bool OnRead(int bytes)
+        {
+            if (bytes > DataSize)
+                return false;
 
-        _readOffset += bytes;
+            _readOffset += bytes;
 
-        return true;
-    }
+            return true;
+        }
 
-    public bool OnWrite(int bytes)
-    {
-        if (bytes > FreeSize)
-            return false;
+        public bool OnWrite(int bytes)
+        {
+            if (bytes > FreeSize)
+                return false;
 
-        _writeOffset += bytes;
+            _writeOffset += bytes;
 
-        return true;
+            return true;
+        }
     }
 }

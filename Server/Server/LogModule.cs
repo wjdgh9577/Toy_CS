@@ -38,7 +38,7 @@ public sealed class LogModule : LogModuleBase
         }
     }
 
-    public override void Log(LogType type, LogCode code, params (LogKey key, object value)[] args)
+    public override void Log(LogType type, LogCode code, params (LogKey, object)[] args)
     {
         if (code == LogCode.CONSOLE)
         {
@@ -53,7 +53,7 @@ public sealed class LogModule : LogModuleBase
             // TODO: DB 연동
             ArgumentContainer container = new ArgumentContainer();
             foreach (var arg in args)
-                container[arg.key.ToString()] = arg.value.ToString();
+                container[arg.Item1.ToString()] = arg.Item2.ToString();
 
 #if DEBUG
             string template = ConsoleMessageTemplate(type, code, args);
@@ -63,7 +63,7 @@ public sealed class LogModule : LogModuleBase
         }
     }
 
-    public override void Log(LogType type, LogCode code, params (string key, object value)[] args)
+    public override void Log(LogType type, LogCode code, params (string, object)[] args)
     {
         if (code == LogCode.CONSOLE)
         {
@@ -78,7 +78,7 @@ public sealed class LogModule : LogModuleBase
             // TODO: DB 연동
             ArgumentContainer container = new ArgumentContainer();
             foreach (var arg in args)
-                container[arg.key.ToString()] = arg.value.ToString();
+                container[arg.Item1.ToString()] = arg.Item2.ToString();
 
 #if DEBUG
             string template = ConsoleMessageTemplate(type, code, args);
