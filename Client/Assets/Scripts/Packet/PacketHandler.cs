@@ -1,6 +1,5 @@
 using CoreLibrary.Log;
 using CoreLibrary.Network;
-using Session;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using System;
