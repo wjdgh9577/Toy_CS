@@ -12,12 +12,7 @@ namespace Server.Room;
 
 public class GameRoom : RoomBase
 {
-    Dictionary<int, GameSession> _sessions = new Dictionary<int, GameSession>();
-
-    public override void OnStart(RoomInfo info)
-    {
-        base.OnStart(info);
-    }
+    public override void OnStart(RoomInfo info) => base.OnStart(info);
 
     public override void OnUpdate()
     {
@@ -29,10 +24,7 @@ public class GameRoom : RoomBase
         }
     }
 
-    public override void OnDestroy()
-    {
-        base.OnDestroy();
-    }
+    public override void OnDestroy() => base.OnDestroy();
 
     public override void OnEnter(GameSession session)
     {
@@ -50,11 +42,5 @@ public class GameRoom : RoomBase
             LogHandler.LogError(LogCode.ROOM_SESSION_NOT_EXIST, $"Session_{session.SUID} is not exist.");
     }
 
-    public void Broadcast(IMessage message)
-    {
-        foreach (var session in _sessions.Values)
-        {
-            session.Send(message);
-        }
-    }
+    public override void Broadcast(GameSession session, IMessage message) => base.Broadcast(session, message);
 }

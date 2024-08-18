@@ -23,7 +23,9 @@ public partial class PacketHandler
 		_deserializers.Add((ushort)MsgId.SEnterRoom, Deserialize<S_EnterRoom>);
         _handlers.Add((ushort)MsgId.SEnterRoom, HandleSEnterRoom);		
 		_deserializers.Add((ushort)MsgId.SLeaveRoom, Deserialize<S_LeaveRoom>);
-        _handlers.Add((ushort)MsgId.SLeaveRoom, HandleSLeaveRoom);
+        _handlers.Add((ushort)MsgId.SLeaveRoom, HandleSLeaveRoom);		
+		_deserializers.Add((ushort)MsgId.STestChat, Deserialize<S_TestChat>);
+        _handlers.Add((ushort)MsgId.STestChat, HandleSTestChat);
 	}
 
 	public static void HandlePacket(SessionBase session, ArraySegment<byte> buffer)

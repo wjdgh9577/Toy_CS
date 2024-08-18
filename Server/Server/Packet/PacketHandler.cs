@@ -40,5 +40,10 @@ public partial class PacketHandler
         GameSession gameSession = (GameSession)session;
         C_TestChat packet = (C_TestChat)message;
         LogHandler.Log(LogCode.CONSOLE, $"Chat: {packet.Chat}");
+
+        S_TestChat broadcastPacket = new S_TestChat();
+        broadcastPacket.Chat = packet.Chat;
+        broadcastPacket.Suid = session.SUID;
+        RoomManager.Instance.Broadcast<GameRoom>(gameSession, broadcastPacket);
     }
 }

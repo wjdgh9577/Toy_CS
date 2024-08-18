@@ -1,6 +1,7 @@
 ﻿using CoreLibrary.Job;
 using CoreLibrary.Log;
 using CoreLibrary.Network;
+using Google.Protobuf;
 using Server.Session;
 using System;
 using System.Collections.Generic;
@@ -102,6 +103,19 @@ public class RoomManager
         }
     }
 
+    public T? FindRoom<T>(GameSession session) where T : RoomBase
+    {
+        lock (_lock)
+        {
+            var room = _rooms
+                .Where(r => r.Value.GetType() == typeof(T) && r.Value.TryGetSession(session.SUID, out var s))
+                .Select(r => r.Value)
+                .FirstOrDefault();
+
+            return room as T;
+        }
+    }
+
     public void UpdateRooms()
     {
         lock (_lock)
@@ -130,6 +144,19 @@ public class RoomManager
             room?.OnDestroy();
 
             return true;
+        }
+    }
+
+    public void Broadcast<T>(GameSession session, IMessage message) where T : RoomBase
+    {
+        lock (_lock)
+        {
+            var room = FindRoom<T>(session);
+
+            if (room == null)
+                return;
+
+            room.Broadcast(session, message);
         }
     }
 }

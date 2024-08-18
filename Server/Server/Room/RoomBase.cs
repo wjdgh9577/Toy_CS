@@ -1,4 +1,5 @@
 ﻿using CoreLibrary.Network;
+using Google.Protobuf;
 using Server.Session;
 using System;
 using System.Collections.Generic;
@@ -53,6 +54,7 @@ public class RoomInfo
 public abstract class RoomBase
 {
     public RoomInfo Info { get; protected set; }
+    protected Dictionary<int, GameSession> _sessions = new Dictionary<int, GameSession>();
 
     public virtual void OnStart(RoomInfo info)
     {
@@ -71,5 +73,20 @@ public abstract class RoomBase
     public virtual void OnLeave(GameSession session)
     {
         Info.Leave();
+    }
+
+    public virtual void Broadcast(GameSession session, IMessage message)
+    {
+        foreach (var _session in _sessions.Values)
+        {
+            if (_session == session)
+                continue;
+            _session.Send(message);
+        }
+    }
+
+    public bool TryGetSession(int suid, out GameSession? session)
+    {
+        return _sessions.TryGetValue(suid, out session);
     }
 }
