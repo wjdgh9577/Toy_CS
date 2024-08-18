@@ -17,7 +17,13 @@ public partial class PacketHandler
 	void Register()
 	{		
 		_deserializers.Add((ushort)MsgId.CPong, Deserialize<C_Pong>);
-        _handlers.Add((ushort)MsgId.CPong, HandleCPong);
+        _handlers.Add((ushort)MsgId.CPong, HandleCPong);		
+		_deserializers.Add((ushort)MsgId.CEnterRoom, Deserialize<C_EnterRoom>);
+        _handlers.Add((ushort)MsgId.CEnterRoom, HandleCEnterRoom);		
+		_deserializers.Add((ushort)MsgId.CLeaveRoom, Deserialize<C_LeaveRoom>);
+        _handlers.Add((ushort)MsgId.CLeaveRoom, HandleCLeaveRoom);		
+		_deserializers.Add((ushort)MsgId.CTestChat, Deserialize<C_TestChat>);
+        _handlers.Add((ushort)MsgId.CTestChat, HandleCTestChat);
 	}
 
 	public static void HandlePacket(SessionBase session, ArraySegment<byte> buffer)

@@ -19,7 +19,11 @@ public partial class PacketHandler
 		_deserializers.Add((ushort)MsgId.SPing, Deserialize<S_Ping>);
         _handlers.Add((ushort)MsgId.SPing, HandleSPing);		
 		_deserializers.Add((ushort)MsgId.SConnected, Deserialize<S_Connected>);
-        _handlers.Add((ushort)MsgId.SConnected, HandleSConnected);
+        _handlers.Add((ushort)MsgId.SConnected, HandleSConnected);		
+		_deserializers.Add((ushort)MsgId.SEnterRoom, Deserialize<S_EnterRoom>);
+        _handlers.Add((ushort)MsgId.SEnterRoom, HandleSEnterRoom);		
+		_deserializers.Add((ushort)MsgId.SLeaveRoom, Deserialize<S_LeaveRoom>);
+        _handlers.Add((ushort)MsgId.SLeaveRoom, HandleSLeaveRoom);
 	}
 
 	public static void HandlePacket(SessionBase session, ArraySegment<byte> buffer)

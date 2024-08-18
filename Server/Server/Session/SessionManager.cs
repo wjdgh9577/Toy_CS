@@ -1,4 +1,5 @@
-﻿using CoreLibrary.Network;
+﻿using CoreLibrary.Log;
+using CoreLibrary.Network;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,24 +13,22 @@ public class SessionManager
     public static SessionManager Instance { get; } = new SessionManager();
     SessionManager() { }
 
-    Dictionary<int, List<SessionBase>> _sessions = new Dictionary<int, List<SessionBase>>();
+    Dictionary<int, SessionBase> _sessions = new Dictionary<int, SessionBase>();
 
-    public int NewSUID => _suid++;
+    int NewSUID => _suid++;
     int _suid = 0;
 
     object _lock = new object();
 
-    public T Generate<T>(int suid) where T : SessionBase, new()
+    public T Generate<T>() where T : SessionBase, new()
     {
         lock (_lock)
         {
             T session = new T();
-            session.SUID = suid;
+            int suid = session.SUID = NewSUID;
 
-            if (_sessions.TryGetValue(suid, out var sessionList))
-                sessionList.Add(session);
-            else
-                _sessions.Add(suid, new List<SessionBase>() { session });
+            if (_sessions.TryAdd(suid, session) == false)
+                LogHandler.LogError(LogCode.SESSION_INVALID_UID, $"SUID ({suid}) is already used.");
 
             return session;
         }
@@ -39,12 +38,9 @@ public class SessionManager
     {
         lock ( _lock)
         {
-            if (_sessions.TryGetValue(suid, out var sessionList))
+            if (_sessions.TryGetValue(suid, out var session))
             {
-                T? session = sessionList.Find(s => s is T) as T;
-
-                if (session != null)
-                    return session;
+                return session as T;
             }
 
             return default;
@@ -55,16 +51,8 @@ public class SessionManager
     {
         lock (_lock)
         {
-            int suid = session.SUID;
-
-            if (_sessions.TryGetValue(suid, out var sessionList))
-            {
-                sessionList.Remove(session);
-
-                if (sessionList.Count == 0)
-                    _sessions.Remove(suid);
-            }
-
+            if (_sessions.Remove(session.SUID) == false)
+                LogHandler.LogError(LogCode.SESSION_NOT_EXIST, $"Session_{session.SUID} is not exist.");
         }
     }
 }

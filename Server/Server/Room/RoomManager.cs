@@ -1,4 +1,7 @@
-﻿using CoreLibrary.Network;
+﻿using CoreLibrary.Job;
+using CoreLibrary.Log;
+using CoreLibrary.Network;
+using Server.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +13,12 @@ namespace Server.Room;
 public class RoomManager
 {
     public static RoomManager Instance { get; } = new RoomManager();
-    RoomManager() { }
+    RoomManager()
+    {
+        JobTimerHandler.PushAfter(UpdateRooms, UPDATE_INTERVAL, autoReset: true);
+    }
 
+    const int UPDATE_INTERVAL = 1000;
     const int MAX_CCU = 500;
 
     public int CCU { get; private set; } = 0;
@@ -21,7 +28,7 @@ public class RoomManager
     int _newUniqueRoomId = 1;
     object _lock = new object();
 
-    public void EnterRoom<T>(SessionBase session, int roomId) where T : RoomBase, new()
+    public void EnterRoom<T>(GameSession session, int roomId) where T : RoomBase, new()
     {
         lock (_lock)
         {
@@ -32,6 +39,37 @@ public class RoomManager
 
             CCU += 1;
             room.OnEnter(session);
+            session.EnterRoom(room);
+        }
+    }
+
+    public void LeaveRoom<T>(GameSession session, int roomId) where T : RoomBase
+    {
+        lock (_lock)
+        {
+            var room = FindRoom<T>(roomId);
+
+            if (room == null)
+            {
+                LogHandler.LogError(LogCode.ROOM_NOT_EXIST, $"{typeof(T)}_{roomId} is not exist.");
+                return;
+            }
+
+            CCU = Math.Max(CCU - 1, 0);
+            room.OnLeave(session);
+            session.LeaveRoom(room);
+        }
+    }
+
+    public void LeaveRoom(GameSession session, HashSet<RoomBase> roomList)
+    {
+        lock (_lock)
+        {
+            foreach (var room in roomList)
+            {
+                room.OnLeave(session);
+                session.LeaveRoom(room);
+            }
         }
     }
 
@@ -42,6 +80,8 @@ public class RoomManager
             T newRoom = new T();
             RoomInfo info = new RoomInfo(_newUniqueRoomId++, roomId);
             _rooms.Add(info, newRoom);
+
+            LogHandler.Log(LogCode.CONSOLE, $"Make room: {info.ToString()}");
 
             newRoom.OnStart(info);
 
@@ -84,6 +124,8 @@ public class RoomManager
 
             var info = room.Info;
             _rooms.Remove(info);
+
+            LogHandler.Log(LogCode.CONSOLE, $"Destroy room: {info.ToString()}");
 
             room?.OnDestroy();
 

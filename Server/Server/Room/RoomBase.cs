@@ -1,4 +1,5 @@
 ﻿using CoreLibrary.Network;
+using Server.Session;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Server.Room;
 
-public struct RoomInfo : IEqualityComparer<RoomInfo>
+public class RoomInfo
 {
     /// <summary>
     /// Room의 고유식별자
@@ -16,7 +17,8 @@ public struct RoomInfo : IEqualityComparer<RoomInfo>
     public int uniqueId;
 
     /// <summary>
-    /// Room의 종류에 따른 식별자
+    /// 같은 Type의 Room을 구분하는 식별자
+    /// (ex. GameRoom_0, GameRoom_1, ...)
     /// </summary>
     public int id;
 
@@ -42,14 +44,9 @@ public struct RoomInfo : IEqualityComparer<RoomInfo>
         this.ccu = Math.Max(this.ccu - 1, 0);
     }
 
-    public bool Equals(RoomInfo x, RoomInfo y)
+    public override string ToString()
     {
-        return x.uniqueId == y.uniqueId && x.id == y.id;
-    }
-
-    public int GetHashCode([DisallowNull] RoomInfo obj)
-    {
-        return obj.uniqueId.GetHashCode();
+        return $"Unique ID: {uniqueId}, ID: {id}";
     }
 }
 
@@ -66,12 +63,12 @@ public abstract class RoomBase
 
     public virtual void OnDestroy() { }
 
-    public virtual void OnEnter(SessionBase session)
+    public virtual void OnEnter(GameSession session)
     {
         Info.Enter();
     }
 
-    public virtual void OnLeave(SessionBase session)
+    public virtual void OnLeave(GameSession session)
     {
         Info.Leave();
     }

@@ -22,7 +22,7 @@ public class SessionManager
         {
             T session = new T();
 
-            _sessions.Add(typeof(T), session);
+            _sessions.TryAdd(typeof(T), session);
 
             return session;
         }

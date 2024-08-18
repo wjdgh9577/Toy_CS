@@ -14,9 +14,15 @@ public enum LogCode
     // Socket
     SOCKET_ERROR,
 
+    // Session
+    SESSION_INVALID_TYPE,
+    SESSION_INVALID_UID,
+    SESSION_NOT_EXIST,
+
     // Room
     ROOM_NOT_EXIST,
-    INVALID_SESSION_TYPE,
+    ROOM_SESSION_INVALID_UID,
+    ROOM_SESSION_NOT_EXIST,
 
     // Exception
     EXCEPTION,

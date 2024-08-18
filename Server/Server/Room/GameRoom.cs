@@ -1,4 +1,6 @@
-﻿using CoreLibrary.Network;
+﻿using CoreLibrary.Log;
+using CoreLibrary.Network;
+using Google.Protobuf;
 using Server.Session;
 using System;
 using System.Collections.Generic;
@@ -32,8 +34,27 @@ public class GameRoom : RoomBase
         base.OnDestroy();
     }
 
-    public override void OnEnter(SessionBase session)
+    public override void OnEnter(GameSession session)
     {
         base.OnEnter(session);
+
+        if (_sessions.TryAdd(session.SUID, session) == false)
+            LogHandler.LogError(LogCode.ROOM_SESSION_INVALID_UID, $"SUID ({session.SUID}) is already used.");
+    }
+
+    public override void OnLeave(GameSession session)
+    {
+        base.OnLeave(session);
+
+        if (_sessions.Remove(session.SUID) == false)
+            LogHandler.LogError(LogCode.ROOM_SESSION_NOT_EXIST, $"Session_{session.SUID} is not exist.");
+    }
+
+    public void Broadcast(IMessage message)
+    {
+        foreach (var session in _sessions.Values)
+        {
+            session.Send(message);
+        }
     }
 }

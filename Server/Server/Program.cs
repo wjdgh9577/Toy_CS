@@ -16,8 +16,7 @@ public class Program
         listener.Accepted += args =>
         {
             Socket? acceptSocket = args.AcceptSocket;
-            int suid = SessionManager.Instance.NewSUID;
-            SessionBase? session = SessionManager.Instance.Generate<GameSession>(suid);
+            SessionBase? session = SessionManager.Instance.Generate<GameSession>();
             if (acceptSocket != null && session != null)
             {
                 session.Start(acceptSocket);

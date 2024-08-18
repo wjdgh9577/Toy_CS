@@ -15,7 +15,7 @@ public partial class PacketHandler
     {
         GameSession gameSession = (GameSession)session;
         S_Ping packet = (S_Ping)message;
-        LogHandler.Log(LogCode.CONSOLE, packet.ServerTime);
+        LogHandler.Log(LogCode.CONSOLE, "HandleSPing", packet.ServerTime.ToDateTime());
 
         gameSession.OnPing(packet.ServerTime.ToDateTime());
     }
@@ -24,8 +24,22 @@ public partial class PacketHandler
     {
         GameSession gameSession = (GameSession)session;
         S_Connected packet = (S_Connected)message;
-        LogHandler.Log(LogCode.CONSOLE, packet.ServerTime.ToDateTime());
+        LogHandler.Log(LogCode.CONSOLE, "HandleSConnected", packet.ServerTime.ToDateTime());
 
         gameSession.OnPing(packet.ServerTime.ToDateTime());
+    }
+
+    void HandleSEnterRoom(SessionBase session, IMessage message)
+    {
+        GameSession gameSession = (GameSession)session;
+        S_EnterRoom packet = (S_EnterRoom)message;
+        LogHandler.Log(LogCode.CONSOLE, "HandleSEnterRoom", packet.EnterOk, packet.RoomId);
+    }
+
+    void HandleSLeaveRoom(SessionBase session, IMessage message)
+    {
+        GameSession gameSession = (GameSession)session;
+        S_LeaveRoom packet = (S_LeaveRoom)message;
+        LogHandler.Log(LogCode.CONSOLE, "HandleSLeaveRoom", packet.LeaveOk, packet.RoomId);
     }
 }

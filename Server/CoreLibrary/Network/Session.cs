@@ -24,12 +24,36 @@ public abstract class SessionBase
 
     public int SUID { get; set; }
 
+    public abstract void OnConnected();
+    public abstract void OnDisconnected();
     public abstract void OnSend(int BytesTransferred);
     public abstract void OnRecv(ArraySegment<byte> buffer);
 
-    public abstract void Start(Socket socket, int recvBufferSize = 65535);
+    public void Start(Socket socket, int recvBufferSize = 65535)
+    {
+        _socket = socket;
 
-    public virtual void Disconnect() { }
+        _sendBuffer = new SendBuffer();
+        _recvBuffer = new RecvBuffer(recvBufferSize);
+
+        OnConnected();
+
+        _sendArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendComplete);
+        _recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
+
+        RegisterRecv();
+    }
+
+    public void Disconnect()
+    {
+        if (Interlocked.Exchange(ref _disconnected, 1) == 1)
+            return;
+
+        OnDisconnected();
+
+        _socket.Shutdown(SocketShutdown.Both);
+        _socket.Close();
+    }
 
     #region Send
 
@@ -178,52 +202,4 @@ public abstract class SessionBase
     }
 
     #endregion
-}
-
-public abstract class TcpSession : SessionBase
-{
-    public abstract void OnConnected();
-    public abstract void OnDisconnected();
-
-    public sealed override void Start(Socket socket, int recvBufferSize = 65535)
-    {
-        _socket = socket;
-
-        _sendBuffer = new SendBuffer();
-        _recvBuffer = new RecvBuffer(recvBufferSize);
-
-        OnConnected();
-
-        _sendArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendComplete);
-        _recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
-
-        RegisterRecv();
-    }
-
-    public sealed override void Disconnect()
-    {
-        if (Interlocked.Exchange(ref _disconnected, 1) == 1)
-            return;
-
-        OnDisconnected();
-
-        _socket.Shutdown(SocketShutdown.Both);
-        _socket.Close();
-    }
-}
-
-public abstract class UdpSession : SessionBase
-{
-    public sealed override void Start(Socket socket, int recvBufferSize = 65535)
-    {
-        _socket = socket;
-
-        _sendBuffer = new SendBuffer();
-        _recvBuffer = new RecvBuffer(recvBufferSize);
-
-        _sendArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendComplete);
-        _recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
-
-        RegisterRecv();
-    }
 }

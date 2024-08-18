@@ -10,6 +10,11 @@ enum MsgId
 	S_PING = 0;
 	C_PONG = 1;
 	S_CONNECTED = 2;
+	S_ENTER_ROOM = 3;
+	C_ENTER_ROOM = 4;
+	S_LEAVE_ROOM = 5;
+	C_LEAVE_ROOM = 6;
+	C_TEST_CHAT = 7;
 }
 
 message S_Ping
@@ -25,4 +30,31 @@ message C_Pong
 message S_Connected
 {
 	google.protobuf.Timestamp serverTime = 1;
+}
+
+message S_EnterRoom
+{
+	int32 roomId = 1;
+	bool enterOk = 2;
+}
+
+message C_EnterRoom
+{
+	int32 roomId = 1;
+}
+
+message S_LeaveRoom
+{
+	int32 roomId = 1;
+	bool leaveOk = 2;
+}
+
+message C_LeaveRoom
+{
+	int32 roomId = 1;
+}
+
+message C_TestChat
+{
+	string chat = 1;
 }

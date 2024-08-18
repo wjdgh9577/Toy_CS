@@ -6,26 +6,32 @@ using TestClient.Session;
 
 namespace TestClient;
 
-internal class Program
+public class Program
 {
+    const int TEST_CLIENT_COUNT = 1;
+
     static void Main(string[] args)
     {
         LogHandler.SetModule(new LogModule());
         
         Thread.Sleep(3000);
 
-        NetworkHandler.TcpConnector(out var connector);
-        connector.Connected += args =>
+        for (int i = 0; i < TEST_CLIENT_COUNT; i++)
         {
-            Socket? connectSocket = args.ConnectSocket;
-            SessionBase? session = SessionManager.Instance.Generate<GameSession>();
-            if (connectSocket != null && session != null)
+            NetworkHandler.TcpConnector(out var connector);
+            connector.Connected += args =>
             {
-                session.Start(connectSocket);
-            }
-        };
+                Socket? connectSocket = args.ConnectSocket;
+                SessionBase? session = SessionManager.Instance.Generate<GameSession>();
+                if (connectSocket != null && session != null)
+                {
+                    session.Start(connectSocket);
+                }
+            };
 
-        connector.Start();
+            connector.Start();
+            Thread.Sleep(10);
+        }
 
         while (true)
         {
