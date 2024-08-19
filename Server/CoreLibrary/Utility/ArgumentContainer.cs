@@ -8,39 +8,36 @@ namespace CoreLibrary.Utility
 {
     public class ArgumentContainer
     {
-        Dictionary<string, string> _arguments = new Dictionary<string, string>();
+        Dictionary<string, object> _arguments = new Dictionary<string, object>();
 
-        public string this[string key]
+        public object this[string key]
         {
             get
             {
-                _arguments.TryGetValue(key, out string value);
+                _arguments.TryGetValue(key, out object value);
                 return value;
             }
             set
             {
                 if (_arguments.ContainsKey(key))
-                    _arguments[key] = value;
-                else
-                    _arguments.Add(key, value);
+                    throw new ArgumentException("Duplicated key.");
+
+                _arguments.Add(key, value);
             }
         }
 
-        public static ArgumentContainer NewContainer(params (object, object)[] args)
+        /// <summary>
+        /// </summary>
+        /// <param name="args">
+        /// Boxing 주의.
+        /// </param>
+        /// <returns></returns>
+        public static ArgumentContainer NewContainer(params (string key, object value)[] args)
         {
             ArgumentContainer container = new ArgumentContainer();
 
             foreach (var arg in args)
-            {
-                if (arg.Item1 is string s_arg)
-                {
-                    container[s_arg] = arg.Item2.ToString();
-                }
-                else
-                {
-                    container[arg.Item1.ToString()] = arg.Item2.ToString();
-                }
-            }
+                container[arg.key] = arg.value;
 
             return container;
         }
