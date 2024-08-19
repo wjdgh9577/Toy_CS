@@ -24,6 +24,7 @@ public partial class PacketHandler
         LogHandler.Log(LogCode.CONSOLE, "HandleCEnterRoom", packet.RoomId);
 
         RoomManager.Instance.EnterRoom<GameRoom>(clientSession, packet.RoomId);
+        RoomManager.Instance.EnterRoom<ChatRoom>(clientSession, 0);
     }
 
     void HandleCLeaveRoom(SessionBase session, IMessage message)
@@ -33,17 +34,18 @@ public partial class PacketHandler
         LogHandler.Log(LogCode.CONSOLE, "HandleCLeaveRoom", packet.RoomId);
 
         RoomManager.Instance.LeaveRoom<GameRoom>(clientSession, packet.RoomId);
+        RoomManager.Instance.LeaveRoom<ChatRoom>(clientSession, 0);
     }
 
-    void HandleCTestChat(SessionBase session, IMessage message)
+    void HandleCChat(SessionBase session, IMessage message)
     {
         ClientSession clientSession = (ClientSession)session;
-        C_TestChat packet = (C_TestChat)message;
+        C_Chat packet = (C_Chat)message;
         LogHandler.Log(LogCode.CONSOLE, $"Chat: {packet.Chat}");
 
-        S_TestChat broadcastPacket = new S_TestChat();
+        S_Chat broadcastPacket = new S_Chat();
         broadcastPacket.Chat = packet.Chat;
         broadcastPacket.Suid = session.SUID;
-        RoomManager.Instance.Broadcast<GameRoom>(clientSession, broadcastPacket);
+        RoomManager.Instance.Broadcast<ChatRoom>(clientSession, broadcastPacket);
     }
 }

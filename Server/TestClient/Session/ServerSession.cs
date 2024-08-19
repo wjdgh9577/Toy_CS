@@ -40,7 +40,7 @@ public class ServerSession : SessionBase
 
     public override void OnSend(int BytesTransferred)
     {
-        LogHandler.Log(LogCode.CONSOLE, BytesTransferred);
+        LogHandler.Log(LogCode.CONSOLE, $"BytesTransferred: {BytesTransferred}");
     }
 
     public void Send(IMessage message)
@@ -64,7 +64,7 @@ public class ServerSession : SessionBase
             while (true)
             {
                 var chat = Console.ReadLine();
-                C_TestChat packet = new C_TestChat();
+                C_Chat packet = new C_Chat();
                 packet.Chat = chat;
                 Send(packet);
             }

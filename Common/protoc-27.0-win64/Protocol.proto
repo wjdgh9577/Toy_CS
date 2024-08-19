@@ -14,8 +14,8 @@ enum MsgId
 	C_ENTER_ROOM = 4;
 	S_LEAVE_ROOM = 5;
 	C_LEAVE_ROOM = 6;
-	S_TEST_CHAT = 7;
-	C_TEST_CHAT = 8;
+	S_CHAT = 7;
+	C_CHAT = 8;
 }
 
 message S_Ping
@@ -55,13 +55,13 @@ message C_LeaveRoom
 	int32 roomId = 1;
 }
 
-message S_TestChat
+message S_Chat
 {
 	string chat = 1;
 	int32 suid = 2;
 }
 
-message C_TestChat
+message C_Chat
 {
 	string chat = 1;
 }

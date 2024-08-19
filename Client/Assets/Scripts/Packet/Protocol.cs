@@ -31,14 +31,14 @@ namespace Google.Protobuf.Protocol {
             "LlRpbWVzdGFtcCIuCgtTX0VudGVyUm9vbRIOCgZyb29tSWQYASABKAUSDwoH",
             "ZW50ZXJPaxgCIAEoCCIdCgtDX0VudGVyUm9vbRIOCgZyb29tSWQYASABKAUi",
             "LgoLU19MZWF2ZVJvb20SDgoGcm9vbUlkGAEgASgFEg8KB2xlYXZlT2sYAiAB",
-            "KAgiHQoLQ19MZWF2ZVJvb20SDgoGcm9vbUlkGAEgASgFIigKClNfVGVzdENo",
-            "YXQSDAoEY2hhdBgBIAEoCRIMCgRzdWlkGAIgASgFIhoKCkNfVGVzdENoYXQS",
-            "DAoEY2hhdBgBIAEoCSIsCghSb29tSW5mbxIQCgh1bmlxdWVJZBgBIAEoBRIO",
-            "CgZyb29tSWQYAiABKAUqmgEKBU1zZ0lkEgoKBlNfUElORxAAEgoKBkNfUE9O",
-            "RxABEg8KC1NfQ09OTkVDVEVEEAISEAoMU19FTlRFUl9ST09NEAMSEAoMQ19F",
-            "TlRFUl9ST09NEAQSEAoMU19MRUFWRV9ST09NEAUSEAoMQ19MRUFWRV9ST09N",
-            "EAYSDwoLU19URVNUX0NIQVQQBxIPCgtDX1RFU1RfQ0hBVBAIQhuqAhhHb29n",
-            "bGUuUHJvdG9idWYuUHJvdG9jb2xiBnByb3RvMw=="));
+            "KAgiHQoLQ19MZWF2ZVJvb20SDgoGcm9vbUlkGAEgASgFIiQKBlNfQ2hhdBIM",
+            "CgRjaGF0GAEgASgJEgwKBHN1aWQYAiABKAUiFgoGQ19DaGF0EgwKBGNoYXQY",
+            "ASABKAkiLAoIUm9vbUluZm8SEAoIdW5pcXVlSWQYASABKAUSDgoGcm9vbUlk",
+            "GAIgASgFKpABCgVNc2dJZBIKCgZTX1BJTkcQABIKCgZDX1BPTkcQARIPCgtT",
+            "X0NPTk5FQ1RFRBACEhAKDFNfRU5URVJfUk9PTRADEhAKDENfRU5URVJfUk9P",
+            "TRAEEhAKDFNfTEVBVkVfUk9PTRAFEhAKDENfTEVBVkVfUk9PTRAGEgoKBlNf",
+            "Q0hBVBAHEgoKBkNfQ0hBVBAIQhuqAhhHb29nbGUuUHJvdG9idWYuUHJvdG9j",
+            "b2xiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -49,8 +49,8 @@ namespace Google.Protobuf.Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_EnterRoom), global::Google.Protobuf.Protocol.C_EnterRoom.Parser, new[]{ "RoomId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_LeaveRoom), global::Google.Protobuf.Protocol.S_LeaveRoom.Parser, new[]{ "RoomId", "LeaveOk" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_LeaveRoom), global::Google.Protobuf.Protocol.C_LeaveRoom.Parser, new[]{ "RoomId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_TestChat), global::Google.Protobuf.Protocol.S_TestChat.Parser, new[]{ "Chat", "Suid" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_TestChat), global::Google.Protobuf.Protocol.C_TestChat.Parser, new[]{ "Chat" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_Chat), global::Google.Protobuf.Protocol.S_Chat.Parser, new[]{ "Chat", "Suid" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_Chat), global::Google.Protobuf.Protocol.C_Chat.Parser, new[]{ "Chat" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.RoomInfo), global::Google.Protobuf.Protocol.RoomInfo.Parser, new[]{ "UniqueId", "RoomId" }, null, null, null, null)
           }));
     }
@@ -66,8 +66,8 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("C_ENTER_ROOM")] CEnterRoom = 4,
     [pbr::OriginalName("S_LEAVE_ROOM")] SLeaveRoom = 5,
     [pbr::OriginalName("C_LEAVE_ROOM")] CLeaveRoom = 6,
-    [pbr::OriginalName("S_TEST_CHAT")] STestChat = 7,
-    [pbr::OriginalName("C_TEST_CHAT")] CTestChat = 8,
+    [pbr::OriginalName("S_CHAT")] SChat = 7,
+    [pbr::OriginalName("C_CHAT")] CChat = 8,
   }
 
   #endregion
@@ -1515,16 +1515,16 @@ namespace Google.Protobuf.Protocol {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class S_TestChat : pb::IMessage<S_TestChat>
+  public sealed partial class S_Chat : pb::IMessage<S_Chat>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<S_TestChat> _parser = new pb::MessageParser<S_TestChat>(() => new S_TestChat());
+    private static readonly pb::MessageParser<S_Chat> _parser = new pb::MessageParser<S_Chat>(() => new S_Chat());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<S_TestChat> Parser { get { return _parser; } }
+    public static pb::MessageParser<S_Chat> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -1540,7 +1540,7 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public S_TestChat() {
+    public S_Chat() {
       OnConstruction();
     }
 
@@ -1548,7 +1548,7 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public S_TestChat(S_TestChat other) : this() {
+    public S_Chat(S_Chat other) : this() {
       chat_ = other.chat_;
       suid_ = other.suid_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -1556,8 +1556,8 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public S_TestChat Clone() {
-      return new S_TestChat(this);
+    public S_Chat Clone() {
+      return new S_Chat(this);
     }
 
     /// <summary>Field number for the "chat" field.</summary>
@@ -1587,12 +1587,12 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as S_TestChat);
+      return Equals(other as S_Chat);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(S_TestChat other) {
+    public bool Equals(S_Chat other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -1678,7 +1678,7 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(S_TestChat other) {
+    public void MergeFrom(S_Chat other) {
       if (other == null) {
         return;
       }
@@ -1750,16 +1750,16 @@ namespace Google.Protobuf.Protocol {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class C_TestChat : pb::IMessage<C_TestChat>
+  public sealed partial class C_Chat : pb::IMessage<C_Chat>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<C_TestChat> _parser = new pb::MessageParser<C_TestChat>(() => new C_TestChat());
+    private static readonly pb::MessageParser<C_Chat> _parser = new pb::MessageParser<C_Chat>(() => new C_Chat());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<C_TestChat> Parser { get { return _parser; } }
+    public static pb::MessageParser<C_Chat> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -1775,7 +1775,7 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public C_TestChat() {
+    public C_Chat() {
       OnConstruction();
     }
 
@@ -1783,15 +1783,15 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public C_TestChat(C_TestChat other) : this() {
+    public C_Chat(C_Chat other) : this() {
       chat_ = other.chat_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public C_TestChat Clone() {
-      return new C_TestChat(this);
+    public C_Chat Clone() {
+      return new C_Chat(this);
     }
 
     /// <summary>Field number for the "chat" field.</summary>
@@ -1809,12 +1809,12 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as C_TestChat);
+      return Equals(other as C_Chat);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(C_TestChat other) {
+    public bool Equals(C_Chat other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -1887,7 +1887,7 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(C_TestChat other) {
+    public void MergeFrom(C_Chat other) {
       if (other == null) {
         return;
       }
