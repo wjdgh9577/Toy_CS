@@ -62,7 +62,7 @@ public class ServerSession : SessionBase
             while (true)
             {
                 var chat = Console.ReadLine();
-                C_TestChat packet = new C_TestChat();
+                C_Chat packet = new C_Chat();
                 packet.Chat = chat;
                 Send(packet);
             }

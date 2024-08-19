@@ -42,10 +42,10 @@ public partial class PacketHandler
         LogHandler.Log(LogCode.CONSOLE, "HandleSLeaveRoom", packet.LeaveOk, packet.RoomId);
     }
 
-    void HandleSTestChat(SessionBase session, IMessage message)
+    void HandleSChat(SessionBase session, IMessage message)
     {
         ServerSession serverSession = (ServerSession)session;
-        S_TestChat packet = (S_TestChat)message;
+        S_Chat packet = (S_Chat)message;
         LogHandler.Log(LogCode.CONSOLE, $"From: Session_{packet.Suid}, Chat: {packet.Chat}");
     }
 }
