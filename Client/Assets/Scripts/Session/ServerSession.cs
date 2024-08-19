@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public class GameSession : SessionBase
+public class ServerSession : SessionBase
 {
     const int TICKS_TO_MILLISECONDS = 10000;
 

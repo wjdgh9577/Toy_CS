@@ -26,7 +26,7 @@ public class GameRoom : RoomBase
 
     public override void OnDestroy() => base.OnDestroy();
 
-    public override void OnEnter(GameSession session)
+    public override void OnEnter(ClientSession session)
     {
         base.OnEnter(session);
         
@@ -34,7 +34,7 @@ public class GameRoom : RoomBase
             LogHandler.LogError(LogCode.ROOM_SESSION_INVALID_UID, $"SUID ({session.SUID}) is already used.");
     }
 
-    public override void OnLeave(GameSession session)
+    public override void OnLeave(ClientSession session)
     {
         base.OnLeave(session);
         
@@ -42,5 +42,5 @@ public class GameRoom : RoomBase
             LogHandler.LogError(LogCode.ROOM_SESSION_NOT_EXIST, $"Session_{session.SUID} is not exist.");
     }
 
-    public override void Broadcast(GameSession session, IMessage message) => base.Broadcast(session, message);
+    public override void Broadcast(ClientSession session, IMessage message) => base.Broadcast(session, message);
 }

@@ -29,7 +29,7 @@ public class RoomManager
     int _newUniqueRoomId = 1;
     object _lock = new object();
 
-    public void EnterRoom<T>(GameSession session, int roomId) where T : RoomBase, new()
+    public void EnterRoom<T>(ClientSession session, int roomId) where T : RoomBase, new()
     {
         lock (_lock)
         {
@@ -44,7 +44,7 @@ public class RoomManager
         }
     }
 
-    public void LeaveRoom<T>(GameSession session, int roomId) where T : RoomBase
+    public void LeaveRoom<T>(ClientSession session, int roomId) where T : RoomBase
     {
         lock (_lock)
         {
@@ -62,7 +62,7 @@ public class RoomManager
         }
     }
 
-    public void LeaveRoom(GameSession session, HashSet<RoomBase> roomList)
+    public void LeaveRoom(ClientSession session, HashSet<RoomBase> roomList)
     {
         lock (_lock)
         {
@@ -103,7 +103,7 @@ public class RoomManager
         }
     }
 
-    public T? FindRoom<T>(GameSession session) where T : RoomBase
+    public T? FindRoom<T>(ClientSession session) where T : RoomBase
     {
         lock (_lock)
         {
@@ -147,7 +147,7 @@ public class RoomManager
         }
     }
 
-    public void Broadcast<T>(GameSession session, IMessage message) where T : RoomBase
+    public void Broadcast<T>(ClientSession session, IMessage message) where T : RoomBase
     {
         lock (_lock)
         {

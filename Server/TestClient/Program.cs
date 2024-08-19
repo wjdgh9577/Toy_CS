@@ -22,7 +22,7 @@ public class Program
             connector.Connected += args =>
             {
                 Socket? connectSocket = args.ConnectSocket;
-                SessionBase? session = SessionManager.Instance.Generate<GameSession>();
+                SessionBase? session = SessionManager.Instance.Generate<ServerSession>();
                 if (connectSocket != null && session != null)
                 {
                     session.Start(connectSocket);

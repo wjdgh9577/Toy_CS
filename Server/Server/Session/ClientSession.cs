@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Server.Session;
 
-public class GameSession : SessionBase
+public class ClientSession : SessionBase
 {
     const int PING_INTERVAL = 30000;
     IJob pingJob = null;

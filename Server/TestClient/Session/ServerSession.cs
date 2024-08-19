@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace TestClient.Session;
 
-public class GameSession : SessionBase
+public class ServerSession : SessionBase
 {
     const int TICKS_TO_MILLISECONDS = 10000;
 

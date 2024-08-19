@@ -54,7 +54,7 @@ public class RoomInfo
 public abstract class RoomBase
 {
     public RoomInfo Info { get; protected set; }
-    protected Dictionary<int, GameSession> _sessions = new Dictionary<int, GameSession>();
+    protected Dictionary<int, ClientSession> _sessions = new Dictionary<int, ClientSession>();
 
     public virtual void OnStart(RoomInfo info)
     {
@@ -65,17 +65,17 @@ public abstract class RoomBase
 
     public virtual void OnDestroy() { }
 
-    public virtual void OnEnter(GameSession session)
+    public virtual void OnEnter(ClientSession session)
     {
         Info.Enter();
     }
 
-    public virtual void OnLeave(GameSession session)
+    public virtual void OnLeave(ClientSession session)
     {
         Info.Leave();
     }
 
-    public virtual void Broadcast(GameSession session, IMessage message)
+    public virtual void Broadcast(ClientSession session, IMessage message)
     {
         foreach (var _session in _sessions.Values)
         {
@@ -85,7 +85,7 @@ public abstract class RoomBase
         }
     }
 
-    public bool TryGetSession(int suid, out GameSession? session)
+    public bool TryGetSession(int suid, out ClientSession? session)
     {
         return _sessions.TryGetValue(suid, out session);
     }
