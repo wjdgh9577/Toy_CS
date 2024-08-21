@@ -12,6 +12,11 @@ using System.Threading.Tasks;
 
 public partial class PacketHandler
 {
+    void HandleLogic(Action<SessionBase, IMessage> handler, SessionBase session, IMessage message)
+    {
+        handler.Invoke(session, message);
+    }
+
     void HandleCPing(SessionBase session, IMessage message)
     {
         ClientSession clientSession = (ClientSession)session;

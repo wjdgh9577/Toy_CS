@@ -47,7 +47,7 @@ public partial class PacketHandler
         packet.MergeFrom(buffer.Array, buffer.Offset + sizeof(ushort) * 2, buffer.Count - sizeof(ushort) * 2);
 
         if (_handlers.TryGetValue(id, out var handler))
-            handler.Invoke(session, packet);
+            HandleLogic(handler, session, packet);
 	}}
 
 	public static ArraySegment<byte> Serialize(IMessage message)

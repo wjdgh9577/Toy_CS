@@ -11,6 +11,11 @@ using TestClient.Session;
 
 public partial class PacketHandler
 {
+    void HandleLogic(Action<SessionBase, IMessage> handler, SessionBase session, IMessage message)
+    {
+        handler.Invoke(session, message);
+    }
+
     void HandleSPing(SessionBase session, IMessage message)
     {
         ServerSession serverSession = (ServerSession)session;

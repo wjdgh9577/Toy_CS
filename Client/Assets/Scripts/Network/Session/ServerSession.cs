@@ -38,7 +38,7 @@ public class ServerSession : SessionBase
 
     public override void OnSend(int BytesTransferred)
     {
-        LogHandler.Log(LogCode.CONSOLE, BytesTransferred);
+        LogHandler.Log(LogCode.CONSOLE, $"BytesTransferred: {BytesTransferred}");
     }
 
     public void Send(IMessage message)

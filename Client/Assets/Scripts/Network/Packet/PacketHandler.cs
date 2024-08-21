@@ -10,6 +10,11 @@ using System.Threading.Tasks;
 
 public partial class PacketHandler
 {
+    void HandleLogic(Action<SessionBase, IMessage> handler, SessionBase session, IMessage message)
+    {
+        Managers.Instance.NetworkManager.HandlePacket(handler, session, message);
+    }
+
     void HandleSPing(SessionBase session, IMessage message)
     {
         ServerSession serverSession = (ServerSession)session;
