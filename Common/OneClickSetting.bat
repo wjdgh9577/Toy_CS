@@ -12,7 +12,7 @@ IF ERRORLEVEL 1 PAUSE
 
 set CLIENT_PLUGIN_PATH="../../Client/Assets/Plugins"
 set SERVER_PLUGIN_PATH="../../Server/TestClient/bin/Debug/net8.0\CoreLibrary.dll"
-set CLIENT_PACKET_PATH="../../Client/Assets/Scripts/Packet"
+set CLIENT_PACKET_PATH="../../Client/Assets/Scripts/Network/Packet"
 set SERVER_PACKET_PATH="../../Server/Server/Packet"
 set DUMMY_PACKET_PATH="../../Server/TestClient/Packet"
 

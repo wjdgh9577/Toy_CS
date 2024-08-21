@@ -12,9 +12,11 @@ using System.Threading.Tasks;
 
 public partial class PacketHandler
 {
-    void HandleCPong(SessionBase session, IMessage message)
+    void HandleCPing(SessionBase session, IMessage message)
     {
+        ClientSession clientSession = (ClientSession)session;
 
+        clientSession.RecvPing();
     }
 
     void HandleCEnterRoom(SessionBase session, IMessage message)

@@ -18,8 +18,8 @@ public partial class PacketHandler
 		
 	void Register()
 	{		
-		_deserializers.Add((ushort)MsgId.CPong, Deserialize<C_Pong>);
-        _handlers.Add((ushort)MsgId.CPong, HandleCPong);		
+		_deserializers.Add((ushort)MsgId.CPing, Deserialize<C_Ping>);
+        _handlers.Add((ushort)MsgId.CPing, HandleCPing);		
 		_deserializers.Add((ushort)MsgId.CEnterRoom, Deserialize<C_EnterRoom>);
         _handlers.Add((ushort)MsgId.CEnterRoom, HandleCEnterRoom);		
 		_deserializers.Add((ushort)MsgId.CLeaveRoom, Deserialize<C_LeaveRoom>);

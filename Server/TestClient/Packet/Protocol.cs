@@ -26,7 +26,7 @@ namespace Google.Protobuf.Protocol {
           string.Concat(
             "Cg5Qcm90b2NvbC5wcm90bxIIUHJvdG9jb2waH2dvb2dsZS9wcm90b2J1Zi90",
             "aW1lc3RhbXAucHJvdG8iOAoGU19QaW5nEi4KCnNlcnZlclRpbWUYASABKAsy",
-            "Gi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIggKBkNfUG9uZyI9CgtTX0Nv",
+            "Gi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIggKBkNfUGluZyI9CgtTX0Nv",
             "bm5lY3RlZBIuCgpzZXJ2ZXJUaW1lGAEgASgLMhouZ29vZ2xlLnByb3RvYnVm",
             "LlRpbWVzdGFtcCIuCgtTX0VudGVyUm9vbRIOCgZyb29tSWQYASABKAUSDwoH",
             "ZW50ZXJPaxgCIAEoCCIdCgtDX0VudGVyUm9vbRIOCgZyb29tSWQYASABKAUi",
@@ -34,7 +34,7 @@ namespace Google.Protobuf.Protocol {
             "KAgiHQoLQ19MZWF2ZVJvb20SDgoGcm9vbUlkGAEgASgFIiQKBlNfQ2hhdBIM",
             "CgRjaGF0GAEgASgJEgwKBHN1aWQYAiABKAUiFgoGQ19DaGF0EgwKBGNoYXQY",
             "ASABKAkiLAoIUm9vbUluZm8SEAoIdW5pcXVlSWQYASABKAUSDgoGcm9vbUlk",
-            "GAIgASgFKpABCgVNc2dJZBIKCgZTX1BJTkcQABIKCgZDX1BPTkcQARIPCgtT",
+            "GAIgASgFKpABCgVNc2dJZBIKCgZTX1BJTkcQABIKCgZDX1BJTkcQARIPCgtT",
             "X0NPTk5FQ1RFRBACEhAKDFNfRU5URVJfUk9PTRADEhAKDENfRU5URVJfUk9P",
             "TRAEEhAKDFNfTEVBVkVfUk9PTRAFEhAKDENfTEVBVkVfUk9PTRAGEgoKBlNf",
             "Q0hBVBAHEgoKBkNfQ0hBVBAIQhuqAhhHb29nbGUuUHJvdG9idWYuUHJvdG9j",
@@ -43,7 +43,7 @@ namespace Google.Protobuf.Protocol {
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_Ping), global::Google.Protobuf.Protocol.S_Ping.Parser, new[]{ "ServerTime" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_Pong), global::Google.Protobuf.Protocol.C_Pong.Parser, null, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_Ping), global::Google.Protobuf.Protocol.C_Ping.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_Connected), global::Google.Protobuf.Protocol.S_Connected.Parser, new[]{ "ServerTime" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_EnterRoom), global::Google.Protobuf.Protocol.S_EnterRoom.Parser, new[]{ "RoomId", "EnterOk" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_EnterRoom), global::Google.Protobuf.Protocol.C_EnterRoom.Parser, new[]{ "RoomId" }, null, null, null, null),
@@ -60,7 +60,7 @@ namespace Google.Protobuf.Protocol {
   #region Enums
   public enum MsgId {
     [pbr::OriginalName("S_PING")] SPing = 0,
-    [pbr::OriginalName("C_PONG")] CPong = 1,
+    [pbr::OriginalName("C_PING")] CPing = 1,
     [pbr::OriginalName("S_CONNECTED")] SConnected = 2,
     [pbr::OriginalName("S_ENTER_ROOM")] SEnterRoom = 3,
     [pbr::OriginalName("C_ENTER_ROOM")] CEnterRoom = 4,
@@ -281,16 +281,16 @@ namespace Google.Protobuf.Protocol {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class C_Pong : pb::IMessage<C_Pong>
+  public sealed partial class C_Ping : pb::IMessage<C_Ping>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<C_Pong> _parser = new pb::MessageParser<C_Pong>(() => new C_Pong());
+    private static readonly pb::MessageParser<C_Ping> _parser = new pb::MessageParser<C_Ping>(() => new C_Ping());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<C_Pong> Parser { get { return _parser; } }
+    public static pb::MessageParser<C_Ping> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -306,7 +306,7 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public C_Pong() {
+    public C_Ping() {
       OnConstruction();
     }
 
@@ -314,25 +314,25 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public C_Pong(C_Pong other) : this() {
+    public C_Ping(C_Ping other) : this() {
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public C_Pong Clone() {
-      return new C_Pong(this);
+    public C_Ping Clone() {
+      return new C_Ping(this);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as C_Pong);
+      return Equals(other as C_Ping);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(C_Pong other) {
+    public bool Equals(C_Ping other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -392,7 +392,7 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(C_Pong other) {
+    public void MergeFrom(C_Ping other) {
       if (other == null) {
         return;
       }

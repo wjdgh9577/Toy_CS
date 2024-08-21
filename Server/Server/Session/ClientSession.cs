@@ -15,9 +15,6 @@ namespace Server.Session;
 
 public class ClientSession : SessionBase
 {
-    const int PING_INTERVAL = 30000;
-    IJob pingJob = null;
-
     HashSet<RoomBase> _roomList = new HashSet<RoomBase>();
 
     #region Network
@@ -31,7 +28,11 @@ public class ClientSession : SessionBase
         packet.ServerTime = Timestamp.FromDateTime(DateTime.UtcNow);
         Send(packet);
 
-        Ping();
+        _pingJob = JobTimerHandler.PushAfter(() =>
+        {
+            SendPing();
+        }, PING_INTERVAL);
+        _lastPingTime = Environment.TickCount64;
     }
 
     public override void OnDisconnected()
@@ -39,7 +40,7 @@ public class ClientSession : SessionBase
         // TODO: 메모리에서 유저 관련 데이터 정리
         LogHandler.Log(LogCode.CONSOLE, $"Disconnected: {SUID}");
 
-        pingJob.Cancel = true;
+        _pingJob.Cancel = true;
         RoomManager.Instance.LeaveRoom(this, _roomList);
         SessionManager.Instance.Remove(this);
     }
@@ -62,16 +63,32 @@ public class ClientSession : SessionBase
         Send(packet);
     }
 
-    void Ping()
+    const int PING_INTERVAL = 5 * 1000;
+    const int PING_TIMEOUT = 30 * 1000;
+    long _lastPingTime;
+    IJob? _pingJob;
+
+    void SendPing()
     {
+        if (Environment.TickCount64 - _lastPingTime >= PING_TIMEOUT)
+        {
+            Disconnect();
+            return;
+        }
+
         S_Ping packet = new S_Ping();
         packet.ServerTime = Timestamp.FromDateTime(DateTime.UtcNow);
         Send(packet);
 
-        pingJob = JobTimerHandler.PushAfter(() =>
+        _pingJob = JobTimerHandler.PushAfter(() =>
         {
-            Ping();
+            SendPing();
         }, PING_INTERVAL);
+    }
+
+    public void RecvPing()
+    {
+        _lastPingTime = Environment.TickCount64;
     }
 
     #endregion

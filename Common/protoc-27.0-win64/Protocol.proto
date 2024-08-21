@@ -8,7 +8,7 @@ option csharp_namespace = "Google.Protobuf.Protocol";
 enum MsgId
 {
 	S_PING = 0;
-	C_PONG = 1;
+	C_PING = 1;
 	S_CONNECTED = 2;
 	S_ENTER_ROOM = 3;
 	C_ENTER_ROOM = 4;
@@ -23,7 +23,7 @@ message S_Ping
 	google.protobuf.Timestamp serverTime = 1;
 }
 
-message C_Pong
+message C_Ping
 {
 
 }
