@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Threading;
+using System.Threading.Tasks;
 
 public class NetworkManager : IManger
 {
@@ -43,12 +44,25 @@ public class NetworkManager : IManger
     public void Connect()
     {
         NetworkHandler.TcpConnector(out var connector);
-        connector.Connected += args =>
+        connector.Connected += (connected, args) =>
         {
-            Socket connectSocket = args.ConnectSocket;
-            if (connectSocket != null)
+            if (connected)
             {
-                _session.Start(connectSocket);
+                Socket connectSocket = args.ConnectSocket;
+                if (connectSocket != null)
+                {
+                    _session.Start(connectSocket);
+                }
+                else
+                {
+                    LogHandler.LogError(LogCode.SOCKET_ERROR, "Missing connect socket.");
+                }
+            }
+            else
+            {
+                // TODO: 팝업창, 재시도
+                LogHandler.Log(LogCode.CONSOLE, "재시도");
+                //connector.Start();
             }
         };
 

@@ -14,7 +14,7 @@ namespace CoreLibrary.Network
         Socket _connectSocket;
         IPEndPoint _endPoint;
 
-        public event Action<SocketAsyncEventArgs> Connected;
+        public event Action<bool, SocketAsyncEventArgs> Connected;
 
         public Connector(IPEndPoint endPoint)
         {
@@ -43,6 +43,7 @@ namespace CoreLibrary.Network
             catch (Exception ex)
             {
                 LogHandler.LogError(LogCode.EXCEPTION, ex.ToString());
+                Connected?.Invoke(false, args);
             }
         }
 
@@ -52,16 +53,18 @@ namespace CoreLibrary.Network
             {
                 if (args.SocketError == SocketError.Success)
                 {
-                    Connected?.Invoke(args);
+                    Connected?.Invoke(true, args);
                 }
                 else
                 {
                     LogHandler.LogError(LogCode.SOCKET_ERROR, args.SocketError.ToString());
+                    Connected?.Invoke(false, args);
                 }
             }
             catch (Exception ex)
             {
                 LogHandler.LogError(LogCode.EXCEPTION, ex.ToString());
+                Connected?.Invoke(false, args);
             }
         }
     }

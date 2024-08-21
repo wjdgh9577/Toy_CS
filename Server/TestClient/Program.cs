@@ -19,13 +19,21 @@ public class Program
         for (int i = 0; i < TEST_CLIENT_COUNT; i++)
         {
             NetworkHandler.TcpConnector(out var connector);
-            connector.Connected += args =>
+            connector.Connected += (connected, args) =>
             {
-                Socket? connectSocket = args.ConnectSocket;
-                SessionBase? session = SessionManager.Instance.Generate<ServerSession>();
-                if (connectSocket != null && session != null)
+                if (connected)
                 {
-                    session.Start(connectSocket);
+                    Socket? connectSocket = args.ConnectSocket;
+                    SessionBase? session = SessionManager.Instance.Generate<ServerSession>();
+                    if (connectSocket != null && session != null)
+                    {
+                        session.Start(connectSocket);
+                    }
+                }
+                else
+                {
+                    connector.Start();
+                    Thread.Sleep(10);
                 }
             };
 
