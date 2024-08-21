@@ -16,11 +16,8 @@ public class RoomManager
     public static RoomManager Instance { get; } = new RoomManager();
     RoomManager()
     {
-        JobTimerHandler.PushAfter(UpdateRooms, UPDATE_INTERVAL, autoReset: true);
+        JobTimerHandler.PushAfter(UpdateRooms, Define.ROOM_UPDATE_INTERVAL, autoReset: true);
     }
-
-    const int UPDATE_INTERVAL = 1000;
-    const int MAX_CCU = 500;
 
     public int CCU { get; private set; } = 0;
 

@@ -31,7 +31,7 @@ public class ClientSession : SessionBase
         _pingJob = JobTimerHandler.PushAfter(() =>
         {
             SendPing();
-        }, PING_INTERVAL);
+        }, Define.PING_INTERVAL);
         _lastPingTime = Environment.TickCount64;
     }
 
@@ -63,14 +63,12 @@ public class ClientSession : SessionBase
         Send(packet);
     }
 
-    const int PING_INTERVAL = 5 * 1000;
-    const int PING_TIMEOUT = 30 * 1000;
     long _lastPingTime;
     IJob? _pingJob;
 
     void SendPing()
     {
-        if (Environment.TickCount64 - _lastPingTime >= PING_TIMEOUT)
+        if (Environment.TickCount64 - _lastPingTime >= Define.PING_TIMEOUT)
         {
             Disconnect();
             return;
@@ -83,7 +81,7 @@ public class ClientSession : SessionBase
         _pingJob = JobTimerHandler.PushAfter(() =>
         {
             SendPing();
-        }, PING_INTERVAL);
+        }, Define.PING_INTERVAL);
     }
 
     public void RecvPing()
