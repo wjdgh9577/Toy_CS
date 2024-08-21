@@ -18,9 +18,6 @@ public partial class PacketHandler
         LogHandler.Log(LogCode.CONSOLE, "HandleSPing", packet.ServerTime.ToDateTime());
 
         serverSession.OnPing(packet.ServerTime.ToDateTime());
-
-        C_Ping resPacket = new C_Ping();
-        serverSession.Send(resPacket);
     }
 
     void HandleSConnected(SessionBase session, IMessage message)

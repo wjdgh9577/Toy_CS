@@ -53,6 +53,9 @@ public class ServerSession : SessionBase
     {
         DateTime localTime = DateTime.UtcNow;
         ping = localTime.Subtract(serverTime).Ticks / TICKS_TO_MILLISECONDS;
+
+        C_Ping resPacket = new C_Ping();
+        Send(resPacket);
     }
 
     void TestChatProcess()
