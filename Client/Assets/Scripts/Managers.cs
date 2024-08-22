@@ -3,12 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IManger
-{
-    void Start();
-    void Update();
-}
-
 public class Managers : MonoBehaviour
 {
     public static Managers Instance { get { Init();  return _instance; } }
@@ -17,9 +11,14 @@ public class Managers : MonoBehaviour
     public NetworkManager NetworkManager { get; } = new NetworkManager();
     public AuthenticationManager AuthenticationManager { get; } = new AuthenticationManager();
 
+    // MonoBehaviour
+    public SceneManager SceneManager { get; private set; }
+
     void Awake()
     {
         Init();
+        
+        SceneManager = gameObject.AddComponent<SceneManager>();
     }
 
     void Start()
@@ -31,7 +30,6 @@ public class Managers : MonoBehaviour
     void Update()
     {
         NetworkManager.Update();
-        AuthenticationManager.Update();
     }
 
 #if UNITY_EDITOR

@@ -1,3 +1,4 @@
+using CoreLibrary.Job;
 using CoreLibrary.Log;
 using CoreLibrary.Network;
 using Google.Protobuf;
@@ -8,7 +9,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 
-public class NetworkManager : IManger
+public class NetworkManager : JobSerializer
 {
     #region Singleton
 
@@ -29,60 +30,52 @@ public class NetworkManager : IManger
         
     }
 
-    public void Update()
+    public override void Update()
     {
-        Queue<Packet> packets = _packetQueue.DequeueAll();
-
-        while (packets.Count > 0)
-            packets.Dequeue().Handle();
+        Flush();
     }
 
     #region Session
 
-    ServerSession _session = new ServerSession();
+    ServerSession _session;
 
-    public void Connect()
+    public void Connect(Action<bool> connectCallback)
     {
         NetworkHandler.TcpConnector(out var connector);
-        connector.Connected += (connected, args) =>
+        connector.Connected += OnConnected;
+
+        connector.Start();
+
+        void OnConnected(bool connected, SocketAsyncEventArgs args)
         {
             if (connected)
             {
                 Socket connectSocket = args.ConnectSocket;
                 if (connectSocket != null)
                 {
+                    _session = new ServerSession();
                     _session.Start(connectSocket);
+                    Push(() => connectCallback.Invoke(true));
                 }
                 else
                 {
                     LogHandler.LogError(LogCode.SOCKET_ERROR, "Missing connect socket.");
+                    Push(() => connectCallback.Invoke(false));
                 }
             }
             else
             {
-                // TODO: 팝업창, 재시도
                 LogHandler.Log(LogCode.CONSOLE, "재시도");
-                //connector.Start();
+                Push(() => connectCallback.Invoke(false));
             }
-        };
 
-        connector.Start();
+            connector.Connected -= OnConnected;
+        }
     }
 
     public void Disconnect()
     {
         _session.Disconnect();
-    }
-
-    #endregion
-
-    #region Packet
-
-    PacketQueue _packetQueue = new PacketQueue();
-
-    public void HandlePacket(Action<SessionBase, IMessage> handler, SessionBase session, IMessage message)
-    {
-        _packetQueue.Enqueue(handler, session, message);
     }
 
     #endregion

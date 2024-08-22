@@ -1,10 +1,11 @@
+using CoreLibrary.Job;
 using CoreLibrary.Log;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 
-public class AuthenticationManager : IManger
+public class AuthenticationManager
 {
     #region Singleton
 
@@ -28,14 +29,10 @@ public class AuthenticationManager : IManger
         guid = Guid.NewGuid().ToString();
     }
 
-    public void Update()
-    {
-        
-    }
-
-    public void Authenticate(Action<bool> authenticated)
+    public void Authenticate(string id, string pw, Action<bool> authenticateCallback)
     {
         // TODO: 로그인 절차 구현
-        authenticated.Invoke(true);
+        LogHandler.Log(LogCode.CONSOLE, $"Authenticated: {id}");
+        authenticateCallback.Invoke(true);
     }
 }

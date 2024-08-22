@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LobbyScene : MonoBehaviour
+public class SigninScene : MonoBehaviour
 {
     void Start()
     {
