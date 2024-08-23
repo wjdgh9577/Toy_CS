@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SigninPanel : MonoBehaviour
+public class UISignin : UIBase, IUIPanel
 {
     [SerializeField]
     InputField _idInputField;
@@ -29,7 +29,8 @@ public class SigninPanel : MonoBehaviour
             }
             else
             {
-                // TODO: 팝업창, 계정 생성
+                var popup = Managers.Instance.UIManager.GetUI<UIPopup>();
+                popup.Show(PopupType.Ok, "가입되지 않은 계정입니다.", null);
                 _onProcess = false;
             }
         }
@@ -41,11 +42,15 @@ public class SigninPanel : MonoBehaviour
                 Managers.Instance.SceneManager.LoadSceneAsync("LobbyScene", () =>
                 {
                     _onProcess = false;
+                    Hide();
                 });
             }
             else
             {
-                // TODO: 팝업창, 연결 재시도
+                var popup = Managers.Instance.UIManager.GetUI<UIPopup>();
+                popup.Show(PopupType.YseNo, "연결을 재시도 하시겠습니까?\n아니오 선택시 게임이 종료됩니다.", () =>
+                Managers.Instance.NetworkManager.Connect(OnConnected), () =>
+                OnExit());
                 _onProcess = false;
             }
         }

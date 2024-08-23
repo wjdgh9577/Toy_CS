@@ -13,12 +13,14 @@ public class Managers : MonoBehaviour
 
     // MonoBehaviour
     public SceneManager SceneManager { get; private set; }
+    public UIManager UIManager { get; private set; }
 
     void Awake()
     {
         Init();
         
         SceneManager = gameObject.AddComponent<SceneManager>();
+        UIManager = gameObject.AddComponent<UIManager>();
     }
 
     void Start()
