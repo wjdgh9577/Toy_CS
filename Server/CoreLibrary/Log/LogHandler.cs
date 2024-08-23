@@ -10,7 +10,7 @@ namespace CoreLibrary.Log
     {
         static LogModuleBase Instance;
 
-        public static void SetModule(LogModuleBase module) => Instance = module;
+        public static void SetModule(LogModuleBase module) => Instance ??= module;
 
         public static void Log(LogCode code, params object[] args) => Instance?.Log(LogType.NONE, code, args);
         public static void Log(LogCode code, params (LogKey key, object value)[] args) => Instance?.Log(LogType.NONE, code, args);
