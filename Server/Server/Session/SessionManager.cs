@@ -15,6 +15,8 @@ public class SessionManager
 
     Dictionary<int, SessionBase> _sessions = new Dictionary<int, SessionBase>();
 
+    public int CCU { get; private set; } = 0;
+
     int NewSUID => _suid++;
     int _suid = 0;
 
@@ -29,6 +31,8 @@ public class SessionManager
 
             if (_sessions.TryAdd(suid, session) == false)
                 LogHandler.LogError(LogCode.SESSION_INVALID_UID, $"SUID ({suid}) is already used.");
+
+            CCU += 1;
 
             return session;
         }
@@ -53,6 +57,8 @@ public class SessionManager
         {
             if (_sessions.Remove(session.SUID) == false)
                 LogHandler.LogError(LogCode.SESSION_NOT_EXIST, $"Session_{session.SUID} is not exist.");
+
+            CCU = Math.Max(CCU - 1, 0);
         }
     }
 }

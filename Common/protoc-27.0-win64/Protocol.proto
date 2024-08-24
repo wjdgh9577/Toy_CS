@@ -10,12 +10,17 @@ enum MsgId
 	S_PING = 0;
 	C_PING = 1;
 	S_CONNECTED = 2;
-	S_ENTER_ROOM = 3;
-	C_ENTER_ROOM = 4;
-	S_LEAVE_ROOM = 5;
-	C_LEAVE_ROOM = 6;
-	S_CHAT = 7;
-	C_CHAT = 8;
+	C_CONNECTED = 3;
+	S_ENTER_WAITING_ROOM = 4;
+	C_ENTER_WAITING_ROOM = 5;
+	S_LEAVE_WAITING_ROOM = 6;
+	C_LEAVE_WAITING_ROOM = 7;
+	S_REFRESH_WAITING_ROOM = 8;
+	C_REFRESH_WAITING_ROOM = 9;
+	C_QUICK_ENTER_WAITING_ROOM = 10;
+	C_CREATE_WAITING_ROOM = 11;
+	S_CHAT = 12;
+	C_CHAT = 13;
 }
 
 message S_Ping
@@ -33,26 +38,53 @@ message S_Connected
 	google.protobuf.Timestamp serverTime = 1;
 }
 
-message S_EnterRoom
+message C_Connected
 {
-	int32 roomId = 1;
-	bool enterOk = 2;
+	string name = 1;
 }
 
-message C_EnterRoom
+message S_EnterWaitingRoom
 {
-	int32 roomId = 1;
+	WaitingRoomInfo roomInfo = 1;
+	bool enterOk = 3;
 }
 
-message S_LeaveRoom
+message C_EnterWaitingRoom
 {
-	int32 roomId = 1;
+	int32 uniqueId = 1;
+}
+
+message S_LeaveWaitingRoom
+{
 	bool leaveOk = 2;
 }
 
-message C_LeaveRoom
+message C_LeaveWaitingRoom
 {
-	int32 roomId = 1;
+	int32 uniqueId = 1;
+}
+
+message S_RefreshWaitingRoom
+{
+	repeated WaitingRoomInfo roomInfos = 1;
+}
+
+message C_RefreshWaitingRoom
+{
+
+}
+
+message C_QuickEnterWaitingRoom
+{
+
+}
+
+message C_CreateWaitingRoom
+{
+	int32 type = 1;
+	int32 maxPersonnel = 2;
+	string title = 3;
+	string password = 4;
 }
 
 message S_Chat
@@ -66,8 +98,23 @@ message C_Chat
 	string chat = 1;
 }
 
+message PlayerInfo
+{
+	int32 uuid = 1;
+	string name = 2;
+}
+
 message RoomInfo
 {
 	int32 uniqueId = 1;
-	int32 roomId = 2;
+	int32 type = 2;
+	int32 personnel = 3;
+	int32 maxPersonnel = 4;
+}
+
+message WaitingRoomInfo
+{
+	RoomInfo baseInfo = 1;
+	string title = 2;
+	string password = 3;
 }

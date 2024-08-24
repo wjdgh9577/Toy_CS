@@ -52,7 +52,7 @@ public class ClientSession : SessionBase
 
     public override void OnSend(int BytesTransferred)
     {
-        LogHandler.Log(LogCode.CONSOLE, $"BytesTransferred: {BytesTransferred}");
+        //LogHandler.Log(LogCode.CONSOLE, $"BytesTransferred: {BytesTransferred}");
     }
 
     public void Send(IMessage message)

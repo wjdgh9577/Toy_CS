@@ -20,10 +20,18 @@ public partial class PacketHandler
 	{		
 		_deserializers.Add((ushort)MsgId.CPing, Deserialize<C_Ping>);
         _handlers.Add((ushort)MsgId.CPing, HandleCPing);		
-		_deserializers.Add((ushort)MsgId.CEnterRoom, Deserialize<C_EnterRoom>);
-        _handlers.Add((ushort)MsgId.CEnterRoom, HandleCEnterRoom);		
-		_deserializers.Add((ushort)MsgId.CLeaveRoom, Deserialize<C_LeaveRoom>);
-        _handlers.Add((ushort)MsgId.CLeaveRoom, HandleCLeaveRoom);		
+		_deserializers.Add((ushort)MsgId.CConnected, Deserialize<C_Connected>);
+        _handlers.Add((ushort)MsgId.CConnected, HandleCConnected);		
+		_deserializers.Add((ushort)MsgId.CEnterWaitingRoom, Deserialize<C_EnterWaitingRoom>);
+        _handlers.Add((ushort)MsgId.CEnterWaitingRoom, HandleCEnterWaitingRoom);		
+		_deserializers.Add((ushort)MsgId.CLeaveWaitingRoom, Deserialize<C_LeaveWaitingRoom>);
+        _handlers.Add((ushort)MsgId.CLeaveWaitingRoom, HandleCLeaveWaitingRoom);		
+		_deserializers.Add((ushort)MsgId.CRefreshWaitingRoom, Deserialize<C_RefreshWaitingRoom>);
+        _handlers.Add((ushort)MsgId.CRefreshWaitingRoom, HandleCRefreshWaitingRoom);		
+		_deserializers.Add((ushort)MsgId.CQuickEnterWaitingRoom, Deserialize<C_QuickEnterWaitingRoom>);
+        _handlers.Add((ushort)MsgId.CQuickEnterWaitingRoom, HandleCQuickEnterWaitingRoom);		
+		_deserializers.Add((ushort)MsgId.CCreateWaitingRoom, Deserialize<C_CreateWaitingRoom>);
+        _handlers.Add((ushort)MsgId.CCreateWaitingRoom, HandleCCreateWaitingRoom);		
 		_deserializers.Add((ushort)MsgId.CChat, Deserialize<C_Chat>);
         _handlers.Add((ushort)MsgId.CChat, HandleCChat);
 	}

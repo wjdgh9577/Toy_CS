@@ -17,6 +17,8 @@ public partial class PacketHandler
         handler.Invoke(session, message);
     }
 
+    #region Handler
+
     void HandleCPing(SessionBase session, IMessage message)
     {
         ClientSession clientSession = (ClientSession)session;
@@ -24,24 +26,76 @@ public partial class PacketHandler
         clientSession.RecvPing();
     }
 
-    void HandleCEnterRoom(SessionBase session, IMessage message)
+    void HandleCConnected(SessionBase session, IMessage message)
     {
         ClientSession clientSession = (ClientSession)session;
-        C_EnterRoom packet = (C_EnterRoom)message;
-        LogHandler.Log(LogCode.CONSOLE, "HandleCEnterRoom", packet.RoomId);
+        C_Connected packet = (C_Connected)message;
+        LogHandler.Log(LogCode.CONSOLE, "HandleCConnected", packet.Name);
 
-        RoomManager.Instance.EnterRoom<GameRoom>(clientSession, packet.RoomId);
-        RoomManager.Instance.EnterRoom<ChatRoom>(clientSession, 0);
+        // TODO: PlayerInfo 저장
     }
 
-    void HandleCLeaveRoom(SessionBase session, IMessage message)
+    void HandleCEnterWaitingRoom(SessionBase session, IMessage message)
     {
         ClientSession clientSession = (ClientSession)session;
-        C_LeaveRoom packet = (C_LeaveRoom)message;
-        LogHandler.Log(LogCode.CONSOLE, "HandleCLeaveRoom", packet.RoomId);
+        C_EnterWaitingRoom packet = (C_EnterWaitingRoom)message;
+        LogHandler.Log(LogCode.CONSOLE, "HandleCEnterRoom", packet.ToString());
 
-        RoomManager.Instance.LeaveRoom<GameRoom>(clientSession, packet.RoomId);
-        RoomManager.Instance.LeaveRoom<ChatRoom>(clientSession, 0);
+        S_EnterWaitingRoom resPacket = new S_EnterWaitingRoom();
+        var result = RoomManager.Instance.EnterRoom<WaitingRoom>(clientSession, packet.UniqueId);
+        resPacket.RoomInfo = result?.Info.GetProto();
+        resPacket.EnterOk = result != null;
+        clientSession.Send(resPacket);
+    }
+
+    void HandleCLeaveWaitingRoom(SessionBase session, IMessage message)
+    {
+        ClientSession clientSession = (ClientSession)session;
+        C_LeaveWaitingRoom packet = (C_LeaveWaitingRoom)message;
+        LogHandler.Log(LogCode.CONSOLE, "HandleCLeaveRoom", packet.ToString());
+
+        S_LeaveWaitingRoom resPacket = new S_LeaveWaitingRoom();
+        resPacket.LeaveOk = RoomManager.Instance.LeaveRoom<WaitingRoom>(clientSession, packet.UniqueId);
+        clientSession.Send(resPacket);
+    }
+
+    void HandleCRefreshWaitingRoom(SessionBase session, IMessage message)
+    {
+        ClientSession clientSession = (ClientSession)session;
+        C_RefreshWaitingRoom packet = (C_RefreshWaitingRoom)message;
+        LogHandler.Log(LogCode.CONSOLE, "HandleCRefreshRoom");
+
+        S_RefreshWaitingRoom resPacket = new S_RefreshWaitingRoom();
+        List<WaitingRoom> roomList = RoomManager.Instance.GetRooms<WaitingRoom>();
+        foreach (WaitingRoom room in roomList)
+            resPacket.RoomInfos.Add(room.Info.GetProto());
+        clientSession.Send(resPacket);
+    }
+
+    void HandleCQuickEnterWaitingRoom(SessionBase session, IMessage message)
+    {
+        ClientSession clientSession = (ClientSession)session;
+        C_QuickEnterWaitingRoom packet = (C_QuickEnterWaitingRoom)message;
+        LogHandler.Log(LogCode.CONSOLE, "HandleCQuickEnterRoom");
+
+        var result = RoomManager.Instance.QuickWaitingRoom(clientSession);
+        S_EnterWaitingRoom resPacket = new S_EnterWaitingRoom();
+        resPacket.RoomInfo = result?.Info.GetProto();
+        resPacket.EnterOk = result != null;
+        clientSession.Send(resPacket);
+    }
+
+    void HandleCCreateWaitingRoom(SessionBase session, IMessage message)
+    {
+        ClientSession clientSession = (ClientSession)session;
+        C_CreateWaitingRoom packet = (C_CreateWaitingRoom)message;
+        LogHandler.Log(LogCode.CONSOLE, "HandleCCreateRoom", packet.ToString());
+
+        var result = RoomManager.Instance.CreateWaitingRoom(clientSession, packet.Type, packet.MaxPersonnel, packet.Title, packet.Password);
+        S_EnterWaitingRoom resPacket = new S_EnterWaitingRoom();
+        resPacket.RoomInfo = result?.Info.GetProto();
+        resPacket.EnterOk = result != null;
+        clientSession.Send(resPacket);
     }
 
     void HandleCChat(SessionBase session, IMessage message)
@@ -53,6 +107,8 @@ public partial class PacketHandler
         S_Chat broadcastPacket = new S_Chat();
         broadcastPacket.Chat = packet.Chat;
         broadcastPacket.Suid = session.SUID;
-        RoomManager.Instance.Broadcast<ChatRoom>(clientSession, broadcastPacket);
+        RoomManager.Instance.Broadcast<WaitingRoom>(clientSession, broadcastPacket);
     }
+
+    #endregion
 }

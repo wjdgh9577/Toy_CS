@@ -21,6 +21,7 @@ namespace CoreLibrary.Log
 
         // Room
         ROOM_NOT_EXIST,
+        ROOM_MAX_PERSONNEL,
         ROOM_SESSION_INVALID_UID,
         ROOM_SESSION_NOT_EXIST,
 

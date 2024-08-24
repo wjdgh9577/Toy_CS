@@ -19,43 +19,95 @@ public class RoomManager
         JobTimerHandler.PushAfter(UpdateRooms, Define.ROOM_UPDATE_INTERVAL, autoReset: true);
     }
 
-    public int CCU { get; private set; } = 0;
-
-    Dictionary<RoomInfo, RoomBase> _rooms = new Dictionary<RoomInfo, RoomBase>();
+    Dictionary<int, RoomBase> _rooms = new Dictionary<int, RoomBase>();
 
     int _newUniqueRoomId = 1;
     object _lock = new object();
 
-    public void EnterRoom<T>(ClientSession session, int roomId) where T : RoomBase, new()
+    public WaitingRoom CreateWaitingRoom(ClientSession session, int type, int maxPersonnel, string title, string password)
     {
         lock (_lock)
         {
-            var room = FindRoom<T>(roomId);
+            WaitingRoom room = MakeRoom<WaitingRoom>(type, maxPersonnel);
+            room.Info.title = title;
+            room.Info.password = password;
 
-            if (room == null)
-                room = MakeRoom<T>(roomId);
-
-            CCU += 1;
             room.OnEnter(session);
             session.EnterRoom(room);
+
+            return room;
         }
     }
 
-    public void LeaveRoom<T>(ClientSession session, int roomId) where T : RoomBase
+    public WaitingRoom? QuickWaitingRoom(ClientSession session)
     {
         lock (_lock)
         {
-            var room = FindRoom<T>(roomId);
+            var room = _rooms
+                .Where(r => r.Value is WaitingRoom wr && string.IsNullOrEmpty(wr.Info.password) && wr.Info.personnel < wr.Info.maxPersonnel)
+                .Select(r => r.Value)
+                .FirstOrDefault() as WaitingRoom;
+
+            if (room != null)
+            {
+                room.OnEnter(session);
+                session.EnterRoom(room);
+            }
+
+            return room;
+        }
+    }
+
+    public T? EnterRoom<T>(ClientSession session, int uniqueId) where T : RoomBase
+    {
+        lock (_lock)
+        {
+            var room = FindRoom<T>(uniqueId);
 
             if (room == null)
             {
-                LogHandler.LogError(LogCode.ROOM_NOT_EXIST, $"{typeof(T)}_{roomId} is not exist.");
-                return;
+                LogHandler.Log(LogCode.ROOM_NOT_EXIST, $"{typeof(T)}_{uniqueId} is not exist.");
+                return null;
+            }
+            else if (room.ContainsSession(session.SUID))
+            {
+                LogHandler.LogError(LogCode.ROOM_SESSION_INVALID_UID, $"Session_({session.SUID}) is already entered.");
+                return null;
+            }
+            else if (room.BaseInfo.personnel >= room.BaseInfo.maxPersonnel)
+            {
+                LogHandler.Log(LogCode.CONSOLE, $"{typeof(T)}_{uniqueId} is already full.");
+                return null;
             }
 
-            CCU = Math.Max(CCU - 1, 0);
+            room.OnEnter(session);
+            session.EnterRoom(room);
+
+            return room;
+        }
+    }
+
+    public bool LeaveRoom<T>(ClientSession session, int uniqueId) where T : RoomBase
+    {
+        lock (_lock)
+        {
+            var room = FindRoom<T>(uniqueId);
+
+            if (room == null)
+            {
+                LogHandler.LogError(LogCode.ROOM_NOT_EXIST, $"{typeof(T)}_{uniqueId} is not exist.");
+                return false;
+            }
+            else if (room.ContainsSession(session.SUID) == false)
+            {
+                LogHandler.LogError(LogCode.ROOM_SESSION_NOT_EXIST, $"Session_{session.SUID} is not exist.");
+                return false;
+            }
+
             room.OnLeave(session);
             session.LeaveRoom(room);
+
+            return true;
         }
     }
 
@@ -71,28 +123,29 @@ public class RoomManager
         }
     }
 
-    public T MakeRoom<T>(int roomId) where T : RoomBase, new()
+    public T MakeRoom<T>(int type, int maxPersonnel) where T : RoomBase, new()
     {
         lock (_lock)
         {
+            int uniqueId = _newUniqueRoomId++;
             T newRoom = new T();
-            RoomInfo info = new RoomInfo(_newUniqueRoomId++, roomId);
-            _rooms.Add(info, newRoom);
 
-            LogHandler.Log(LogCode.CONSOLE, $"Make room: {info.ToString()}");
+            _rooms.Add(uniqueId, newRoom);
 
-            newRoom.OnStart(info);
+            LogHandler.Log(LogCode.CONSOLE, $"Make room: Unique ID: {uniqueId}, ID: {type}");
+
+            newRoom.OnStart(uniqueId, type, maxPersonnel);
 
             return newRoom;
         }
     }
 
-    public T? FindRoom<T>(int roomId) where T : RoomBase
+    public T? FindRoom<T>(int uniqueId) where T : RoomBase
     {
         lock (_lock)
         {
             var room = _rooms
-                .Where(r => r.Value is T && r.Key.id == roomId)
+                .Where(r => r.Value is T && r.Key == uniqueId)
                 .Select(r => r.Value)
                 .FirstOrDefault();
 
@@ -105,11 +158,27 @@ public class RoomManager
         lock (_lock)
         {
             var room = _rooms
-                .Where(r => r.Value.GetType() == typeof(T) && r.Value.TryGetSession(session.SUID, out var s))
+                .Where(r => r.Value is T && r.Value.ContainsSession(session.SUID))
                 .Select(r => r.Value)
                 .FirstOrDefault();
 
             return room as T;
+        }
+    }
+
+    public List<T> GetRooms<T>() where T : RoomBase
+    {
+        lock (_lock)
+        {
+            List<T> rooms = new List<T>();
+
+            foreach (var room in _rooms)
+            {
+                if (room.Value is T r)
+                    rooms.Add(r);
+            }
+
+            return rooms;
         }
     }
 
@@ -124,21 +193,16 @@ public class RoomManager
         }
     }
 
-    public bool DestroyRoom<T>(int roomId) where T : RoomBase
+    public bool DestroyRoom(int uniqueId)
     {
         lock (_lock)
         {
-            var room = FindRoom<T>(roomId);
-
-            if (room == null)
+            if (_rooms.Remove(uniqueId, out var room) == false)
                 return false;
 
-            var info = room.Info;
-            _rooms.Remove(info);
+            LogHandler.Log(LogCode.CONSOLE, $"Destroy room: {uniqueId}");
 
-            LogHandler.Log(LogCode.CONSOLE, $"Destroy room: {info.ToString()}");
-
-            room?.OnDestroy();
+            room.OnDestroy();
 
             return true;
         }

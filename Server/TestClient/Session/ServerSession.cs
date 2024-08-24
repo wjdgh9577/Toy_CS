@@ -5,6 +5,7 @@ using Google.Protobuf.Protocol;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,10 +22,6 @@ public class ServerSession : SessionBase
     {
         LogHandler.Log(LogCode.CONSOLE, "Connected");
 
-        C_EnterRoom packet = new C_EnterRoom();
-        packet.RoomId = 1;
-        Send(packet);
-
         TestChatProcess();
     }
 
@@ -40,7 +37,7 @@ public class ServerSession : SessionBase
 
     public override void OnSend(int BytesTransferred)
     {
-        LogHandler.Log(LogCode.CONSOLE, $"BytesTransferred: {BytesTransferred}");
+        //LogHandler.Log(LogCode.CONSOLE, $"BytesTransferred: {BytesTransferred}");
     }
 
     public void Send(IMessage message)
@@ -66,10 +63,56 @@ public class ServerSession : SessionBase
         {
             while (true)
             {
-                var chat = Console.ReadLine();
-                C_Chat packet = new C_Chat();
-                packet.Chat = chat;
-                Send(packet);
+                var command = Console.ReadLine();
+
+                var array = command.Split(' ');
+
+                if (array.Length >= 2 
+                    && string.Equals(array[0]?.ToLower(), "enter") 
+                    && int.TryParse(array[1], out int id))
+                {
+                    C_EnterWaitingRoom packet = new C_EnterWaitingRoom();
+                    packet.UniqueId = id;
+                    Send(packet);
+                }
+                else if (array.Length >= 2
+                    && string.Equals(array[0]?.ToLower(), "leave") 
+                    && int.TryParse(array[1], out id))
+                {
+                    C_LeaveWaitingRoom packet = new C_LeaveWaitingRoom();
+                    packet.UniqueId = id;
+                    Send(packet);
+                }
+                else if (array.Length >= 1 
+                    && string.Equals(array[0]?.ToLower(), "refresh"))
+                {
+                    C_RefreshWaitingRoom packet = new C_RefreshWaitingRoom();
+                    Send(packet);
+                }
+                else if (array.Length >= 1 
+                    && string.Equals(array[0]?.ToLower(), "quick"))
+                {
+                    C_QuickEnterWaitingRoom packet = new C_QuickEnterWaitingRoom();
+                    Send(packet);
+                }
+                else if (array.Length >= 5 
+                    && string.Equals(array[0]?.ToLower(), "create")
+                    && int.TryParse(array[1], out int type)
+                    && int.TryParse(array[2], out int max))
+                {
+                    C_CreateWaitingRoom packet = new C_CreateWaitingRoom();
+                    packet.Type = type;
+                    packet.MaxPersonnel = max;
+                    packet.Title = array[3];
+                    packet.Password = array[4];
+                    Send(packet);
+                }
+                else
+                {
+                    C_Chat packet = new C_Chat();
+                    packet.Chat = command;
+                    Send(packet);
+                }
             }
         });
     }

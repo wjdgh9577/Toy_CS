@@ -7,20 +7,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Server.Room.WaitingRoom;
 
 namespace Server.Room;
 
 public class GameRoom : RoomBase
 {
-    public override void OnStart(RoomInfo info) => base.OnStart(info);
+    public class GameRoomInfo : RoomInfo
+    {
+        public GameRoomInfo(int uniqueId, int type, int maxPersonnel) : base(uniqueId, type, maxPersonnel)
+        {
+
+        }
+    }
+
+    public GameRoomInfo Info { get { return (GameRoomInfo)_info; } }
+
+    public override void OnStart(int uniqueId, int type, int maxPersonnel)
+    {
+        _info = new GameRoomInfo(uniqueId, type, maxPersonnel);
+    }
 
     public override void OnUpdate()
     {
         base.OnUpdate();
 
-        if (Info.ccu == 0)
+        if (_info.personnel == 0)
         {
-            RoomManager.Instance.DestroyRoom<GameRoom>(Info.id);
+            RoomManager.Instance.DestroyRoom(_info.uniqueId);
         }
     }
 
@@ -29,17 +43,15 @@ public class GameRoom : RoomBase
     public override void OnEnter(ClientSession session)
     {
         base.OnEnter(session);
-        
-        if (_sessions.TryAdd(session.SUID, session) == false)
-            LogHandler.LogError(LogCode.ROOM_SESSION_INVALID_UID, $"SUID ({session.SUID}) is already used.");
+
+        _sessions.TryAdd(session.SUID, session);
     }
 
     public override void OnLeave(ClientSession session)
     {
         base.OnLeave(session);
-        
-        if (_sessions.Remove(session.SUID) == false)
-            LogHandler.LogError(LogCode.ROOM_SESSION_NOT_EXIST, $"Session_{session.SUID} is not exist.");
+
+        _sessions.Remove(session.SUID);
     }
 
     public override void Broadcast(ClientSession session, IMessage message) => base.Broadcast(session, message);

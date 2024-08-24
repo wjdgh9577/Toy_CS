@@ -20,7 +20,7 @@ public partial class PacketHandler
     {
         ServerSession serverSession = (ServerSession)session;
         S_Ping packet = (S_Ping)message;
-        LogHandler.Log(LogCode.CONSOLE, "HandleSPing", packet.ServerTime.ToDateTime());
+        //LogHandler.Log(LogCode.CONSOLE, "HandleSPing", packet.ServerTime.ToDateTime());
 
         serverSession.OnPing(packet.ServerTime.ToDateTime());
     }
@@ -34,18 +34,25 @@ public partial class PacketHandler
         serverSession.OnPing(packet.ServerTime.ToDateTime());
     }
 
-    void HandleSEnterRoom(SessionBase session, IMessage message)
+    void HandleSEnterWaitingRoom(SessionBase session, IMessage message)
     {
         ServerSession serverSession = (ServerSession)session;
-        S_EnterRoom packet = (S_EnterRoom)message;
-        LogHandler.Log(LogCode.CONSOLE, "HandleSEnterRoom", packet.EnterOk, packet.RoomId);
+        S_EnterWaitingRoom packet = (S_EnterWaitingRoom)message;
+        LogHandler.Log(LogCode.CONSOLE, "HandleSEnterRoom", packet.EnterOk, packet.RoomInfo?.BaseInfo.UniqueId);
     }
 
-    void HandleSLeaveRoom(SessionBase session, IMessage message)
+    void HandleSLeaveWaitingRoom(SessionBase session, IMessage message)
     {
         ServerSession serverSession = (ServerSession)session;
-        S_LeaveRoom packet = (S_LeaveRoom)message;
-        LogHandler.Log(LogCode.CONSOLE, "HandleSLeaveRoom", packet.LeaveOk, packet.RoomId);
+        S_LeaveWaitingRoom packet = (S_LeaveWaitingRoom)message;
+        LogHandler.Log(LogCode.CONSOLE, "HandleSLeaveRoom", packet.LeaveOk);
+    }
+
+    void HandleSRefreshWaitingRoom(SessionBase session, IMessage message)
+    {
+        ServerSession serverSession = (ServerSession)session;
+        S_RefreshWaitingRoom packet = (S_RefreshWaitingRoom)message;
+        LogHandler.Log(LogCode.CONSOLE, "HandleSRefreshRoom", packet.ToString());
     }
 
     void HandleSChat(SessionBase session, IMessage message)

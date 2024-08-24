@@ -10,56 +10,44 @@ using System.Threading.Tasks;
 
 namespace Server.Room;
 
-public class RoomInfo
+public abstract class RoomInfo
 {
-    /// <summary>
-    /// Room의 고유식별자
-    /// </summary>
     public int uniqueId;
+    public int type;
+    public int personnel;
+    public int maxPersonnel;
 
-    /// <summary>
-    /// 같은 Type의 Room을 구분하는 식별자
-    /// (ex. GameRoom_0, GameRoom_1, ...)
-    /// </summary>
-    public int id;
-
-    /// <summary>
-    /// 현재 접속자 수
-    /// </summary>
-    public int ccu;
-
-    public RoomInfo(int uniqueId, int id)
+    public RoomInfo(int uniqueId, int type, int maxPersonnel)
     {
         this.uniqueId = uniqueId;
-        this.id = id;
-        this.ccu = 0;
+        this.type = type;
+        this.maxPersonnel = maxPersonnel;
+        this.personnel = 0;
     }
 
-    public void Enter()
+    public virtual void Enter()
     {
-        this.ccu += 1;
+        this.personnel += 1;
     }
 
-    public void Leave()
+    public virtual void Leave()
     {
-        this.ccu = Math.Max(this.ccu - 1, 0);
+        this.personnel = Math.Max(this.personnel - 1, 0);
     }
 
     public override string ToString()
     {
-        return $"Unique ID: {uniqueId}, ID: {id}";
+        return $"Unique ID: {uniqueId}, ID: {type}";
     }
 }
 
 public abstract class RoomBase
 {
-    public RoomInfo Info { get; protected set; }
+    protected RoomInfo _info { get; set; }
+    public RoomInfo BaseInfo { get { return _info; } }
     protected Dictionary<int, ClientSession> _sessions = new Dictionary<int, ClientSession>();
 
-    public virtual void OnStart(RoomInfo info)
-    {
-        Info = info;
-    }
+    public abstract void OnStart(int uniqueId, int type, int maxPersonnel);
 
     public virtual void OnUpdate() { }
 
@@ -67,12 +55,12 @@ public abstract class RoomBase
 
     public virtual void OnEnter(ClientSession session)
     {
-        Info.Enter();
+        _info.Enter();
     }
 
     public virtual void OnLeave(ClientSession session)
     {
-        Info.Leave();
+        _info.Leave();
     }
 
     public virtual void Broadcast(ClientSession session, IMessage message)
@@ -88,5 +76,10 @@ public abstract class RoomBase
     public bool TryGetSession(int suid, out ClientSession? session)
     {
         return _sessions.TryGetValue(suid, out session);
+    }
+
+    public bool ContainsSession(int suid)
+    {
+        return _sessions.ContainsKey(suid);
     }
 }

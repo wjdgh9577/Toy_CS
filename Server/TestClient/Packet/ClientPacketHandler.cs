@@ -22,10 +22,12 @@ public partial class PacketHandler
         _handlers.Add((ushort)MsgId.SPing, HandleSPing);		
 		_deserializers.Add((ushort)MsgId.SConnected, Deserialize<S_Connected>);
         _handlers.Add((ushort)MsgId.SConnected, HandleSConnected);		
-		_deserializers.Add((ushort)MsgId.SEnterRoom, Deserialize<S_EnterRoom>);
-        _handlers.Add((ushort)MsgId.SEnterRoom, HandleSEnterRoom);		
-		_deserializers.Add((ushort)MsgId.SLeaveRoom, Deserialize<S_LeaveRoom>);
-        _handlers.Add((ushort)MsgId.SLeaveRoom, HandleSLeaveRoom);		
+		_deserializers.Add((ushort)MsgId.SEnterWaitingRoom, Deserialize<S_EnterWaitingRoom>);
+        _handlers.Add((ushort)MsgId.SEnterWaitingRoom, HandleSEnterWaitingRoom);		
+		_deserializers.Add((ushort)MsgId.SLeaveWaitingRoom, Deserialize<S_LeaveWaitingRoom>);
+        _handlers.Add((ushort)MsgId.SLeaveWaitingRoom, HandleSLeaveWaitingRoom);		
+		_deserializers.Add((ushort)MsgId.SRefreshWaitingRoom, Deserialize<S_RefreshWaitingRoom>);
+        _handlers.Add((ushort)MsgId.SRefreshWaitingRoom, HandleSRefreshWaitingRoom);		
 		_deserializers.Add((ushort)MsgId.SChat, Deserialize<S_Chat>);
         _handlers.Add((ushort)MsgId.SChat, HandleSChat);
 	}
