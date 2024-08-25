@@ -22,6 +22,10 @@ public class ServerSession : SessionBase
     {
         LogHandler.Log(LogCode.CONSOLE, "Connected");
 
+        C_Connected packet = new C_Connected();
+        packet.Token = Token;
+        Send(packet);
+
         TestChatProcess();
     }
 

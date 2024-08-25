@@ -25,18 +25,16 @@ enum MsgId
 
 message S_Ping
 {
-	MessageBase base = 1;
 	google.protobuf.Timestamp serverTime = 2;
 }
 
 message C_Ping
 {
-	MessageBase base = 1;
+	
 }
 
 message S_Connected
 {
-	MessageBase base = 1;
 	google.protobuf.Timestamp serverTime = 2;
 }
 
@@ -47,48 +45,42 @@ message C_Connected
 
 message S_EnterWaitingRoom
 {
-	MessageBase base = 1;
 	WaitingRoomInfo roomInfo = 2;
 	bool enterOk = 3;
 }
 
 message C_EnterWaitingRoom
 {
-	MessageBase base = 1;
 	int32 uniqueId = 2;
 }
 
 message S_LeaveWaitingRoom
 {
-	MessageBase base = 1;
 	bool leaveOk = 2;
 }
 
 message C_LeaveWaitingRoom
 {
-	MessageBase base = 1;
 	int32 uniqueId = 2;
 }
 
 message S_RefreshWaitingRoom
 {
-	MessageBase base = 1;
 	repeated WaitingRoomInfo roomInfos = 2;
 }
 
 message C_RefreshWaitingRoom
 {
-	MessageBase base = 1;
+	
 }
 
 message C_QuickEnterWaitingRoom
 {
-	MessageBase base = 1;
+	
 }
 
 message C_CreateWaitingRoom
 {
-	MessageBase base = 1;
 	int32 type = 2;
 	int32 maxPersonnel = 3;
 	string title = 4;
@@ -97,20 +89,13 @@ message C_CreateWaitingRoom
 
 message S_Chat
 {
-	MessageBase base = 1;
 	string chat = 2;
 	int32 suid = 3;
 }
 
 message C_Chat
 {
-	MessageBase base = 1;
 	string chat = 2;
-}
-
-message MessageBase
-{
-	string token = 1;
 }
 
 message PlayerInfo

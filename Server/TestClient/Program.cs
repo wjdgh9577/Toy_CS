@@ -27,6 +27,7 @@ public class Program
                     SessionBase? session = SessionManager.Instance.Generate<ServerSession>();
                     if (connectSocket != null && session != null)
                     {
+                        session.Token = Guid.NewGuid().ToString();
                         session.Start(connectSocket);
                     }
                 }
