@@ -60,13 +60,14 @@ namespace CoreLibrary.Network
 
         #region Send
 
+        bool _dirty = false;
         protected void Send(ArraySegment<byte> data)
         {
             lock (_lock)
             {
                 _sendBuffer.Add(data);
 
-                if (_sendBuffer.BufferList.Count > 0)
+                if (!_dirty)
                 {
                     RegisterSend();
                 }
@@ -78,6 +79,7 @@ namespace CoreLibrary.Network
             if (_disconnected == 1)
                 return;
 
+            _dirty = true;
             _sendArgs.BufferList = _sendBuffer.BufferList;
 
             try
@@ -109,12 +111,12 @@ namespace CoreLibrary.Network
             {
                 lock (_lock)
                 {
+                    _dirty = false;
                     _sendArgs.BufferList = null;
 
                     OnSend(args.BytesTransferred);
 
-                    bool pending = _sendBuffer.CheckPending();
-                    if (pending)
+                    if (_sendBuffer.Pending)
                         RegisterSend();
                 }
             }

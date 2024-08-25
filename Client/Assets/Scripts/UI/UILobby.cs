@@ -26,7 +26,7 @@ public class UILobby : UIBase
 
     public void RefreshButton()
     {
-        Managers.Instance.NetworkManager.SendCRefreshWaitingRoom();
+        PacketHandler.SendCRefreshWaitingRoom();
     }
 
     public void OnRefresh(RepeatedField<WaitingRoomInfo> roomInfos)
@@ -42,7 +42,7 @@ public class UILobby : UIBase
 
     public void QuickButton()
     {
-        Managers.Instance.NetworkManager.SendCQuickEnterWaitingRoom();
+        PacketHandler.SendCQuickEnterWaitingRoom();
     }
 
     public void CreateButton()

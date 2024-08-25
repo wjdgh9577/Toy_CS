@@ -19,7 +19,7 @@ public class ServerSession : SessionBase
     {
         LogHandler.Log(LogCode.CONSOLE, "Connected");
 
-        Managers.Instance.NetworkManager.SendCConnected(Token);
+        PacketHandler.SendCConnected(Token);
     }
 
     public override void OnDisconnected()
@@ -49,6 +49,6 @@ public class ServerSession : SessionBase
         DateTime localTime = DateTime.UtcNow;
         ping = localTime.Subtract(serverTime).Ticks / TICKS_TO_MILLISECONDS;
 
-        Managers.Instance.NetworkManager.SendCPing();
+        PacketHandler.SendCPing();
     }
 }

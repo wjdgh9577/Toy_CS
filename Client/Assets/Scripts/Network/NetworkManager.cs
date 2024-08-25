@@ -84,66 +84,9 @@ public class NetworkManager : JobSerializer
 
     #region Packet
 
-    void Send(IMessage message)
+    public void Send(IMessage message)
     {
         _session.Send(message);
-    }
-
-    public void SendCPing()
-    {
-        C_Ping packet = new C_Ping();
-        Send(packet);
-    }
-
-    public void SendCConnected(string token)
-    {
-        C_Connected packet = new C_Connected();
-        packet.Token = token;
-        Send(packet);
-    }
-
-    public void SendCEnterWaitingRoom(int uniqueId, string password)
-    {
-        C_EnterWaitingRoom packet = new C_EnterWaitingRoom();
-        packet.UniqueId = uniqueId;
-        packet.Password = password;
-        Send(packet);
-    }
-
-    public void SendCLeaveWaitingRoom(int uniqueId)
-    {
-        C_LeaveWaitingRoom packet = new C_LeaveWaitingRoom();
-        packet.UniqueId = uniqueId;
-        Send(packet);
-    }
-
-    public void SendCRefreshWaitingRoom()
-    {
-        C_RefreshWaitingRoom packet = new C_RefreshWaitingRoom();
-        Send(packet);
-    }
-
-    public void SendCQuickEnterWaitingRoom()
-    {
-        C_QuickEnterWaitingRoom packet = new C_QuickEnterWaitingRoom();
-        Send(packet);
-    }
-
-    public void SendCCreateWaitingRoom(int type, int maxPersonnel, string title, string password)
-    {
-        C_CreateWaitingRoom packet = new C_CreateWaitingRoom();
-        packet.Type = type;
-        packet.MaxPersonnel = maxPersonnel;
-        packet.Title = title;
-        packet.Password = password;
-        Send(packet);
-    }
-
-    public void SendCChat(string chat)
-    {
-        C_Chat packet = new C_Chat();
-        packet.Chat = chat;
-        Send(packet);
     }
 
     #endregion

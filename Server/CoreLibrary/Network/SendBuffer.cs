@@ -15,19 +15,20 @@ namespace CoreLibrary.Network
 
         Queue<ArraySegment<byte>> _sendQueue = new Queue<ArraySegment<byte>>();
 
-        object _lock = new object();
-
-        public bool CheckPending()
+        public bool Pending
         {
-            BufferList.Clear();
-
-            while (_sendQueue.Count > 0)
+            get
             {
-                var d = _sendQueue.Dequeue();
-                BufferList.Add(d);
-            }
+                BufferList.Clear();
 
-            return BufferList.Count > 0;
+                while (_sendQueue.Count > 0)
+                {
+                    var d = _sendQueue.Dequeue();
+                    BufferList.Add(d);
+                }
+
+                return BufferList.Count > 0;
+            }
         }
 
         public void Add(ArraySegment<byte> data)

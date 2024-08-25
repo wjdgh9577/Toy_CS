@@ -23,6 +23,7 @@ public partial class PacketHandler
     {
         ClientSession clientSession = (ClientSession)session;
         C_Ping packet = (C_Ping)message;
+        //LogHandler.Log(LogCode.CONSOLE, "HandleCPing");
 
         clientSession.RecvPing();
     }
