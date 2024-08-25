@@ -30,9 +30,14 @@ public class WaitingRoom : RoomBase
             info.BaseInfo.Personnel = personnel;
             info.BaseInfo.MaxPersonnel = maxPersonnel;
             info.Title = title;
-            info.Password = password.GetHashCode().ToString();
+            info.Password = !string.IsNullOrEmpty(password);
 
             return info;
+        }
+
+        public bool Verification(string password)
+        {
+            return string.Equals(this.password, password);
         }
     }
 

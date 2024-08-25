@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIPopup : UIBase, IUIPopup
+public class UIMessagePopup : UIBase
 {
     [SerializeField]
     GameObject _yseNoGroup;

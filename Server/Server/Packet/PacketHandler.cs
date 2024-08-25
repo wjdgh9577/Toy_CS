@@ -44,7 +44,7 @@ public partial class PacketHandler
         LogHandler.Log(LogCode.CONSOLE, "HandleCEnterRoom", packet.ToString());
 
         S_EnterWaitingRoom resPacket = new S_EnterWaitingRoom();
-        var result = RoomManager.Instance.EnterRoom<WaitingRoom>(clientSession, packet.UniqueId);
+        var result = RoomManager.Instance.EnterWaitingRoom(clientSession, packet.UniqueId, packet.Password);
         resPacket.RoomInfo = result?.Info.GetProto();
         resPacket.EnterOk = result != null;
         clientSession.Send(resPacket);

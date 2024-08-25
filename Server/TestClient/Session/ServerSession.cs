@@ -71,12 +71,13 @@ public class ServerSession : SessionBase
 
                 var array = command.Split(' ');
 
-                if (array.Length >= 2 
+                if (array.Length >= 3 
                     && string.Equals(array[0]?.ToLower(), "enter") 
                     && int.TryParse(array[1], out int id))
                 {
                     C_EnterWaitingRoom packet = new C_EnterWaitingRoom();
                     packet.UniqueId = id;
+                    packet.Password = array[2];
                     Send(packet);
                 }
                 else if (array.Length >= 2

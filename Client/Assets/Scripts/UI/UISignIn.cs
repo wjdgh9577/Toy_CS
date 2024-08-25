@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UISignin : UIBase, IUIPanel
+public class UISignin : UIBase
 {
     [SerializeField]
     InputField _idInputField;
@@ -19,17 +19,22 @@ public class UISignin : UIBase, IUIPanel
 
         _onProcess = true;
 
-        Managers.Instance.AuthenticationManager.Authenticate(_idInputField.text, _passwordInputField.text, OnAuthenticated);
+        string id = _idInputField.text;
+        string password = _passwordInputField.text;
+        string tokenCache;
 
-        void OnAuthenticated(bool authenticated)
+        Managers.Instance.AuthenticationManager.Authenticate(id, password, OnAuthenticated);
+
+        void OnAuthenticated(bool authenticated, string token)
         {
             if (authenticated)
             {
-                Managers.Instance.NetworkManager.Connect(OnConnected);
+                tokenCache = token;
+                Managers.Instance.NetworkManager.Connect(tokenCache, OnConnected);
             }
             else
             {
-                var popup = Managers.Instance.UIManager.GetUI<UIPopup>();
+                var popup = Managers.Instance.UIManager.GetUI<UIMessagePopup>();
                 popup.Show(PopupType.Ok, "가입되지 않은 계정입니다.", null);
                 _onProcess = false;
             }
@@ -39,7 +44,7 @@ public class UISignin : UIBase, IUIPanel
         {
             if (connected)
             {
-                Managers.Instance.SceneManager.LoadSceneAsync("LobbyScene", () =>
+                Managers.Instance.SceneManager.LoadSceneAsync(SceneName.LobbyScene, () =>
                 {
                     _onProcess = false;
                     Hide();
@@ -47,10 +52,10 @@ public class UISignin : UIBase, IUIPanel
             }
             else
             {
-                var popup = Managers.Instance.UIManager.GetUI<UIPopup>();
+                var popup = Managers.Instance.UIManager.GetUI<UIMessagePopup>();
                 popup.Show(PopupType.YseNo, "연결을 재시도 하시겠습니까?\n아니오 선택시 게임이 종료됩니다.", () =>
-                Managers.Instance.NetworkManager.Connect(OnConnected), () =>
-                OnExit());
+                    Managers.Instance.NetworkManager.Connect(tokenCache, OnConnected), () =>
+                    OnExit());
                 _onProcess = false;
             }
         }

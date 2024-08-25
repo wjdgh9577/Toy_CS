@@ -19,11 +19,7 @@ public class ServerSession : SessionBase
     {
         LogHandler.Log(LogCode.CONSOLE, "Connected");
 
-        C_EnterRoom packet = new C_EnterRoom();
-        packet.RoomId = 1;
-        Send(packet);
-
-        TestChatProcess();
+        Managers.Instance.NetworkManager.SendCConnected(Token);
     }
 
     public override void OnDisconnected()
@@ -38,14 +34,13 @@ public class ServerSession : SessionBase
 
     public override void OnSend(int BytesTransferred)
     {
-        LogHandler.Log(LogCode.CONSOLE, $"BytesTransferred: {BytesTransferred}");
+        //LogHandler.Log(LogCode.CONSOLE, $"BytesTransferred: {BytesTransferred}");
     }
 
     public void Send(IMessage message)
     {
         ArraySegment<byte> packet = PacketHandler.Serialize(message);
 
-        // TODO: 최적화 고려
         Send(packet);
     }
 
@@ -54,21 +49,6 @@ public class ServerSession : SessionBase
         DateTime localTime = DateTime.UtcNow;
         ping = localTime.Subtract(serverTime).Ticks / TICKS_TO_MILLISECONDS;
 
-        C_Ping resPacket = new C_Ping();
-        Send(resPacket);
-    }
-
-    void TestChatProcess()
-    {
-        Task.Run(() =>
-        {
-            while (true)
-            {
-                var chat = Console.ReadLine();
-                C_Chat packet = new C_Chat();
-                packet.Chat = chat;
-                Send(packet);
-            }
-        });
+        Managers.Instance.NetworkManager.SendCPing();
     }
 }

@@ -52,6 +52,7 @@ message S_EnterWaitingRoom
 message C_EnterWaitingRoom
 {
 	int32 uniqueId = 2;
+	string password = 3;
 }
 
 message S_LeaveWaitingRoom
@@ -116,5 +117,5 @@ message WaitingRoomInfo
 {
 	RoomInfo baseInfo = 1;
 	string title = 2;
-	string password = 3;
+	bool password = 3;
 }

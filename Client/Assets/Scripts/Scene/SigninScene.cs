@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SigninScene : MonoBehaviour
+public class SigninScene : SceneBase
 {
     void Start()
     {
         LogHandler.SetModule(new LogModule());
+        Managers.Instance.SceneManager.CurrentScene = this;
         Managers.Instance.UIManager.GetUI<UISignin>().Show();
     }
 }

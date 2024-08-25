@@ -1,10 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PopupType
+public abstract class SceneBase : MonoBehaviour
 {
-    YseNo,
-    Ok,
+    
 }

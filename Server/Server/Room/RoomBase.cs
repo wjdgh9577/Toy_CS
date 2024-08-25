@@ -44,8 +44,9 @@ public abstract class RoomInfo
 public abstract class RoomBase
 {
     protected RoomInfo _info { get; set; }
-    public RoomInfo BaseInfo { get { return _info; } }
-    protected Dictionary<int, ClientSession> _sessions = new Dictionary<int, ClientSession>();
+    public bool Accessible { get { return _info.personnel < _info.maxPersonnel; } }
+
+    protected Dictionary<int, ClientSession> _sessions { get; } = new Dictionary<int, ClientSession>();
 
     public abstract void OnStart(int uniqueId, int type, int maxPersonnel);
 

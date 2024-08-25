@@ -7,22 +7,32 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum SceneName
+{
+    SigninScene,
+    LobbyScene,
+    WaitingScene,
+    GameScene
+}
+
 public class SceneManager : MonoBehaviour
 {
-    public void LoadSceneAsync(string sceneName, Action callback)
+    public SceneBase CurrentScene { get; set; }
+
+    public void LoadSceneAsync(SceneName sceneName, Action callback)
     {
         StartCoroutine(LoadSceneAsyncCoroutine(sceneName, callback));
     }
 
-    IEnumerator LoadSceneAsyncCoroutine(string sceneName, Action callback)
+    IEnumerator LoadSceneAsyncCoroutine(SceneName sceneName, Action callback)
     {
-        var operation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
-        
+        var operation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName.ToString(), LoadSceneMode.Single);
+
         while (operation.isDone == false)
         {
             yield return null;
         }
-
+        
         callback.Invoke();
     }
 }
