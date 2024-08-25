@@ -24,6 +24,8 @@ namespace CoreLibrary.Network
         object _lock = new object();
 
         public int SUID { get; set; }
+        public string Token { get; set; }
+        public bool Verify(string token) { return string.Equals(token, Token); }
 
         public abstract void OnConnected();
         public abstract void OnDisconnected();

@@ -22,6 +22,13 @@ public partial class PacketHandler
     void HandleCPing(SessionBase session, IMessage message)
     {
         ClientSession clientSession = (ClientSession)session;
+        C_Ping packet = (C_Ping)message;
+        
+        if (clientSession.Verify(packet.Base.Token))
+        {
+            LogHandler.LogError(LogCode.PACKET_INVALID_TOKEN, packet.Base.Token);
+            return;
+        }
 
         clientSession.RecvPing();
     }
@@ -30,8 +37,9 @@ public partial class PacketHandler
     {
         ClientSession clientSession = (ClientSession)session;
         C_Connected packet = (C_Connected)message;
-        LogHandler.Log(LogCode.CONSOLE, "HandleCConnected", packet.Name);
+        LogHandler.Log(LogCode.CONSOLE, "HandleCConnected", packet.Token);
 
+        clientSession.Token = packet.Token;
         // TODO: PlayerInfo 저장
     }
 
@@ -40,6 +48,12 @@ public partial class PacketHandler
         ClientSession clientSession = (ClientSession)session;
         C_EnterWaitingRoom packet = (C_EnterWaitingRoom)message;
         LogHandler.Log(LogCode.CONSOLE, "HandleCEnterRoom", packet.ToString());
+
+        if (clientSession.Verify(packet.Base.Token))
+        {
+            LogHandler.LogError(LogCode.PACKET_INVALID_TOKEN, packet.Base.Token);
+            return;
+        }
 
         S_EnterWaitingRoom resPacket = new S_EnterWaitingRoom();
         var result = RoomManager.Instance.EnterRoom<WaitingRoom>(clientSession, packet.UniqueId);
@@ -54,6 +68,12 @@ public partial class PacketHandler
         C_LeaveWaitingRoom packet = (C_LeaveWaitingRoom)message;
         LogHandler.Log(LogCode.CONSOLE, "HandleCLeaveRoom", packet.ToString());
 
+        if (clientSession.Verify(packet.Base.Token))
+        {
+            LogHandler.LogError(LogCode.PACKET_INVALID_TOKEN, packet.Base.Token);
+            return;
+        }
+
         S_LeaveWaitingRoom resPacket = new S_LeaveWaitingRoom();
         resPacket.LeaveOk = RoomManager.Instance.LeaveRoom<WaitingRoom>(clientSession, packet.UniqueId);
         clientSession.Send(resPacket);
@@ -64,6 +84,12 @@ public partial class PacketHandler
         ClientSession clientSession = (ClientSession)session;
         C_RefreshWaitingRoom packet = (C_RefreshWaitingRoom)message;
         LogHandler.Log(LogCode.CONSOLE, "HandleCRefreshRoom");
+
+        if (clientSession.Verify(packet.Base.Token))
+        {
+            LogHandler.LogError(LogCode.PACKET_INVALID_TOKEN, packet.Base.Token);
+            return;
+        }
 
         S_RefreshWaitingRoom resPacket = new S_RefreshWaitingRoom();
         List<WaitingRoom> roomList = RoomManager.Instance.GetRooms<WaitingRoom>();
@@ -78,6 +104,12 @@ public partial class PacketHandler
         C_QuickEnterWaitingRoom packet = (C_QuickEnterWaitingRoom)message;
         LogHandler.Log(LogCode.CONSOLE, "HandleCQuickEnterRoom");
 
+        if (clientSession.Verify(packet.Base.Token))
+        {
+            LogHandler.LogError(LogCode.PACKET_INVALID_TOKEN, packet.Base.Token);
+            return;
+        }
+
         var result = RoomManager.Instance.QuickWaitingRoom(clientSession);
         S_EnterWaitingRoom resPacket = new S_EnterWaitingRoom();
         resPacket.RoomInfo = result?.Info.GetProto();
@@ -91,6 +123,12 @@ public partial class PacketHandler
         C_CreateWaitingRoom packet = (C_CreateWaitingRoom)message;
         LogHandler.Log(LogCode.CONSOLE, "HandleCCreateRoom", packet.ToString());
 
+        if (clientSession.Verify(packet.Base.Token))
+        {
+            LogHandler.LogError(LogCode.PACKET_INVALID_TOKEN, packet.Base.Token);
+            return;
+        }
+
         var result = RoomManager.Instance.CreateWaitingRoom(clientSession, packet.Type, packet.MaxPersonnel, packet.Title, packet.Password);
         S_EnterWaitingRoom resPacket = new S_EnterWaitingRoom();
         resPacket.RoomInfo = result?.Info.GetProto();
@@ -103,6 +141,12 @@ public partial class PacketHandler
         ClientSession clientSession = (ClientSession)session;
         C_Chat packet = (C_Chat)message;
         LogHandler.Log(LogCode.CONSOLE, $"Chat: {packet.Chat}");
+
+        if (clientSession.Verify(packet.Base.Token))
+        {
+            LogHandler.LogError(LogCode.PACKET_INVALID_TOKEN, packet.Base.Token);
+            return;
+        }
 
         S_Chat broadcastPacket = new S_Chat();
         broadcastPacket.Chat = packet.Chat;

@@ -14,6 +14,9 @@ namespace CoreLibrary.Log
         // Socket
         SOCKET_ERROR,
 
+        // Packet
+        PACKET_INVALID_TOKEN,
+
         // Session
         SESSION_INVALID_TYPE,
         SESSION_INVALID_UID,

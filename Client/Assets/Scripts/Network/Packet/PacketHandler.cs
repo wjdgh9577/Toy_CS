@@ -10,10 +10,13 @@ using System.Threading.Tasks;
 
 public partial class PacketHandler
 {
+    // 메인스레드 로직
     void HandleLogic(Action<SessionBase, IMessage> handler, SessionBase session, IMessage message)
     {
         Managers.Instance.NetworkManager.Push(handler, session, message);
     }
+
+    #region Handler
 
     void HandleSPing(SessionBase session, IMessage message)
     {
@@ -33,18 +36,25 @@ public partial class PacketHandler
         serverSession.OnPing(packet.ServerTime.ToDateTime());
     }
 
-    void HandleSEnterRoom(SessionBase session, IMessage message)
+    void HandleSEnterWaitingRoom(SessionBase session, IMessage message)
     {
         ServerSession serverSession = (ServerSession)session;
-        S_EnterRoom packet = (S_EnterRoom)message;
-        LogHandler.Log(LogCode.CONSOLE, "HandleSEnterRoom", packet.EnterOk, packet.RoomId);
+        S_EnterWaitingRoom packet = (S_EnterWaitingRoom)message;
+        LogHandler.Log(LogCode.CONSOLE, "HandleSEnterRoom", packet.EnterOk, packet.RoomInfo.BaseInfo.UniqueId);
     }
 
-    void HandleSLeaveRoom(SessionBase session, IMessage message)
+    void HandleSLeaveWaitingRoom(SessionBase session, IMessage message)
     {
         ServerSession serverSession = (ServerSession)session;
-        S_LeaveRoom packet = (S_LeaveRoom)message;
-        LogHandler.Log(LogCode.CONSOLE, "HandleSLeaveRoom", packet.LeaveOk, packet.RoomId);
+        S_LeaveWaitingRoom packet = (S_LeaveWaitingRoom)message;
+        LogHandler.Log(LogCode.CONSOLE, "HandleSLeaveRoom", packet.LeaveOk);
+    }
+
+    void HandleSRefreshWaitingRoom(SessionBase session, IMessage message)
+    {
+        ServerSession serverSession = (ServerSession)session;
+        S_RefreshWaitingRoom packet = (S_RefreshWaitingRoom)message;
+        LogHandler.Log(LogCode.CONSOLE, "HandleSRefreshRoom", packet.ToString());
     }
 
     void HandleSChat(SessionBase session, IMessage message)
@@ -53,4 +63,6 @@ public partial class PacketHandler
         S_Chat packet = (S_Chat)message;
         LogHandler.Log(LogCode.CONSOLE, $"From: Session_{packet.Suid}, Chat: {packet.Chat}");
     }
+
+    #endregion
 }

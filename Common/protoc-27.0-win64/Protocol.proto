@@ -25,77 +25,92 @@ enum MsgId
 
 message S_Ping
 {
-	google.protobuf.Timestamp serverTime = 1;
+	MessageBase base = 1;
+	google.protobuf.Timestamp serverTime = 2;
 }
 
 message C_Ping
 {
-
+	MessageBase base = 1;
 }
 
 message S_Connected
 {
-	google.protobuf.Timestamp serverTime = 1;
+	MessageBase base = 1;
+	google.protobuf.Timestamp serverTime = 2;
 }
 
 message C_Connected
 {
-	string name = 1;
+	string token = 1;
 }
 
 message S_EnterWaitingRoom
 {
-	WaitingRoomInfo roomInfo = 1;
+	MessageBase base = 1;
+	WaitingRoomInfo roomInfo = 2;
 	bool enterOk = 3;
 }
 
 message C_EnterWaitingRoom
 {
-	int32 uniqueId = 1;
+	MessageBase base = 1;
+	int32 uniqueId = 2;
 }
 
 message S_LeaveWaitingRoom
 {
+	MessageBase base = 1;
 	bool leaveOk = 2;
 }
 
 message C_LeaveWaitingRoom
 {
-	int32 uniqueId = 1;
+	MessageBase base = 1;
+	int32 uniqueId = 2;
 }
 
 message S_RefreshWaitingRoom
 {
-	repeated WaitingRoomInfo roomInfos = 1;
+	MessageBase base = 1;
+	repeated WaitingRoomInfo roomInfos = 2;
 }
 
 message C_RefreshWaitingRoom
 {
-
+	MessageBase base = 1;
 }
 
 message C_QuickEnterWaitingRoom
 {
-
+	MessageBase base = 1;
 }
 
 message C_CreateWaitingRoom
 {
-	int32 type = 1;
-	int32 maxPersonnel = 2;
-	string title = 3;
-	string password = 4;
+	MessageBase base = 1;
+	int32 type = 2;
+	int32 maxPersonnel = 3;
+	string title = 4;
+	string password = 5;
 }
 
 message S_Chat
 {
-	string chat = 1;
-	int32 suid = 2;
+	MessageBase base = 1;
+	string chat = 2;
+	int32 suid = 3;
 }
 
 message C_Chat
 {
-	string chat = 1;
+	MessageBase base = 1;
+	string chat = 2;
+}
+
+message MessageBase
+{
+	string token = 1;
 }
 
 message PlayerInfo
