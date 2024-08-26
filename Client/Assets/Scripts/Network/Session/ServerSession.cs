@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 public class ServerSession : SessionBase
 {
+    #region Network
+
     const int TICKS_TO_MILLISECONDS = 10000;
 
     public DateTime ServerTime => DateTime.UtcNow - new TimeSpan(ping * TICKS_TO_MILLISECONDS);
@@ -49,4 +51,17 @@ public class ServerSession : SessionBase
 
         Managers.Instance.NetworkManager.Send(PacketHandler.C_Ping());
     }
+
+    #endregion
+
+    #region content
+
+    public AccountInfo AccountInfo { get; private set; }
+
+    public void SetAccountInfo(Google.Protobuf.Protocol.AccountInfo info)
+    {
+        AccountInfo = new AccountInfo(info);
+    }
+
+    #endregion
 }

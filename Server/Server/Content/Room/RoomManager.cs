@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.Room;
+namespace Server.Content.Room;
 
 public class RoomManager
 {

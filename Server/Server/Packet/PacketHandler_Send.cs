@@ -24,6 +24,14 @@ public partial class PacketHandler
         return packet;
     }
 
+    public static S_AccountInfo S_AccountInfo(AccountInfo info)
+    {
+        S_AccountInfo packet = new S_AccountInfo();
+        packet.Info = info;
+
+        return packet;
+    }
+
     public static S_EnterWaitingRoom S_EnterWaitingRoom(WaitingRoomInfo? roomInfo, bool enterOk)
     {
         S_EnterWaitingRoom packet = new S_EnterWaitingRoom();

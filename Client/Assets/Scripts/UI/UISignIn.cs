@@ -21,16 +21,14 @@ public class UISignin : UIBase
 
         string id = _idInputField.text;
         string password = _passwordInputField.text;
-        string tokenCache;
 
         Managers.Instance.AuthenticationManager.Authenticate(id, password, OnAuthenticated);
 
-        void OnAuthenticated(bool authenticated, string token)
+        void OnAuthenticated(bool authenticated)
         {
             if (authenticated)
             {
-                tokenCache = token;
-                Managers.Instance.NetworkManager.Connect(tokenCache, OnConnected);
+                Managers.Instance.NetworkManager.Connect(OnConnected);
             }
             else
             {
@@ -54,7 +52,7 @@ public class UISignin : UIBase
             {
                 var popup = Managers.Instance.UIManager.GetUI<UIMessagePopup>();
                 popup.Show(PopupType.YseNo, "연결을 재시도 하시겠습니까?\n아니오 선택시 게임이 종료됩니다.", () =>
-                    Managers.Instance.NetworkManager.Connect(tokenCache, OnConnected), () =>
+                    Managers.Instance.NetworkManager.Connect(OnConnected), () =>
                     OnExit());
                 _onProcess = false;
             }

@@ -1,13 +1,13 @@
 ﻿using CoreLibrary.Log;
 using CoreLibrary.Network;
 using Google.Protobuf;
-using Google.Protobuf.Protocol;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using TestClient.Data;
 
 namespace TestClient.Session;
 
@@ -101,5 +101,12 @@ public class ServerSession : SessionBase
                 }
             }
         });
+    }
+
+    public AccountInfo AccountInfo { get; private set; }
+
+    public void SetAccountInfo(Google.Protobuf.Protocol.AccountInfo info)
+    {
+        AccountInfo = new AccountInfo(info);
     }
 }

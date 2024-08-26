@@ -30,9 +30,10 @@ public class ClientSession : SessionBase
     {
         LogHandler.Log(LogCode.CONSOLE, $"Disconnected: {SUID}");
 
-        _pingJob.Cancel = true;
         RoomManager.Instance.LeaveRoom(this, _roomList);
         SessionManager.Instance.Remove(this);
+
+        _pingJob.Cancel = true;
     }
 
     public override void OnRecv(ArraySegment<byte> buffer)
@@ -90,6 +91,11 @@ public class ClientSession : SessionBase
     public AccountInfo AccountInfo { get; private set; }
 
     HashSet<RoomBase> _roomList = new HashSet<RoomBase>();
+
+    public void SetAccountInfo(/* DB Model */)
+    {
+        AccountInfo = new AccountInfo(Token, $"Session_{SUID}", 1); // 임시값
+    }
 
     public void EnterRoom(RoomBase room)
     {

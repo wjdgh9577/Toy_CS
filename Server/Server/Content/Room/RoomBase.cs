@@ -1,5 +1,6 @@
 ﻿using CoreLibrary.Network;
 using Google.Protobuf;
+using Server.Content.Data;
 using Server.Session;
 using System;
 using System.Collections.Generic;
@@ -8,38 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.Room;
-
-public abstract class RoomInfo
-{
-    public int uniqueId;
-    public int type;
-    public int personnel;
-    public int maxPersonnel;
-
-    public RoomInfo(int uniqueId, int type, int maxPersonnel)
-    {
-        this.uniqueId = uniqueId;
-        this.type = type;
-        this.maxPersonnel = maxPersonnel;
-        this.personnel = 0;
-    }
-
-    public virtual void Enter()
-    {
-        this.personnel += 1;
-    }
-
-    public virtual void Leave()
-    {
-        this.personnel = Math.Max(this.personnel - 1, 0);
-    }
-
-    public override string ToString()
-    {
-        return $"Unique ID: {uniqueId}, ID: {type}";
-    }
-}
+namespace Server.Content.Room;
 
 public abstract class RoomBase
 {

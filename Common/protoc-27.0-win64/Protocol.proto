@@ -21,16 +21,7 @@ enum MsgId
 	C_CREATE_WAITING_ROOM = 11;
 	S_CHAT = 12;
 	C_CHAT = 13;
-}
-
-message S_Ping
-{
-	google.protobuf.Timestamp serverTime = 2;
-}
-
-message C_Ping
-{
-	
+	S_ACCOUNT_INFO = 14;
 }
 
 message S_Connected
@@ -39,6 +30,21 @@ message S_Connected
 }
 
 message C_Connected
+{
+	
+}
+
+message S_AccountInfo
+{
+	AccountInfo info = 1;
+}
+
+message S_Ping
+{
+	google.protobuf.Timestamp serverTime = 2;
+}
+
+message C_Ping
 {
 	
 }

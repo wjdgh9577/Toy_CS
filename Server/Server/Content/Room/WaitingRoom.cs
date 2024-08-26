@@ -1,40 +1,31 @@
 ﻿using CoreLibrary.Log;
-using CoreLibrary.Network;
 using Google.Protobuf;
+using Server.Content.Data;
 using Server.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Server.Room.WaitingRoom;
 
-namespace Server.Room;
+namespace Server.Content.Room;
 
-public class GameRoom : RoomBase
+public class WaitingRoom : RoomBase
 {
-    public class GameRoomInfo : RoomInfo
-    {
-        public GameRoomInfo(int uniqueId, int type, int maxPersonnel) : base(uniqueId, type, maxPersonnel)
-        {
-
-        }
-    }
-
-    public GameRoomInfo Info { get { return (GameRoomInfo)_info; } }
+    public WaitingRoomInfo Info { get { return (WaitingRoomInfo)_info; } }
 
     public override void OnStart(int uniqueId, int type, int maxPersonnel)
     {
-        _info = new GameRoomInfo(uniqueId, type, maxPersonnel);
+        _info = new WaitingRoomInfo(uniqueId, type, maxPersonnel);
     }
 
     public override void OnUpdate()
     {
         base.OnUpdate();
 
-        if (_info.personnel == 0)
+        if (Info.personnel == 0)
         {
-            RoomManager.Instance.DestroyRoom(_info.uniqueId);
+            RoomManager.Instance.DestroyRoom(Info.uniqueId);
         }
     }
 
@@ -45,6 +36,9 @@ public class GameRoom : RoomBase
         base.OnEnter(session);
 
         _sessions.TryAdd(session.SUID, session);
+
+        // TODO: Broadcast
+        // session.PlayerInfo
     }
 
     public override void OnLeave(ClientSession session)
@@ -52,6 +46,9 @@ public class GameRoom : RoomBase
         base.OnLeave(session);
 
         _sessions.Remove(session.SUID);
+
+        // TODO: Broadcast
+        // session.PlayerInfo
     }
 
     public override void Broadcast(ClientSession session, IMessage message) => base.Broadcast(session, message);

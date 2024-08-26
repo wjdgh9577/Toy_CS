@@ -40,7 +40,7 @@ public class NetworkManager : JobSerializer
 
     ServerSession _session;
 
-    public void Connect(string token, Action<bool> connectCallback)
+    public void Connect(Action<bool> connectCallback)
     {
         NetworkHandler.TcpConnector(out var connector);
         connector.Connected += OnConnected;
@@ -55,7 +55,6 @@ public class NetworkManager : JobSerializer
                 if (connectSocket != null)
                 {
                     _session = new ServerSession();
-                    _session.Token = token;
                     _session.Start(connectSocket);
                     Push(() => connectCallback.Invoke(true));
                 }

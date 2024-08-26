@@ -21,18 +21,15 @@ public class AuthenticationManager
 
     #endregion
 
-    string _token;
-
     public void Start()
     {
-        // Test
-        _token = Guid.NewGuid().ToString();
+        
     }
 
-    public void Authenticate(string id, string pw, Action<bool, string> authenticateCallback)
+    public void Authenticate(string id, string pw, Action<bool> authenticateCallback)
     {
-        // TODO: 로그인 절차 구현, 토큰 취득
+        // TODO: 로그인 절차 구현
         LogHandler.Log(LogCode.CONSOLE, $"Authenticated: {id}");
-        authenticateCallback.Invoke(true, _token);
+        authenticateCallback.Invoke(true);
     }
 }

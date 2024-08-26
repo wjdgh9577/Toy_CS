@@ -26,15 +26,6 @@ public partial class PacketHandler
 
     #region Handler
 
-    void HandleSPing(SessionBase session, IMessage message)
-    {
-        ServerSession serverSession = (ServerSession)session;
-        S_Ping packet = (S_Ping)message;
-        //LogHandler.Log(LogCode.CONSOLE, "HandleSPing", packet.ServerTime.ToDateTime());
-
-        serverSession.OnPing(packet.ServerTime.ToDateTime());
-    }
-
     void HandleSConnected(SessionBase session, IMessage message)
     {
         ServerSession serverSession = (ServerSession)session;
@@ -42,6 +33,24 @@ public partial class PacketHandler
         LogHandler.Log(LogCode.CONSOLE, "HandleSConnected");
 
         Managers.Instance.NetworkManager.Send(PacketHandler.C_Connected());
+    }
+
+    void HandleSAccountInfo(SessionBase session, IMessage message)
+    {
+        ServerSession serverSession = (ServerSession)session;
+        S_AccountInfo packet = (S_AccountInfo)message;
+        LogHandler.Log(LogCode.CONSOLE, "HandleSAccountInfo", packet.ToString());
+
+        serverSession.SetAccountInfo(packet.Info);
+    }
+
+    void HandleSPing(SessionBase session, IMessage message)
+    {
+        ServerSession serverSession = (ServerSession)session;
+        S_Ping packet = (S_Ping)message;
+        //LogHandler.Log(LogCode.CONSOLE, "HandleSPing", packet.ServerTime.ToDateTime());
+
+        serverSession.OnPing(packet.ServerTime.ToDateTime());
     }
 
     void HandleSEnterWaitingRoom(SessionBase session, IMessage message)

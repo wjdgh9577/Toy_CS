@@ -24,15 +24,6 @@ public partial class PacketHandler
 
     #region Handler
 
-    void HandleCPing(SessionBase session, IMessage message)
-    {
-        ClientSession clientSession = (ClientSession)session;
-        C_Ping packet = (C_Ping)message;
-        //LogHandler.Log(LogCode.CONSOLE, "HandleCPing");
-
-        clientSession.RecvPing();
-    }
-
     void HandleCConnected(SessionBase session, IMessage message)
     {
         ClientSession clientSession = (ClientSession)session;
@@ -40,6 +31,19 @@ public partial class PacketHandler
         LogHandler.Log(LogCode.CONSOLE, "HandleCConnected");
 
         clientSession.StartPing();
+
+        // TODO: DB로부터 AccountInfo 긁어오기
+        clientSession.SetAccountInfo(); // 임시값
+        clientSession.Send(S_AccountInfo(clientSession.AccountInfo.GetProto()));
+    }
+
+    void HandleCPing(SessionBase session, IMessage message)
+    {
+        ClientSession clientSession = (ClientSession)session;
+        C_Ping packet = (C_Ping)message;
+        //LogHandler.Log(LogCode.CONSOLE, "HandleCPing");
+
+        clientSession.RecvPing();
     }
 
     void HandleCEnterWaitingRoom(SessionBase session, IMessage message)
