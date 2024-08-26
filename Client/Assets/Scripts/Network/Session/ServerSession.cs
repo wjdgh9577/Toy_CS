@@ -18,8 +18,6 @@ public class ServerSession : SessionBase
     public override void OnConnected()
     {
         LogHandler.Log(LogCode.CONSOLE, "Connected");
-
-        Managers.Instance.NetworkManager.Send(PacketHandler.C_Connected(Token));
     }
 
     public override void OnDisconnected()
@@ -39,7 +37,7 @@ public class ServerSession : SessionBase
 
     public void Send(IMessage message)
     {
-        ArraySegment<byte> packet = PacketHandler.Serialize(message);
+        ArraySegment<byte> packet = PacketHandler.Serialize(Token, message);
 
         Send(packet);
     }

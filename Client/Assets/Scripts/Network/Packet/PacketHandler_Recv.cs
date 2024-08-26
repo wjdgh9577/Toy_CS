@@ -11,8 +11,16 @@ using System.Threading.Tasks;
 public partial class PacketHandler
 {
     // 메인스레드 로직
-    void HandleLogic(Action<SessionBase, IMessage> handler, SessionBase session, IMessage message)
+    void HandleLogic(Action<SessionBase, IMessage> handler, SessionBase session, string token, IMessage message)
     {
+        if (message is S_Connected)
+            session.Token = token;
+        else if (session.Verify(token) == false)
+        {
+            LogHandler.LogError(LogCode.PACKET_INVALID_TOKEN, token);
+            return;
+        }
+
         Managers.Instance.NetworkManager.Push(handler, session, message);
     }
 
@@ -31,9 +39,9 @@ public partial class PacketHandler
     {
         ServerSession serverSession = (ServerSession)session;
         S_Connected packet = (S_Connected)message;
-        LogHandler.Log(LogCode.CONSOLE, "HandleSConnected", packet.ServerTime.ToDateTime());
+        LogHandler.Log(LogCode.CONSOLE, "HandleSConnected");
 
-        serverSession.OnPing(packet.ServerTime.ToDateTime());
+        Managers.Instance.NetworkManager.Send(PacketHandler.C_Connected());
     }
 
     void HandleSEnterWaitingRoom(SessionBase session, IMessage message)

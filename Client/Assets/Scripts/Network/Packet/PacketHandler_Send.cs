@@ -11,10 +11,9 @@ public partial class PacketHandler
         return packet;
     }
 
-    public static C_Connected C_Connected(string token)
+    public static C_Connected C_Connected()
     {
         C_Connected packet = new C_Connected();
-        packet.Token = token;
 
         return packet;
     }

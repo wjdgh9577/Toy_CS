@@ -2,9 +2,8 @@
 using CoreLibrary.Log;
 using CoreLibrary.Network;
 using Google.Protobuf;
-using Google.Protobuf.Protocol;
-using Google.Protobuf.WellKnownTypes;
-using Server.Room;
+using Server.Content.Data;
+using Server.Content.Room;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,29 +14,20 @@ namespace Server.Session;
 
 public class ClientSession : SessionBase
 {
-    HashSet<RoomBase> _roomList = new HashSet<RoomBase>();
-
     #region Network
 
     public override void OnConnected()
     {
-        // TODO: 메모리에 유저 데이터 적재
         LogHandler.Log(LogCode.CONSOLE, $"Connected: {SUID}");
 
-        S_Connected packet = new S_Connected();
-        packet.ServerTime = Timestamp.FromDateTime(DateTime.UtcNow);
-        Send(packet);
+        // TODO: 토큰 발급
+        Token = Guid.NewGuid().ToString(); // 테스트
 
-        _pingJob = JobTimerHandler.PushAfter(() =>
-        {
-            SendPing();
-        }, Define.PING_INTERVAL);
-        _lastPingTime = Environment.TickCount64;
+        Send(PacketHandler.S_Connected());
     }
 
     public override void OnDisconnected()
     {
-        // TODO: 메모리에서 유저 관련 데이터 정리
         LogHandler.Log(LogCode.CONSOLE, $"Disconnected: {SUID}");
 
         _pingJob.Cancel = true;
@@ -57,7 +47,7 @@ public class ClientSession : SessionBase
 
     public void Send(IMessage message)
     {
-        ArraySegment<byte> packet = PacketHandler.Serialize(message);
+        ArraySegment<byte> packet = PacketHandler.Serialize(Token, message);
 
         // TODO: 최적화 고려
         Send(packet);
@@ -65,6 +55,12 @@ public class ClientSession : SessionBase
 
     long _lastPingTime;
     IJob? _pingJob;
+
+    public void StartPing()
+    {
+        _lastPingTime = Environment.TickCount64;
+        SendPing();
+    }
 
     void SendPing()
     {
@@ -90,6 +86,10 @@ public class ClientSession : SessionBase
     #endregion
 
     #region content
+
+    public AccountInfo AccountInfo { get; private set; }
+
+    HashSet<RoomBase> _roomList = new HashSet<RoomBase>();
 
     public void EnterRoom(RoomBase room)
     {

@@ -1,6 +1,6 @@
 ﻿using Google.Protobuf.Protocol;
 using Google.Protobuf.WellKnownTypes;
-using Server.Room;
+using Server.Content.Room;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +17,9 @@ public partial class PacketHandler
         return packet;
     }
 
-    public static S_Connected S_Connected(DateTime dateTime)
+    public static S_Connected S_Connected()
     {
         S_Connected packet = new S_Connected();
-        packet.ServerTime = Timestamp.FromDateTime(dateTime);
 
         return packet;
     }

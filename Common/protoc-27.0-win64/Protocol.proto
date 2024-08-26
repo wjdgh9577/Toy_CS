@@ -35,12 +35,12 @@ message C_Ping
 
 message S_Connected
 {
-	google.protobuf.Timestamp serverTime = 2;
+	
 }
 
 message C_Connected
 {
-	string token = 1;
+	
 }
 
 message S_EnterWaitingRoom
@@ -99,10 +99,11 @@ message C_Chat
 	string chat = 2;
 }
 
-message PlayerInfo
+message AccountInfo
 {
-	int32 uuid = 1;
+	string uuid = 1;
 	string name = 2;
+	int32 level = 3;
 }
 
 message RoomInfo

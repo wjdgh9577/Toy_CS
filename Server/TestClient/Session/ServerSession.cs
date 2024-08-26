@@ -22,8 +22,6 @@ public class ServerSession : SessionBase
     {
         LogHandler.Log(LogCode.CONSOLE, "Connected");
 
-        Send(PacketHandler.C_Connected(Token));
-
         TestChatProcess();
     }
 
@@ -44,7 +42,7 @@ public class ServerSession : SessionBase
 
     public void Send(IMessage message)
     {
-        ArraySegment<byte> packet = PacketHandler.Serialize(message);
+        ArraySegment<byte> packet = PacketHandler.Serialize(Token, message);
 
         // TODO: 최적화 고려
         Send(packet);

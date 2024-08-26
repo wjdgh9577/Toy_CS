@@ -2,7 +2,7 @@
 using CoreLibrary.Network;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
-using Server.Room;
+using Server.Content.Room;
 using Server.Session;
 using System;
 using System.Collections.Generic;
@@ -12,8 +12,13 @@ using System.Threading.Tasks;
 
 public partial class PacketHandler
 {
-    void HandleLogic(Action<SessionBase, IMessage> handler, SessionBase session, IMessage message)
+    void HandleLogic(Action<SessionBase, IMessage> handler, SessionBase session, string token, IMessage message)
     {
+        if (session.Verify(token) == false)
+        {
+            LogHandler.LogError(LogCode.PACKET_INVALID_TOKEN, token);
+            return;
+        }
         handler.Invoke(session, message);
     }
 
@@ -32,10 +37,9 @@ public partial class PacketHandler
     {
         ClientSession clientSession = (ClientSession)session;
         C_Connected packet = (C_Connected)message;
-        LogHandler.Log(LogCode.CONSOLE, "HandleCConnected", packet.Token);
+        LogHandler.Log(LogCode.CONSOLE, "HandleCConnected");
 
-        clientSession.Token ??= packet.Token;
-        // TODO: PlayerInfo 저장
+        clientSession.StartPing();
     }
 
     void HandleCEnterWaitingRoom(SessionBase session, IMessage message)
