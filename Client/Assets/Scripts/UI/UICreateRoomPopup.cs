@@ -64,7 +64,7 @@ public class UICreateRoomPopup : UIBase
         var password = _passwordInput.text;
         var personnel = _personnel;
 
-        PacketHandler.SendCCreateWaitingRoom(1, personnel, title, password);
+        Managers.Instance.NetworkManager.Send(PacketHandler.C_CreateWaitingRoom(1, personnel, title, password));
 
         Hide();
 

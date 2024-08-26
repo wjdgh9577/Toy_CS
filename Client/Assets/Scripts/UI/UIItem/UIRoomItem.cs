@@ -43,6 +43,6 @@ public class UIRoomItem : UIItemBase
 
     void Enter(string password)
     {
-        PacketHandler.SendCEnterWaitingRoom(_info.BaseInfo.UniqueId, password);
+        Managers.Instance.NetworkManager.Send(PacketHandler.C_EnterWaitingRoom(_info.BaseInfo.UniqueId, password));
     }
 }

@@ -58,7 +58,7 @@ public class RoomManager
         }
     }
 
-    public WaitingRoom EnterWaitingRoom(ClientSession session, int uniqueId, string password = null)
+    public WaitingRoom? EnterWaitingRoom(ClientSession session, int uniqueId, string password = null)
     {
         lock (_lock)
         {

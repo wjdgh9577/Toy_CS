@@ -74,9 +74,7 @@ public class ClientSession : SessionBase
             return;
         }
 
-        S_Ping packet = new S_Ping();
-        packet.ServerTime = Timestamp.FromDateTime(DateTime.UtcNow);
-        Send(packet);
+        Send(PacketHandler.S_Ping(DateTime.UtcNow));
 
         _pingJob = JobTimerHandler.PushAfter(() =>
         {

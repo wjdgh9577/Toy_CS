@@ -22,9 +22,7 @@ public class ServerSession : SessionBase
     {
         LogHandler.Log(LogCode.CONSOLE, "Connected");
 
-        C_Connected packet = new C_Connected();
-        packet.Token = Token;
-        Send(packet);
+        Send(PacketHandler.C_Connected(Token));
 
         TestChatProcess();
     }
@@ -57,8 +55,7 @@ public class ServerSession : SessionBase
         DateTime localTime = DateTime.UtcNow;
         ping = localTime.Subtract(serverTime).Ticks / TICKS_TO_MILLISECONDS;
 
-        C_Ping resPacket = new C_Ping();
-        Send(resPacket);
+        Send(PacketHandler.C_Ping());
     }
 
     void TestChatProcess()
@@ -75,48 +72,34 @@ public class ServerSession : SessionBase
                     && string.Equals(array[0]?.ToLower(), "enter") 
                     && int.TryParse(array[1], out int id))
                 {
-                    C_EnterWaitingRoom packet = new C_EnterWaitingRoom();
-                    packet.UniqueId = id;
-                    packet.Password = array[2];
-                    Send(packet);
+                    SessionManager.Instance.Session.Send(PacketHandler.C_EnterWaitingRoom(id, array[2]));
                 }
                 else if (array.Length >= 2
                     && string.Equals(array[0]?.ToLower(), "leave") 
                     && int.TryParse(array[1], out id))
                 {
-                    C_LeaveWaitingRoom packet = new C_LeaveWaitingRoom();
-                    packet.UniqueId = id;
-                    Send(packet);
+                    SessionManager.Instance.Session.Send(PacketHandler.C_LeaveWaitingRoom(id));
                 }
                 else if (array.Length >= 1 
                     && string.Equals(array[0]?.ToLower(), "refresh"))
                 {
-                    C_RefreshWaitingRoom packet = new C_RefreshWaitingRoom();
-                    Send(packet);
+                    SessionManager.Instance.Session.Send(PacketHandler.C_RefreshWaitingRoom());
                 }
                 else if (array.Length >= 1 
                     && string.Equals(array[0]?.ToLower(), "quick"))
                 {
-                    C_QuickEnterWaitingRoom packet = new C_QuickEnterWaitingRoom();
-                    Send(packet);
+                    SessionManager.Instance.Session.Send(PacketHandler.C_QuickEnterWaitingRoom());
                 }
                 else if (array.Length >= 5 
                     && string.Equals(array[0]?.ToLower(), "create")
                     && int.TryParse(array[1], out int type)
                     && int.TryParse(array[2], out int max))
                 {
-                    C_CreateWaitingRoom packet = new C_CreateWaitingRoom();
-                    packet.Type = type;
-                    packet.MaxPersonnel = max;
-                    packet.Title = array[3];
-                    packet.Password = array[4];
-                    Send(packet);
+                    SessionManager.Instance.Session.Send(PacketHandler.C_CreateWaitingRoom(type, max, array[3], array[4]));
                 }
                 else
                 {
-                    C_Chat packet = new C_Chat();
-                    packet.Chat = command;
-                    Send(packet);
+                    SessionManager.Instance.Session.Send(PacketHandler.C_Chat(command));
                 }
             }
         });

@@ -13,7 +13,9 @@ public class SessionManager
     public static SessionManager Instance { get; } = new SessionManager();
     SessionManager() { }
 
-    Dictionary<int, SessionBase> _sessions = new Dictionary<int, SessionBase>();
+    Dictionary<int, ClientSession> _clientSessions = new Dictionary<int, ClientSession>();
+    // 서버간 통신 전용
+    //Dictionary<int, ServerSession> _serverSessions = new Dictionary<int, ServerSession>();
 
     public int CCU { get; private set; } = 0;
 
@@ -22,14 +24,14 @@ public class SessionManager
 
     object _lock = new object();
 
-    public T Generate<T>() where T : SessionBase, new()
+    public ClientSession Generate()
     {
         lock (_lock)
         {
-            T session = new T();
+            ClientSession session = new ClientSession();
             int suid = session.SUID = NewSUID;
 
-            if (_sessions.TryAdd(suid, session) == false)
+            if (_clientSessions.TryAdd(suid, session) == false)
                 LogHandler.LogError(LogCode.SESSION_INVALID_UID, $"SUID ({suid}) is already used.");
 
             CCU += 1;
@@ -38,24 +40,24 @@ public class SessionManager
         }
     }
 
-    public T? Find<T>(int suid) where T : SessionBase
+    public ClientSession? Find(int suid)
     {
         lock ( _lock)
         {
-            if (_sessions.TryGetValue(suid, out var session))
+            if (_clientSessions.TryGetValue(suid, out var session))
             {
-                return session as T;
+                return session;
             }
 
             return default;
         }
     }
 
-    public void Remove<T>(T session) where T : SessionBase
+    public void Remove(ClientSession session)
     {
         lock (_lock)
         {
-            if (_sessions.Remove(session.SUID) == false)
+            if (_clientSessions.Remove(session.SUID) == false)
                 LogHandler.LogError(LogCode.SESSION_NOT_EXIST, $"Session_{session.SUID} is not exist.");
 
             CCU = Math.Max(CCU - 1, 0);

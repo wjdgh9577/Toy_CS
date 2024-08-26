@@ -12,38 +12,17 @@ public class SessionManager
     public static SessionManager Instance { get; } = new SessionManager();
     SessionManager() { }
 
-    Dictionary<Type, SessionBase> _sessions = new Dictionary<Type, SessionBase>();
+    public ServerSession Session { get; private set; }
 
     object _lock = new object();
 
-    public T Generate<T>() where T : SessionBase, new()
+    public ServerSession Generate()
     {
         lock (_lock)
         {
-            T session = new T();
+            Session = new ServerSession();
 
-            _sessions.TryAdd(typeof(T), session);
-
-            return session;
-        }
-    }
-
-    public T? Find<T>() where T : SessionBase
-    {
-        lock (_lock)
-        {
-            if (_sessions.TryGetValue(typeof(T), out var session))
-                return (T)session;
-
-            return default;
-        }
-    }
-
-    public void Remove<T>() where T : SessionBase
-    {
-        lock ( _lock)
-        {
-            _sessions.Remove(typeof(T));
+            return Session;
         }
     }
 }
