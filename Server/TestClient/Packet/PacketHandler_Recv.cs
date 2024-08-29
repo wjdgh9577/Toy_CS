@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestClient.Data;
 using TestClient.Session;
 
 public partial class PacketHandler
@@ -69,13 +70,27 @@ public partial class PacketHandler
     {
         ServerSession serverSession = (ServerSession)session;
         S_RefreshWaitingRoom packet = (S_RefreshWaitingRoom)message;
-        LogHandler.Log(LogCode.CONSOLE, "HandleSRefreshRoom", packet.ToString());
+        LogHandler.Log(LogCode.CONSOLE, "HandleSRefreshWaitingRoom", packet.ToString());
+    }
+
+    void HandleSReadyWaitingRoom(SessionBase session, IMessage message)
+    {
+        ServerSession serverSession = (ServerSession)session;
+        S_ReadyWaitingRoom packet = (S_ReadyWaitingRoom)message;
+        LogHandler.Log(LogCode.CONSOLE, "HandleSReadyWaitingRoom", packet.ToString());
+    }
+
+    void HandleSRefreshLobby(SessionBase session, IMessage message)
+    {
+        ServerSession serverSession = (ServerSession)session;
+        S_RefreshLobby packet = (S_RefreshLobby)message;
+        LogHandler.Log(LogCode.CONSOLE, "HandleSRefreshLobby", packet.ToString());
     }
 
     void HandleSChat(SessionBase session, IMessage message)
     {
         ServerSession serverSession = (ServerSession)session;
         S_Chat packet = (S_Chat)message;
-        LogHandler.Log(LogCode.CONSOLE, $"From: Session_{packet.Suid}, Chat: {packet.Chat}");
+        LogHandler.Log(LogCode.CONSOLE, $"From: {packet.Info.Name}, Chat: {packet.Chat}");
     }
 }

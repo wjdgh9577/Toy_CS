@@ -29,6 +29,10 @@ public partial class PacketHandler
         _handlers.Add((ushort)MsgId.SLeaveWaitingRoom, HandleSLeaveWaitingRoom);		
 		_deserializers.Add((ushort)MsgId.SRefreshWaitingRoom, Deserialize<S_RefreshWaitingRoom>);
         _handlers.Add((ushort)MsgId.SRefreshWaitingRoom, HandleSRefreshWaitingRoom);		
+		_deserializers.Add((ushort)MsgId.SReadyWaitingRoom, Deserialize<S_ReadyWaitingRoom>);
+        _handlers.Add((ushort)MsgId.SReadyWaitingRoom, HandleSReadyWaitingRoom);		
+		_deserializers.Add((ushort)MsgId.SRefreshLobby, Deserialize<S_RefreshLobby>);
+        _handlers.Add((ushort)MsgId.SRefreshLobby, HandleSRefreshLobby);		
 		_deserializers.Add((ushort)MsgId.SChat, Deserialize<S_Chat>);
         _handlers.Add((ushort)MsgId.SChat, HandleSChat);		
 		_deserializers.Add((ushort)MsgId.SAccountInfo, Deserialize<S_AccountInfo>);

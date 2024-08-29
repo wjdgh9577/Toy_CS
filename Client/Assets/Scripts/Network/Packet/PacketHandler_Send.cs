@@ -35,9 +35,17 @@ public partial class PacketHandler
         return packet;
     }
 
-    public static C_RefreshWaitingRoom C_RefreshWaitingRoom()
+    public static C_ReadyWaitingRoom C_ReadyWaitingRoom(bool ready)
     {
-        C_RefreshWaitingRoom packet = new C_RefreshWaitingRoom();
+        C_ReadyWaitingRoom packet = new C_ReadyWaitingRoom();
+        packet.Ready = ready;
+
+        return packet;
+    }
+
+    public static C_RefreshLobby C_RefreshLobby()
+    {
+        C_RefreshLobby packet = new C_RefreshLobby();
 
         return packet;
     }

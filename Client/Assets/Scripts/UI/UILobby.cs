@@ -1,5 +1,3 @@
-using Google.Protobuf.Collections;
-using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,15 +19,22 @@ public class UILobby : UIBase
     void Clear()
     {
         for (int i = 0; i < _roomItemRoot.childCount; i++)
-            _roomItemRoot.GetChild(i).gameObject.SetActive(false);
+        {
+            var roomItem = _roomItemRoot.GetChild(i).GetComponent<UIRoomItem>();
+            if (roomItem != null)
+            {
+                roomItem.Using = false;
+                roomItem.SetActive(false);
+            }
+        }
     }
 
     public void RefreshButton()
     {
-        Managers.Instance.NetworkManager.Send(PacketHandler.C_RefreshWaitingRoom());
+        Managers.Instance.NetworkManager.Send(PacketHandler.C_RefreshLobby());
     }
 
-    public void OnRefresh(RepeatedField<WaitingRoomInfo> roomInfos)
+    public void OnRefresh(List<WaitingRoomInfo> roomInfos)
     {
         Clear();
 

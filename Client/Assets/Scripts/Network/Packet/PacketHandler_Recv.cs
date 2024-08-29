@@ -61,7 +61,12 @@ public partial class PacketHandler
 
         if (packet.EnterOk)
         {
-            // TODO: 대기방 이동
+            var roomInfo = packet.RoomInfo.ToLocalData();
+            Managers.Instance.UIManager.GetUI<UILobby>().Hide();
+            Managers.Instance.SceneManager.LoadSceneAsync(SceneName.WaitingRoomScene, () =>
+            {
+                Managers.Instance.UIManager.GetUI<UIWaitingRoom>().Show(roomInfo);
+            });
         }
     }
 
@@ -73,7 +78,11 @@ public partial class PacketHandler
 
         if (packet.LeaveOk)
         {
-            // TODO: 로비씬 이동
+            Managers.Instance.UIManager.GetUI<UIWaitingRoom>().Hide();
+            Managers.Instance.SceneManager.LoadSceneAsync(SceneName.LobbyScene, () =>
+            {
+                Managers.Instance.UIManager.GetUI<UILobby>().Show();
+            });
         }
     }
 
@@ -83,14 +92,34 @@ public partial class PacketHandler
         S_RefreshWaitingRoom packet = (S_RefreshWaitingRoom)message;
         LogHandler.Log(LogCode.CONSOLE, "HandleSRefreshRoom", packet.ToString());
 
-        Managers.Instance.UIManager.GetUI<UILobby>().OnRefresh(packet.RoomInfos);
+        Managers.Instance.UIManager.GetUI<UIWaitingRoom>().OnRefresh(packet.RoomInfo.ToLocalData());
+    }
+
+    void HandleSReadyWaitingRoom(SessionBase session, IMessage message)
+    {
+        ServerSession serverSession = (ServerSession)session;
+        S_ReadyWaitingRoom packet = (S_ReadyWaitingRoom)message;
+        LogHandler.Log(LogCode.CONSOLE, "HandleSReadyWaitingRoom", packet.ToString());
+
+        Managers.Instance.UIManager.GetUI<UIWaitingRoom>().OnRefresh(packet.Info.ToLocalData());
+    }
+
+    void HandleSRefreshLobby(SessionBase session, IMessage message)
+    {
+        ServerSession serverSession = (ServerSession)session;
+        S_RefreshLobby packet = (S_RefreshLobby)message;
+        LogHandler.Log(LogCode.CONSOLE, "HandleSRefreshLobby", packet.ToString());
+
+        Managers.Instance.UIManager.GetUI<UILobby>().OnRefresh(packet.RoomInfos.ToLocalData());
     }
 
     void HandleSChat(SessionBase session, IMessage message)
     {
         ServerSession serverSession = (ServerSession)session;
         S_Chat packet = (S_Chat)message;
-        LogHandler.Log(LogCode.CONSOLE, $"From: Session_{packet.Suid}, Chat: {packet.Chat}");
+        LogHandler.Log(LogCode.CONSOLE, $"From: Session_{packet.Info.Name}, Chat: {packet.Chat}");
+
+        Managers.Instance.UIManager.GetUI<UIWaitingRoom>().OnChat(packet.Info.ToLocalData(), packet.Chat);
     }
 
     #endregion

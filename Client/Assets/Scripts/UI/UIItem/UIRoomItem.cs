@@ -1,4 +1,3 @@
-using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,16 +18,16 @@ public class UIRoomItem : UIItemBase
     {
         _info = info;
 
-        _passwordFlag.SetActive(info.Password);
-        _roomTitleText.text = info.Title;
-        _personnelText.text = $"{info.BaseInfo.Personnel}/{info.BaseInfo.MaxPersonnel}";
+        _passwordFlag.SetActive(info.password);
+        _roomTitleText.text = info.title;
+        _personnelText.text = $"{info.personnel}/{info.maxPersonnel}";
 
         SetActive(true);
     }
 
     public void OnClick()
     {
-        if (_info.Password)
+        if (_info.password)
         {
             var popup = Managers.Instance.UIManager.GetUI<UIPasswordPopup>();
             popup.Show(PopupType.YseNo, password =>
@@ -43,6 +42,6 @@ public class UIRoomItem : UIItemBase
 
     void Enter(string password)
     {
-        Managers.Instance.NetworkManager.Send(PacketHandler.C_EnterWaitingRoom(_info.BaseInfo.UniqueId, password));
+        Managers.Instance.NetworkManager.Send(PacketHandler.C_EnterWaitingRoom(_info.uniqueId, password));
     }
 }

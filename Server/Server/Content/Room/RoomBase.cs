@@ -26,12 +26,12 @@ public abstract class RoomBase
 
     public virtual void OnEnter(ClientSession session)
     {
-        _info.Enter();
+        _info.Enter(session.AccountInfo);
     }
 
     public virtual void OnLeave(ClientSession session)
     {
-        _info.Leave();
+        _info.Leave(session.AccountInfo);
     }
 
     public virtual void Broadcast(ClientSession session, IMessage message)

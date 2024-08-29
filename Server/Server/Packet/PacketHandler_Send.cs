@@ -49,19 +49,35 @@ public partial class PacketHandler
         return packet;
     }
 
-    public static S_RefreshWaitingRoom S_RefreshWaitingRoom(List<WaitingRoom> roomList)
+    public static S_RefreshWaitingRoom S_RefreshWaitingRoom(WaitingRoomInfo? roomInfo)
     {
         S_RefreshWaitingRoom packet = new S_RefreshWaitingRoom();
+        packet.RoomInfo = roomInfo;
+
+        return packet;
+    }
+
+    public static S_ReadyWaitingRoom S_ReadyWaitingRoom(AccountInfo accountInfo)
+    {
+        S_ReadyWaitingRoom packet = new S_ReadyWaitingRoom();
+        packet.Info = accountInfo;
+
+        return packet;
+    }
+
+    public static S_RefreshLobby S_RefreshLobby(List<WaitingRoom> roomList)
+    {
+        S_RefreshLobby packet = new S_RefreshLobby();
         foreach (WaitingRoom room in roomList)
             packet.RoomInfos.Add(room.Info.GetProto());
 
         return packet;
     }
 
-    public static S_Chat S_Chat(int suid, string chat)
+    public static S_Chat S_Chat(AccountInfo info, string chat)
     {
         S_Chat packet = new S_Chat();
-        packet.Suid = suid;
+        packet.Info = info;
         packet.Chat = chat;
 
         return packet;

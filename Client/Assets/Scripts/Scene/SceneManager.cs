@@ -11,7 +11,7 @@ public enum SceneName
 {
     SigninScene,
     LobbyScene,
-    WaitingScene,
+    WaitingRoomScene,
     GameScene
 }
 

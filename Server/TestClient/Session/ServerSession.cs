@@ -78,10 +78,16 @@ public class ServerSession : SessionBase
                 {
                     SessionManager.Instance.Session.Send(PacketHandler.C_LeaveWaitingRoom(id));
                 }
+                else if (array.Length >= 2
+                    && string.Equals(array[0]?.ToLower(), "ready")
+                    && bool.TryParse(array[1], out var ready))
+                {
+                    SessionManager.Instance.Session.Send(PacketHandler.C_ReadyWaitingRoom(ready));
+                }
                 else if (array.Length >= 1 
                     && string.Equals(array[0]?.ToLower(), "refresh"))
                 {
-                    SessionManager.Instance.Session.Send(PacketHandler.C_RefreshWaitingRoom());
+                    SessionManager.Instance.Session.Send(PacketHandler.C_RefreshLobby());
                 }
                 else if (array.Length >= 1 
                     && string.Equals(array[0]?.ToLower(), "quick"))

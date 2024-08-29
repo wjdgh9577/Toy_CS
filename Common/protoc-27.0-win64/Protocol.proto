@@ -16,12 +16,15 @@ enum MsgId
 	S_LEAVE_WAITING_ROOM = 6;
 	C_LEAVE_WAITING_ROOM = 7;
 	S_REFRESH_WAITING_ROOM = 8;
-	C_REFRESH_WAITING_ROOM = 9;
-	C_QUICK_ENTER_WAITING_ROOM = 10;
-	C_CREATE_WAITING_ROOM = 11;
-	S_CHAT = 12;
-	C_CHAT = 13;
-	S_ACCOUNT_INFO = 14;
+	S_READY_WAITING_ROOM = 9;
+	C_READY_WAITING_ROOM = 10;
+	S_REFRESH_LOBBY = 11;
+	C_REFRESH_LOBBY = 12;
+	C_QUICK_ENTER_WAITING_ROOM = 13;
+	C_CREATE_WAITING_ROOM = 14;
+	S_CHAT = 15;
+	C_CHAT = 16;
+	S_ACCOUNT_INFO = 17;
 }
 
 message S_Connected
@@ -73,10 +76,25 @@ message C_LeaveWaitingRoom
 
 message S_RefreshWaitingRoom
 {
+	WaitingRoomInfo roomInfo = 1;
+}
+
+message S_ReadyWaitingRoom
+{
+	AccountInfo info = 1;
+}
+
+message C_ReadyWaitingRoom
+{
+	bool ready = 1;
+}
+
+message S_RefreshLobby
+{
 	repeated WaitingRoomInfo roomInfos = 2;
 }
 
-message C_RefreshWaitingRoom
+message C_RefreshLobby
 {
 	
 }
@@ -96,8 +114,8 @@ message C_CreateWaitingRoom
 
 message S_Chat
 {
+	AccountInfo info = 1;
 	string chat = 2;
-	int32 suid = 3;
 }
 
 message C_Chat
@@ -110,6 +128,7 @@ message AccountInfo
 	string uuid = 1;
 	string name = 2;
 	int32 level = 3;
+	bool ready = 4;
 }
 
 message RoomInfo
@@ -118,6 +137,7 @@ message RoomInfo
 	int32 type = 2;
 	int32 personnel = 3;
 	int32 maxPersonnel = 4;
+	repeated AccountInfo players = 5;
 }
 
 message WaitingRoomInfo

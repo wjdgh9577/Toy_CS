@@ -27,8 +27,10 @@ public partial class PacketHandler
         _handlers.Add((ushort)MsgId.CEnterWaitingRoom, HandleCEnterWaitingRoom);		
 		_deserializers.Add((ushort)MsgId.CLeaveWaitingRoom, Deserialize<C_LeaveWaitingRoom>);
         _handlers.Add((ushort)MsgId.CLeaveWaitingRoom, HandleCLeaveWaitingRoom);		
-		_deserializers.Add((ushort)MsgId.CRefreshWaitingRoom, Deserialize<C_RefreshWaitingRoom>);
-        _handlers.Add((ushort)MsgId.CRefreshWaitingRoom, HandleCRefreshWaitingRoom);		
+		_deserializers.Add((ushort)MsgId.CReadyWaitingRoom, Deserialize<C_ReadyWaitingRoom>);
+        _handlers.Add((ushort)MsgId.CReadyWaitingRoom, HandleCReadyWaitingRoom);		
+		_deserializers.Add((ushort)MsgId.CRefreshLobby, Deserialize<C_RefreshLobby>);
+        _handlers.Add((ushort)MsgId.CRefreshLobby, HandleCRefreshLobby);		
 		_deserializers.Add((ushort)MsgId.CQuickEnterWaitingRoom, Deserialize<C_QuickEnterWaitingRoom>);
         _handlers.Add((ushort)MsgId.CQuickEnterWaitingRoom, HandleCQuickEnterWaitingRoom);		
 		_deserializers.Add((ushort)MsgId.CCreateWaitingRoom, Deserialize<C_CreateWaitingRoom>);

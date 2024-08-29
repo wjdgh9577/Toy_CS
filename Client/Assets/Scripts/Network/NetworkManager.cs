@@ -38,7 +38,7 @@ public class NetworkManager : JobSerializer
 
     #region Session
 
-    ServerSession _session;
+    public ServerSession Session { get; private set; }
 
     public void Connect(Action<bool> connectCallback)
     {
@@ -54,8 +54,8 @@ public class NetworkManager : JobSerializer
                 Socket connectSocket = args.ConnectSocket;
                 if (connectSocket != null)
                 {
-                    _session = new ServerSession();
-                    _session.Start(connectSocket);
+                    Session = new ServerSession();
+                    Session.Start(connectSocket);
                     Push(() => connectCallback.Invoke(true));
                 }
                 else
@@ -76,7 +76,7 @@ public class NetworkManager : JobSerializer
 
     public void Disconnect()
     {
-        _session.Disconnect();
+        Session.Disconnect();
     }
 
     #endregion
@@ -85,7 +85,7 @@ public class NetworkManager : JobSerializer
 
     public void Send(IMessage message)
     {
-        _session.Send(message);
+        Session.Send(message);
     }
 
     #endregion

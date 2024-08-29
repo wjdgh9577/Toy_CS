@@ -92,7 +92,7 @@ public class RoomManager
         }
     }
 
-    public bool LeaveRoom<T>(ClientSession session, int uniqueId) where T : RoomBase
+    public T? LeaveRoom<T>(ClientSession session, int uniqueId) where T : RoomBase
     {
         lock (_lock)
         {
@@ -101,18 +101,18 @@ public class RoomManager
             if (room == null)
             {
                 LogHandler.LogError(LogCode.ROOM_NOT_EXIST, $"{typeof(T)}_{uniqueId} is not exist.");
-                return false;
+                return null;
             }
             else if (room.ContainsSession(session.SUID) == false)
             {
                 LogHandler.LogError(LogCode.ROOM_SESSION_NOT_EXIST, $"Session_{session.SUID} is not exist.");
-                return false;
+                return null;
             }
 
             room.OnLeave(session);
             session.LeaveRoom(room);
 
-            return true;
+            return room;
         }
     }
 
@@ -149,10 +149,7 @@ public class RoomManager
     {
         lock (_lock)
         {
-            var room = _rooms
-                .Where(r => r.Value is T && r.Key == uniqueId)
-                .Select(r => r.Value)
-                .FirstOrDefault();
+            _rooms.TryGetValue(uniqueId, out var room);
 
             return room as T;
         }
@@ -218,6 +215,19 @@ public class RoomManager
         lock (_lock)
         {
             var room = FindRoom<T>(session);
+
+            if (room == null)
+                return;
+
+            room.Broadcast(session, message);
+        }
+    }
+
+    public void Broadcast<T>(ClientSession session, int uniqueId, IMessage message) where T : RoomBase
+    {
+        lock (_lock)
+        {
+            var room = FindRoom<T>(uniqueId);
 
             if (room == null)
                 return;

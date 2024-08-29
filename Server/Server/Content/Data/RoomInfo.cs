@@ -13,22 +13,27 @@ public abstract class RoomInfo
     public int personnel;
     public int maxPersonnel;
 
+    public Dictionary<string, AccountInfo> players;
+
     public RoomInfo(int uniqueId, int type, int maxPersonnel)
     {
         this.uniqueId = uniqueId;
         this.type = type;
         this.maxPersonnel = maxPersonnel;
+        players = new Dictionary<string, AccountInfo>();
         personnel = 0;
     }
 
-    public virtual void Enter()
+    public virtual void Enter(AccountInfo info)
     {
-        personnel += 1;
+        players.Add(info.Uuid, info);
+        personnel = players.Count;
     }
 
-    public virtual void Leave()
+    public virtual void Leave(AccountInfo info)
     {
-        personnel = Math.Max(personnel - 1, 0);
+        players.Remove(info.Uuid);
+        personnel = players.Count;
     }
 
     public override string ToString()
@@ -55,6 +60,8 @@ public sealed class WaitingRoomInfo : RoomInfo
         info.BaseInfo.Type = type;
         info.BaseInfo.Personnel = personnel;
         info.BaseInfo.MaxPersonnel = maxPersonnel;
+        foreach (var p in players)
+            info.BaseInfo.Players.Add(p.Value.GetProto());
         info.Title = title;
         info.Password = !string.IsNullOrEmpty(password);
 
