@@ -56,12 +56,6 @@ public partial class PacketHandler
         WaitingRoomInfo? roomInfo = result?.Info.GetProto();
         bool enterOk = result != null;
         clientSession.Send(S_EnterWaitingRoom(roomInfo, enterOk));
-
-        if (enterOk)
-        {
-            // 방 전체 broadcast
-            RoomManager.Instance.Broadcast<WaitingRoom>(clientSession, S_RefreshWaitingRoom(roomInfo));
-        }
     }
 
     void HandleCLeaveWaitingRoom(SessionBase session, IMessage message)
@@ -73,12 +67,6 @@ public partial class PacketHandler
         WaitingRoom? result = RoomManager.Instance.LeaveRoom<WaitingRoom>(clientSession, packet.UniqueId);
         bool leaveOk = result != null;
         clientSession.Send(S_LeaveWaitingRoom(leaveOk));
-
-        if (leaveOk)
-        {
-            // 방 전체 broadcast
-            RoomManager.Instance.Broadcast<WaitingRoom>(clientSession, packet.UniqueId, S_RefreshWaitingRoom(result.Info.GetProto()));
-        }
     }
 
     void HandleCReadyWaitingRoom(SessionBase session, IMessage message)
@@ -111,12 +99,6 @@ public partial class PacketHandler
         WaitingRoomInfo? roomInfo = result?.Info.GetProto();
         bool enterOk = result != null;
         clientSession.Send(S_EnterWaitingRoom(roomInfo, enterOk));
-
-        if (enterOk)
-        {
-            // 방 전체 broadcast
-            RoomManager.Instance.Broadcast<WaitingRoom>(clientSession, S_RefreshWaitingRoom(roomInfo));
-        }
     }
 
     void HandleCCreateWaitingRoom(SessionBase session, IMessage message)

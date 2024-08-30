@@ -37,8 +37,7 @@ public class WaitingRoom : RoomBase
 
         _sessions.TryAdd(session.SUID, session);
 
-        // TODO: Broadcast
-        // session.PlayerInfo
+        Broadcast(session, PacketHandler.S_RefreshWaitingRoom(Info.GetProto()));
     }
 
     public override void OnLeave(ClientSession session)
@@ -47,8 +46,7 @@ public class WaitingRoom : RoomBase
 
         _sessions.Remove(session.SUID);
 
-        // TODO: Broadcast
-        // session.PlayerInfo
+        Broadcast(session, PacketHandler.S_RefreshWaitingRoom(Info.GetProto()));
     }
 
     public override void Broadcast(ClientSession session, IMessage message) => base.Broadcast(session, message);
