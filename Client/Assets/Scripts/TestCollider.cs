@@ -13,6 +13,7 @@ public class TestCollider : MonoBehaviour
         compositeCollider = GetComponent<CompositeCollider2D>();
     }
 
+#if UNITY_EDITOR
     void OnDrawGizmos()
     {
         if (compositeCollider == null)
@@ -35,4 +36,5 @@ public class TestCollider : MonoBehaviour
             }
         }
     }
+#endif
 }
