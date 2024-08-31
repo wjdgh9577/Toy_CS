@@ -1,20 +1,19 @@
 @ECHO off
 
-CD protoc-27.0-win64
-protoc -I=./ --csharp_out=./ ./Protocol.proto
+"protoc-27.0-win64/protoc" -I=./ --csharp_out=./ ./Protocol.proto
 IF ERRORLEVEL 1 PAUSE
 
-dotnet build ../../Server/Server.sln --configuration Debug
+dotnet build ../Server/Server.sln --configuration Debug
 IF ERRORLEVEL 1 PAUSE
 
-START /wait ../../Server/CodeGenerator/bin/Debug/net8.0/CodeGenerator.exe ./Protocol.proto
+START /wait ../Server/CodeGenerator/bin/Debug/net8.0/CodeGenerator.exe ./Protocol.proto
 IF ERRORLEVEL 1 PAUSE
 
-SET CLIENT_PLUGIN_PATH="../../Client/Assets/Plugins"
-SET SERVER_PLUGIN_PATH="../../Server/TestClient/bin/Debug/net8.0\CoreLibrary.dll"
-SET CLIENT_PACKET_PATH="../../Client/Assets/Scripts/Network/Packet"
-SET SERVER_PACKET_PATH="../../Server/Server/Packet"
-SET DUMMY_PACKET_PATH="../../Server/TestClient/Packet"
+SET CLIENT_PLUGIN_PATH="../Client/Assets/Plugins"
+SET SERVER_PLUGIN_PATH="../Server/TestClient/bin/Debug/net8.0\CoreLibrary.dll"
+SET CLIENT_PACKET_PATH="../Client/Assets/Scripts/Network/Packet"
+SET SERVER_PACKET_PATH="../Server/Server/Packet"
+SET DUMMY_PACKET_PATH="../Server/TestClient/Packet"
 
 XCOPY /Y %SERVER_PLUGIN_PATH% %CLIENT_PLUGIN_PATH%
 
