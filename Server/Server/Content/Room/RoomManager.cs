@@ -24,8 +24,11 @@ public class RoomManager
     int _newUniqueRoomId = 1;
     object _lock = new object();
 
-    public WaitingRoom CreateWaitingRoom(ClientSession session, int type, int maxPersonnel, string title, string password)
+    public WaitingRoom? CreateWaitingRoom(ClientSession session, int type, int maxPersonnel, string title, string password)
     {
+        if (string.IsNullOrEmpty(title))
+            return null;
+
         lock (_lock)
         {
             WaitingRoom room = MakeRoom<WaitingRoom>(type, maxPersonnel);

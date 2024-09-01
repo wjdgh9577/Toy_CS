@@ -23,7 +23,7 @@ Command | Description | arg[0] | arg[1] | arg[2] | arg[3] | Response
 |:-:|:-|:-|:-|:-|:-|:-|
 Enter | 특정 방에 입장 | int:RoomId | string?:Password | - | - | bool:EnterOk
 Leave | 특정 방에서 퇴장 | int:RoomId | - | - | - | bool:LeaveOk
-Create | 방 생성 | int:RoomType | int:MaxAllowedToEnter | string?:RoomTitle | string?:Password | bool:EnterOk
+Create | 방 생성 | int:RoomType | int:MaxAllowedToEnter | string:RoomTitle | string?:Password | bool:EnterOk
 Quick | 무작위 랜덤 공개방 입장 | - | - | - | - | bool:EnterOk
 Refresh | 로비 대기방 리스트 갱신 | - | - | - | - | class[]:RoomInfos
 Ready | 대기방에서 준비상태 변경 | bool:Ready | - | - | - | class:AccountInfo
