@@ -18,6 +18,9 @@
 <br/>
 
 ## Log
+CoreLibrary의 LogModule을 구현한다.
+
+LogCode가 Console일 경우 에디터에 로그를 출력하며, 그 외의 경우 별도의 파일에 저장한다.(미구현)
 
 <br/>
 

@@ -27,6 +27,15 @@ System.Timers.Timer 클래스를 활용한 커스텀 타이머
 
 LogHandler를 통해 API를 제공하며, 필요한 경우 모듈을 변경하여 사용할 수 있다.
 
+### LogCode
+로그의 종류를 나타내며 필요한 경우 추가하여 사용한다.
+
+### LogType
+로그의 중요도를 나타내며 None, Warning, Error 세 단계로 구성된다.
+
+### LogKey
+로그의 key를 지정하여 사용할 경우 추가하여 사용한다.
+
 <br/>
 
 ## Network
