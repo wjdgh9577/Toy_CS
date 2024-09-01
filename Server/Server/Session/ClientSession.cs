@@ -20,9 +20,6 @@ public class ClientSession : SessionBase
     {
         LogHandler.Log(LogCode.CONSOLE, $"Connected: {SUID}");
 
-        // TODO: 토큰 발급
-        Token = Guid.NewGuid().ToString(); // 테스트
-
         Send(PacketHandler.S_Connected());
     }
 

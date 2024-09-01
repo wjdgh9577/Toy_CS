@@ -29,7 +29,11 @@ public class SessionManager
         lock (_lock)
         {
             ClientSession session = new ClientSession();
+            
             int suid = session.SUID = NewSUID;
+
+            // TODO: 토큰 발급
+            session.Token = Guid.NewGuid().ToString(); // 테스트
 
             if (_clientSessions.TryAdd(suid, session) == false)
                 LogHandler.LogError(LogCode.SESSION_INVALID_UID, $"SUID ({suid}) is already used.");
