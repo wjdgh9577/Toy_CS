@@ -11,6 +11,8 @@ TCP/IP 기반의 실시간 서버 구현 토이 프로젝트
 1. DB 연동
 1. 로그인 인증 Web API 서버 + Redis 캐시 서버
 
+![Diagram](https://github.com/user-attachments/assets/5bd04567-4847-42de-a5bd-fb55b9e77bdc)
+
 <br/>
 
 # 진행 상황
