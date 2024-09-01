@@ -6,10 +6,12 @@ Common 디렉토리의 'Protocol.proto'를 분석하여 클라이언트/서버�
 <br/>
 
 # CoreLibrary
+[상세 페이지 참고](https://github.com/wjdgh9577/Toy_CS/tree/main/Server/CoreLibrary)
 
 <br/>
 
 # Server
+[상세 페이지 참고](https://github.com/wjdgh9577/Toy_CS/tree/main/Server/Server)
 
 <br/>
 
