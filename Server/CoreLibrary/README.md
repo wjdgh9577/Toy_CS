@@ -44,6 +44,9 @@ Connector, Listener 소켓 초기화와 관련된 API를 제공한다.
 
 토큰은 최초 연결시 서버에서 지급하며 이후 패킷의 헤더에 삽입되어 패킷 검증용으로 사용된다.
 
+<패킷 구성>
+![Packet](https://github.com/user-attachments/assets/b8eef1ea-ae64-4191-98b4-b2daa27fc860)
+
 <br/>
 
 ## Utility
