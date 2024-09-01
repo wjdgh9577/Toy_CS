@@ -16,7 +16,7 @@ public class RoomManager
     public static RoomManager Instance { get; } = new RoomManager();
     RoomManager()
     {
-        JobTimerHandler.PushAfter(UpdateRooms, Define.ROOM_UPDATE_INTERVAL, autoReset: true);
+        //JobTimerHandler.PushAfter(UpdateRooms, Define.ROOM_UPDATE_INTERVAL, autoReset: true);
     }
 
     Dictionary<int, RoomBase> _rooms = new Dictionary<int, RoomBase>();

@@ -4,6 +4,7 @@ using Server.Session;
 using Server.Log;
 using System.Net;
 using System.Net.Sockets;
+using Server.Content.Room;
 
 namespace Server;
 
@@ -30,7 +31,8 @@ public class Program
 
         while (true)
         {
-            Thread.Sleep(1000);
+            RoomManager.Instance.UpdateRooms();
+            Thread.Sleep(Define.ROOM_UPDATE_INTERVAL);
         }
     }
 }
