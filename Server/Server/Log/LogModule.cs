@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using CoreLibrary.Log;
 using CoreLibrary.Utility;
 
-namespace Server;
+namespace Server.Log;
 
 /// <summary>
 /// LogHandler를 통해 접근

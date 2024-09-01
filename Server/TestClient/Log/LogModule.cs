@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TestClient;
+namespace TestClient.Log;
 
 public sealed class LogModule : LogModuleBase
 {

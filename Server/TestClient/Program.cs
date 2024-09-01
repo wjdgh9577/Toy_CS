@@ -3,6 +3,7 @@ using CoreLibrary.Network;
 using System.Net;
 using System.Net.Sockets;
 using TestClient.Session;
+using TestClient.Log;
 
 namespace TestClient;
 
