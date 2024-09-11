@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-
+using Newtonsoft.Json;
+using CoreLibrary.Utility;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -10,32 +11,38 @@ using UnityEditor;
 public class MapEditor
 {
     const string DATA_PATH = "../Common/Map";
+    const string PREFAB_PATH = "Prefabs/Map";
 
     [MenuItem("Tools/Map/Extract Tilemap Collider")]
     static void ExtractTilemapCollider()
     {
-        using (var writer = File.CreateText($"{DATA_PATH}/Map.json"))
+        Map[] maps = Resources.LoadAll<Map>(PREFAB_PATH);
+        foreach (Map map in maps)
         {
-            CompositeCollider2D[] compositeColliders = Transform.FindObjectsOfType<CompositeCollider2D>();
-
-            foreach (var compositeCollider in compositeColliders)
+            using (var writer = File.CreateText($"{DATA_PATH}/{map.name}.json"))
             {
-                if (compositeCollider == null)
-                    continue;
+                MapInfo mapInfo = new MapInfo(map.uniqueId);
+                CompositeCollider2D[] compositeColliders = map.GetComponentsInChildren<CompositeCollider2D>();
 
-                for (int i = 0; i < compositeCollider.pathCount; i++)
+                foreach (var compositeCollider in compositeColliders)
                 {
-                    Vector2[] path = new Vector2[compositeCollider.GetPathPointCount(i)];
-                    compositeCollider.GetPath(i, path);
+                    if (compositeCollider == null)
+                        continue;
 
-                    for (int j = 0; j < path.Length; j++)
+                    for (int i = 0; i < compositeCollider.pathCount; i++)
                     {
-                        Vector2 point = path[j];
+                        List<Vector2> path = new List<Vector2>();
+                        compositeCollider.GetPath(i, path);
 
-                        // TODO: Map Data Schema First
-                        writer.Write(point);
+                        List<CustomVector2Int> newPath = new List<CustomVector2Int>();
+                        foreach (var point in path)
+                            newPath.Add(point.ToCustomVector2Int());
+
+                        mapInfo.colliderPaths.Add(newPath);
                     }
                 }
+
+                writer.Write(JsonConvert.SerializeObject(mapInfo));
             }
         }
     }
