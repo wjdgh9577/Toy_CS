@@ -6,9 +6,9 @@ using UnityEngine.Windows;
 #if UNITY_EDITOR
 using UnityEditor;
 
-public class TestClientEditor : Editor
+public class TestClientEditor
 {
-    [MenuItem("Tools/TestClient")]
+    [MenuItem("Tools/Test/Build and Run")]
     static void BuildAndRun()
     {
         var buildOptions = new BuildPlayerOptions();
