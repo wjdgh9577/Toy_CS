@@ -2,7 +2,7 @@
 using CoreLibrary.Log;
 using CoreLibrary.Network;
 using Google.Protobuf;
-using Server.Content.Data;
+using Server.Content.Info;
 using Server.Content.Room;
 using System;
 using System.Collections.Generic;

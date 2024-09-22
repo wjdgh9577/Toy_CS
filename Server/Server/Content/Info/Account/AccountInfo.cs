@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.Content.Data;
+namespace Server.Content.Info;
 
 public class AccountInfo
 {
@@ -15,10 +15,10 @@ public class AccountInfo
 
     public AccountInfo(string uuid, string name, int level, bool ready = false)
     {
-        this.Uuid = uuid;
-        this.Name = name;
-        this.Level = level;
-        this.Ready = ready;
+        Uuid = uuid;
+        Name = name;
+        Level = level;
+        Ready = ready;
     }
 
     public Google.Protobuf.Protocol.AccountInfo GetProto()

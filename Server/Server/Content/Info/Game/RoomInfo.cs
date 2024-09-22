@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.Content.Data;
+namespace Server.Content.Info;
 
 public abstract class RoomInfo
 {

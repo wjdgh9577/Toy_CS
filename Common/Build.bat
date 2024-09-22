@@ -10,9 +10,12 @@ START /wait ../Server/CodeGenerator/bin/Debug/net8.0/CodeGenerator.exe ./Protoco
 IF ERRORLEVEL 1 PAUSE
 
 SET CLIENT_PLUGIN_PATH="../Client/Assets/Plugins"
-SET SERVER_PLUGIN_PATH="../Server/TestClient/bin/Debug/net8.0\CoreLibrary.dll"
 SET CLIENT_PACKET_PATH="../Client/Assets/Scripts/Network/Packet"
+
+SET SERVER_PLUGIN_PATH="../Server/TestClient/bin/Debug/net8.0\CoreLibrary.dll"
 SET SERVER_PACKET_PATH="../Server/Server/Packet"
+SET SERVER_DATA_PATH="../Server/Server/Data"
+
 SET DUMMY_PACKET_PATH="../Server/TestClient/Packet"
 
 XCOPY /Y %SERVER_PLUGIN_PATH% %CLIENT_PLUGIN_PATH%
@@ -28,3 +31,5 @@ DEL ClientPacketHandler.cs
 
 XCOPY /Y ServerPacketHandler.cs %SERVER_PACKET_PATH% >nul
 DEL ServerPacketHandler.cs
+
+XCOPY /I /E /Y "./Map" %SERVER_DATA_PATH%\Map >nul
