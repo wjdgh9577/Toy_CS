@@ -1,4 +1,5 @@
 ﻿using CoreLibrary.Utility;
+using Server.Data.Map;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +10,11 @@ namespace Server.Content.Info
 {
     public class MapInfo
     {
-        public int uniqueId;
-        public List<List<CustomVector2Int>> colliderPaths = new List<List<CustomVector2Int>>();
+        public MapData mapData { get; private set; }
 
-        public MapInfo(int uniqueId)
+        public MapInfo(MapData mapData)
         {
-            this.uniqueId = uniqueId;
+            this.mapData = mapData;
         }
     }
 }

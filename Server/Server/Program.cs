@@ -5,6 +5,7 @@ using Server.Log;
 using System.Net;
 using System.Net.Sockets;
 using Server.Content.Room;
+using Server.Data;
 
 namespace Server;
 
@@ -13,6 +14,7 @@ public class Program
     static void Main(string[] args)
     {
         LogHandler.SetModule(new LogModule());
+        DataManager.Instance.Init();
 
         NetworkHandler.TcpListener(out var listener);
         listener.Accepted += args =>

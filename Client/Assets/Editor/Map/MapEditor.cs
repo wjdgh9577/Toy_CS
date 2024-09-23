@@ -10,18 +10,20 @@ using UnityEditor;
 
 public class MapEditor
 {
-    const string DATA_PATH = "../Common/Map";
+    const string DATA_PATH = "../Common/Data";
     const string PREFAB_PATH = "Prefabs/Map";
 
     [MenuItem("Tools/Map/Extract Tilemap Collider")]
     static void ExtractTilemapCollider()
     {
         Map[] maps = Resources.LoadAll<Map>(PREFAB_PATH);
-        foreach (Map map in maps)
+        SerializedData<MapData> data = new SerializedData<MapData>();
+
+        using (var writer = File.CreateText($"{DATA_PATH}/MapData.json"))
         {
-            using (var writer = File.CreateText($"{DATA_PATH}/{map.name}.json"))
+            foreach (Map map in maps)
             {
-                MapInfo mapInfo = new MapInfo(map.uniqueId);
+                MapData mapData = new MapData(map.MapInfo.uniqueId);
                 CompositeCollider2D[] compositeColliders = map.GetComponentsInChildren<CompositeCollider2D>();
 
                 foreach (var compositeCollider in compositeColliders)
@@ -38,12 +40,14 @@ public class MapEditor
                         foreach (var point in path)
                             newPath.Add(point.ToCustomVector2Int());
 
-                        mapInfo.colliderPaths.Add(newPath);
+                        mapData.colliderPaths.Add(newPath);
                     }
                 }
 
-                writer.Write(JsonConvert.SerializeObject(mapInfo));
+                data.datas.Add(mapData);
             }
+
+            writer.WriteLine(JsonConvert.SerializeObject(data));
         }
     }
 }

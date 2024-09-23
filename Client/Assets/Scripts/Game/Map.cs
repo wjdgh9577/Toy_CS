@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class Map : MonoBehaviour
 {
-    public int uniqueId;
+    [SerializeField]
+    MapInfo _mapInfo;
+
+    public MapInfo MapInfo { get { return _mapInfo; } }
 }
