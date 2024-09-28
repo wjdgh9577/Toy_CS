@@ -10,16 +10,13 @@ using UnityEditor;
 
 public class MapEditor
 {
-    const string DATA_PATH = "../Common/Data";
-    const string PREFAB_PATH = "Prefabs/Map";
-
     [MenuItem("Tools/Map/Extract Tilemap Collider")]
     static void ExtractTilemapCollider()
     {
-        Map[] maps = Resources.LoadAll<Map>(PREFAB_PATH);
+        Map[] maps = Resources.LoadAll<Map>(Config.MAP_PREFAB_PATH);
         SerializedData<MapData> data = new SerializedData<MapData>();
 
-        using (var writer = File.CreateText($"{DATA_PATH}/MapData.json"))
+        using (var writer = File.CreateText($"{Config.COMMON_DATA_PATH}/MapData.json"))
         {
             foreach (Map map in maps)
             {

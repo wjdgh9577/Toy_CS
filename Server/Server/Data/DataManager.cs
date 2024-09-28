@@ -75,9 +75,9 @@ public class DataManager
         }
     }
 
-    string LoadJsonData(string path)
+    string LoadJsonData(string fileName)
     {
-        path = Path.GetFullPath($"../../../Data/JsonData/{path}.json");
+        string path = Path.GetFullPath($"{Define.JSON_DATA_PATH}/{fileName}.json");
         string json = "";
 
         if (File.Exists(path))

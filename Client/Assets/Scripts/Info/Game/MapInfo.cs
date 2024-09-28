@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Scriptable Object/Map Info")]
-public class MapInfo : ScriptableObject
+public class MapInfo : ScriptableObject, IInfo<int>
 {
     public int uniqueId;
+    public string mapName;
+
+    public int GetKey() => uniqueId;
 }

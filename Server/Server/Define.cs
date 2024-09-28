@@ -13,4 +13,6 @@ public static class Define
 
     public const int ROOM_UPDATE_INTERVAL = 100;
     public const int MAX_CCU = 500;
+
+    public const string JSON_DATA_PATH = "../../../Data/JsonData";
 }

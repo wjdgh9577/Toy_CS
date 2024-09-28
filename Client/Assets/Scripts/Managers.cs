@@ -14,6 +14,8 @@ public class Managers : MonoBehaviour
     // MonoBehaviour
     public SceneManager SceneManager { get; private set; }
     public UIManager UIManager { get; private set; }
+    public GameManager GameManager { get; private set; }
+    public ResourceManager ResourceManager { get; private set; }
 
     void Awake()
     {
@@ -21,6 +23,8 @@ public class Managers : MonoBehaviour
         
         SceneManager = gameObject.AddComponent<SceneManager>();
         UIManager = gameObject.AddComponent<UIManager>();
+        GameManager = gameObject.AddComponent<GameManager>();
+        ResourceManager = gameObject.AddComponent<ResourceManager>();
     }
 
     void Start()

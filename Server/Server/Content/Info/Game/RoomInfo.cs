@@ -12,6 +12,7 @@ public abstract class RoomInfo
     public int type;
     public int personnel;
     public int maxPersonnel;
+    public int mapId;
 
     public Dictionary<string, AccountInfo> players;
 
@@ -19,9 +20,11 @@ public abstract class RoomInfo
     {
         this.uniqueId = uniqueId;
         this.type = type;
+        this.personnel = 0;
         this.maxPersonnel = maxPersonnel;
-        players = new Dictionary<string, AccountInfo>();
-        personnel = 0;
+        this.mapId = 1;
+
+        this.players = new Dictionary<string, AccountInfo>();
     }
 
     public virtual void Enter(AccountInfo info)
@@ -40,30 +43,50 @@ public abstract class RoomInfo
     {
         return $"Unique ID: {uniqueId}, ID: {type}";
     }
+
+    protected Google.Protobuf.Protocol.RoomInfo GetProto()
+    {
+        var baseInfo = new Google.Protobuf.Protocol.RoomInfo();
+
+        baseInfo.UniqueId = uniqueId;
+        baseInfo.Type = type;
+        baseInfo.Personnel = personnel;
+        baseInfo.MaxPersonnel = maxPersonnel;
+        foreach (var p in players)
+            baseInfo.Players.Add(p.Value.GetProto());
+
+        return baseInfo;
+    }
 }
 
 public sealed class WaitingRoomInfo : RoomInfo
 {
     public string title;
     public string password;
+    public AccountInfo chief;
 
     public WaitingRoomInfo(int uniqueId, int type, int maxPersonnel) : base(uniqueId, type, maxPersonnel)
     {
 
     }
 
-    public Google.Protobuf.Protocol.WaitingRoomInfo GetProto()
+    public override void Leave(AccountInfo info)
+    {
+        base.Leave(info);
+
+        if (chief.Uuid == info.Uuid)
+        {
+            chief = players.FirstOrDefault().Value;
+        }
+    }
+
+    public new Google.Protobuf.Protocol.WaitingRoomInfo GetProto()
     {
         Google.Protobuf.Protocol.WaitingRoomInfo info = new Google.Protobuf.Protocol.WaitingRoomInfo();
-        info.BaseInfo = new Google.Protobuf.Protocol.RoomInfo();
-        info.BaseInfo.UniqueId = uniqueId;
-        info.BaseInfo.Type = type;
-        info.BaseInfo.Personnel = personnel;
-        info.BaseInfo.MaxPersonnel = maxPersonnel;
-        foreach (var p in players)
-            info.BaseInfo.Players.Add(p.Value.GetProto());
+        info.BaseInfo = base.GetProto();
         info.Title = title;
         info.Password = !string.IsNullOrEmpty(password);
+        info.Chief = chief?.GetProto();
 
         return info;
     }

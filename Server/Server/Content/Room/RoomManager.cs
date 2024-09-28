@@ -34,6 +34,7 @@ public class RoomManager
             WaitingRoom room = MakeRoom<WaitingRoom>(type, maxPersonnel);
             room.Info.title = title;
             room.Info.password = password;
+            room.Info.chief = session.AccountInfo;
 
             room.OnEnter(session);
             session.EnterRoom(room);
