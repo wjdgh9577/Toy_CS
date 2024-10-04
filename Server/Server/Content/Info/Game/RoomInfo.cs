@@ -14,8 +14,6 @@ public abstract class RoomInfo
     public int maxPersonnel;
     public int mapId;
 
-    public Dictionary<string, AccountInfo> players;
-
     public RoomInfo(int uniqueId, int type, int maxPersonnel)
     {
         this.uniqueId = uniqueId;
@@ -23,20 +21,16 @@ public abstract class RoomInfo
         this.personnel = 0;
         this.maxPersonnel = maxPersonnel;
         this.mapId = 1;
-
-        this.players = new Dictionary<string, AccountInfo>();
     }
 
     public virtual void Enter(AccountInfo info)
     {
-        players.Add(info.Uuid, info);
-        personnel = players.Count;
+        
     }
 
     public virtual void Leave(AccountInfo info)
     {
-        players.Remove(info.Uuid);
-        personnel = players.Count;
+        
     }
 
     public override string ToString()
@@ -52,8 +46,6 @@ public abstract class RoomInfo
         baseInfo.Type = type;
         baseInfo.Personnel = personnel;
         baseInfo.MaxPersonnel = maxPersonnel;
-        foreach (var p in players)
-            baseInfo.Players.Add(p.Value.GetProto());
 
         return baseInfo;
     }
@@ -63,21 +55,28 @@ public sealed class WaitingRoomInfo : RoomInfo
 {
     public string title;
     public string password;
-    public AccountInfo chief;
+
+    public Dictionary<string, WaitingRoomPlayerInfo> players;
 
     public WaitingRoomInfo(int uniqueId, int type, int maxPersonnel) : base(uniqueId, type, maxPersonnel)
     {
+        this.players = new Dictionary<string, WaitingRoomPlayerInfo>();
+    }
 
+    public override void Enter(AccountInfo info)
+    {
+        base.Enter(info);
+
+        players.Add(info.Uuid, new WaitingRoomPlayerInfo(info));
+        personnel = players.Count;
     }
 
     public override void Leave(AccountInfo info)
     {
         base.Leave(info);
 
-        if (chief.Uuid == info.Uuid)
-        {
-            chief = players.FirstOrDefault().Value;
-        }
+        players.Remove(info.Uuid);
+        personnel = players.Count;
     }
 
     public new Google.Protobuf.Protocol.WaitingRoomInfo GetProto()
@@ -86,7 +85,8 @@ public sealed class WaitingRoomInfo : RoomInfo
         info.BaseInfo = base.GetProto();
         info.Title = title;
         info.Password = !string.IsNullOrEmpty(password);
-        info.Chief = chief?.GetProto();
+        foreach (var p in players)
+            info.Players.Add(p.Value.GetProto());
 
         return info;
     }

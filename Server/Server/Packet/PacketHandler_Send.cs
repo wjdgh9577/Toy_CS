@@ -57,10 +57,12 @@ public partial class PacketHandler
         return packet;
     }
 
-    public static S_ReadyWaitingRoom S_ReadyWaitingRoom(AccountInfo accountInfo)
+    public static S_ReadyWaitingRoom S_ReadyWaitingRoom(AccountInfo accountInfo, bool ready)
     {
         S_ReadyWaitingRoom packet = new S_ReadyWaitingRoom();
-        packet.Info = accountInfo;
+        packet.Info = new WaitingRoomPlayerInfo();
+        packet.Info.BaseInfo.AccountInfo = accountInfo;
+        packet.Info.Ready = ready;
 
         return packet;
     }

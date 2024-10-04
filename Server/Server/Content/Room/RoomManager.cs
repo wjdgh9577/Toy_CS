@@ -34,7 +34,6 @@ public class RoomManager
             WaitingRoom room = MakeRoom<WaitingRoom>(type, maxPersonnel);
             room.Info.title = title;
             room.Info.password = password;
-            room.Info.chief = session.AccountInfo;
 
             room.OnEnter(session);
             session.EnterRoom(room);
@@ -237,6 +236,18 @@ public class RoomManager
                 return;
 
             room.Broadcast(session, message);
+        }
+    }
+
+    /// <summary>
+    /// 외부에서 Room에 접근하여 로직을 수행할 때 원자성 보장
+    /// </summary>
+    /// <param name="action"></param>
+    public void Handle(Action action)
+    {
+        lock (_lock)
+        {
+            action?.Invoke();
         }
     }
 }

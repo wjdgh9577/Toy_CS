@@ -81,7 +81,7 @@ message S_RefreshWaitingRoom
 
 message S_ReadyWaitingRoom
 {
-	AccountInfo info = 1;
+	WaitingRoomPlayerInfo info = 1;
 }
 
 message C_ReadyWaitingRoom
@@ -128,7 +128,6 @@ message AccountInfo
 	string uuid = 1;
 	string name = 2;
 	int32 level = 3;
-	bool ready = 4;
 }
 
 message RoomInfo
@@ -138,7 +137,6 @@ message RoomInfo
 	int32 personnel = 3;
 	int32 maxPersonnel = 4;
 	int32 mapId = 5;
-	repeated AccountInfo players = 6;
 }
 
 message WaitingRoomInfo
@@ -146,5 +144,16 @@ message WaitingRoomInfo
 	RoomInfo baseInfo = 1;
 	string title = 2;
 	bool password = 3;
-	AccountInfo chief = 4;
+	repeated WaitingRoomPlayerInfo players = 4;
+}
+
+message RoomPlayerInfo
+{
+	AccountInfo accountInfo = 1;
+}
+
+message WaitingRoomPlayerInfo
+{
+	RoomPlayerInfo baseInfo = 1;
+	bool ready = 2;
 }

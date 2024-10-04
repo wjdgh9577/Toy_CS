@@ -52,10 +52,13 @@ public partial class PacketHandler
         C_EnterWaitingRoom packet = (C_EnterWaitingRoom)message;
         LogHandler.Log(LogCode.CONSOLE, "HandleCEnterRoom", packet.ToString());
 
-        WaitingRoom? result = RoomManager.Instance.EnterWaitingRoom(clientSession, packet.UniqueId, packet.Password);
-        WaitingRoomInfo? roomInfo = result?.Info.GetProto();
-        bool enterOk = result != null;
-        clientSession.Send(S_EnterWaitingRoom(roomInfo, enterOk));
+        RoomManager.Instance.Handle(() =>
+        {
+            WaitingRoom? result = RoomManager.Instance.EnterWaitingRoom(clientSession, packet.UniqueId, packet.Password);
+            WaitingRoomInfo? roomInfo = result?.Info.GetProto();
+            bool enterOk = result != null;
+            clientSession.Send(S_EnterWaitingRoom(roomInfo, enterOk));
+        });
     }
 
     void HandleCLeaveWaitingRoom(SessionBase session, IMessage message)
@@ -64,9 +67,12 @@ public partial class PacketHandler
         C_LeaveWaitingRoom packet = (C_LeaveWaitingRoom)message;
         LogHandler.Log(LogCode.CONSOLE, "HandleCLeaveRoom", packet.ToString());
 
-        WaitingRoom? result = RoomManager.Instance.LeaveRoom<WaitingRoom>(clientSession, packet.UniqueId);
-        bool leaveOk = result != null;
-        clientSession.Send(S_LeaveWaitingRoom(leaveOk));
+        RoomManager.Instance.Handle(() =>
+        {
+            WaitingRoom? result = RoomManager.Instance.LeaveRoom<WaitingRoom>(clientSession, packet.UniqueId);
+            bool leaveOk = result != null;
+            clientSession.Send(S_LeaveWaitingRoom(leaveOk));
+        });
     }
 
     void HandleCReadyWaitingRoom(SessionBase session, IMessage message)
@@ -75,26 +81,33 @@ public partial class PacketHandler
         C_ReadyWaitingRoom packet = (C_ReadyWaitingRoom)message;
         LogHandler.Log(LogCode.CONSOLE, "HandleCReadyWaitingRoom", packet.ToString());
 
-        clientSession.AccountInfo.Ready = packet.Ready;
-        RoomManager.Instance.Broadcast<WaitingRoom>(clientSession, S_ReadyWaitingRoom(clientSession.AccountInfo.GetProto()));
-
-        WaitingRoom? room = RoomManager.Instance.FindRoom<WaitingRoom>(clientSession);
-        
-        bool canStart = true;
-        foreach (var p in room.Info.players.Values)
+        RoomManager.Instance.Handle(() =>
         {
-            if (!p.Ready)
+            WaitingRoom? room = RoomManager.Instance.FindRoom<WaitingRoom>(clientSession);
+
+            bool canStart = true;
+            foreach (var p in room.Info.players.Values)
             {
-                canStart = false;
-                break;
+                if (p.AccountInfo.Uuid == clientSession.AccountInfo.Uuid)
+                {
+                    p.Ready = packet.Ready;
+                }
+                if (!p.Ready)
+                {
+                    canStart = false;
+                }
             }
-        }
 
-        if (canStart)
-        {
-            // TODO: 게임 시작
-            //RoomManager.Instance.Broadcast<WaitingRoom>(clientSession, );
-        }
+            if (canStart)
+            {
+                // TODO: 게임 시작
+                //RoomManager.Instance.Broadcast<WaitingRoom>(clientSession, );
+            }
+            else
+            {
+                RoomManager.Instance.Broadcast<WaitingRoom>(clientSession, S_ReadyWaitingRoom(clientSession.AccountInfo.GetProto(), packet.Ready));
+            }
+        });
     }
 
     void HandleCRefreshLobby(SessionBase session, IMessage message)
@@ -113,10 +126,13 @@ public partial class PacketHandler
         C_QuickEnterWaitingRoom packet = (C_QuickEnterWaitingRoom)message;
         LogHandler.Log(LogCode.CONSOLE, "HandleCQuickEnterRoom");
 
-        WaitingRoom? result = RoomManager.Instance.QuickWaitingRoom(clientSession);
-        WaitingRoomInfo? roomInfo = result?.Info.GetProto();
-        bool enterOk = result != null;
-        clientSession.Send(S_EnterWaitingRoom(roomInfo, enterOk));
+        RoomManager.Instance.Handle(() =>
+        {
+            WaitingRoom? result = RoomManager.Instance.QuickWaitingRoom(clientSession);
+            WaitingRoomInfo? roomInfo = result?.Info.GetProto();
+            bool enterOk = result != null;
+            clientSession.Send(S_EnterWaitingRoom(roomInfo, enterOk));
+        });
     }
 
     void HandleCCreateWaitingRoom(SessionBase session, IMessage message)
@@ -125,10 +141,13 @@ public partial class PacketHandler
         C_CreateWaitingRoom packet = (C_CreateWaitingRoom)message;
         LogHandler.Log(LogCode.CONSOLE, "HandleCCreateRoom", packet.ToString());
 
-        WaitingRoom? result = RoomManager.Instance.CreateWaitingRoom(clientSession, packet.Type, packet.MaxPersonnel, packet.Title, packet.Password);
-        WaitingRoomInfo? roomInfo = result?.Info.GetProto();
-        bool enterOk = result != null;
-        clientSession.Send(S_EnterWaitingRoom(roomInfo, enterOk));
+        RoomManager.Instance.Handle(() =>
+        {
+            WaitingRoom? result = RoomManager.Instance.CreateWaitingRoom(clientSession, packet.Type, packet.MaxPersonnel, packet.Title, packet.Password);
+            WaitingRoomInfo? roomInfo = result?.Info.GetProto();
+            bool enterOk = result != null;
+            clientSession.Send(S_EnterWaitingRoom(roomInfo, enterOk));
+        });
     }
 
     void HandleCChat(SessionBase session, IMessage message)
