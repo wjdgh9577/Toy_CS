@@ -77,6 +77,24 @@ public partial class PacketHandler
 
         clientSession.AccountInfo.Ready = packet.Ready;
         RoomManager.Instance.Broadcast<WaitingRoom>(clientSession, S_ReadyWaitingRoom(clientSession.AccountInfo.GetProto()));
+
+        WaitingRoom? room = RoomManager.Instance.FindRoom<WaitingRoom>(clientSession);
+        
+        bool canStart = true;
+        foreach (var p in room.Info.players.Values)
+        {
+            if (!p.Ready)
+            {
+                canStart = false;
+                break;
+            }
+        }
+
+        if (canStart)
+        {
+            // TODO: 게임 시작
+            //RoomManager.Instance.Broadcast<WaitingRoom>(clientSession, );
+        }
     }
 
     void HandleCRefreshLobby(SessionBase session, IMessage message)

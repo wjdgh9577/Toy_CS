@@ -6,9 +6,6 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    const string UI_RESOURCES_PATH = "Prefabs/UI";
-    const string UI_ITEM_RESOURCES_PATH = "Prefabs/UI/UIItem";
-
     Dictionary<Type, UIBase> _uiPool = new Dictionary<Type, UIBase>();
     Dictionary<Type, List<UIItemBase>> _uiItemPool = new Dictionary<Type, List<UIItemBase>>();
 
@@ -16,7 +13,7 @@ public class UIManager : MonoBehaviour
     {
         if (_uiPool.TryGetValue(typeof(T), out UIBase ui) == false)
         {
-            var obj = Resources.Load($"{UI_RESOURCES_PATH}/{typeof(T).Name}");
+            var obj = Resources.Load($"{Config.UI_RESOURCES_PATH}/{typeof(T).Name}");
             ui = (Instantiate(obj, transform) as GameObject).GetComponent<T>();
             _uiPool.Add(typeof(T), ui);
         }
@@ -36,7 +33,7 @@ public class UIManager : MonoBehaviour
         var item = list.Where(i => i.Using == false).FirstOrDefault() as T;
         if (item == default)
         {
-            var obj = Resources.Load<GameObject>($"{UI_ITEM_RESOURCES_PATH}/{typeof(T).Name}");
+            var obj = Resources.Load<GameObject>($"{Config.UI_ITEM_RESOURCES_PATH}/{typeof(T).Name}");
             item = (Instantiate(obj)).GetComponent<T>();
             list.Add(item);
         }
@@ -57,7 +54,7 @@ public class UIManager : MonoBehaviour
             _uiItemPool.Add(typeof(T), uiList);
         }
 
-        var obj = Resources.Load<GameObject>($"{UI_ITEM_RESOURCES_PATH}/{typeof(T).Name}");
+        var obj = Resources.Load<GameObject>($"{Config.UI_ITEM_RESOURCES_PATH}/{typeof(T).Name}");
         while (uiList.Count < count)
         {
             var item = (Instantiate(obj)).GetComponent<T>();

@@ -12,4 +12,7 @@ public static class Config
 
     public const string MAP_PREFAB_PATH = "Prefabs/Map";
     public const string MAP_DATA_PATH = "Data/Map";
+
+    public const string UI_RESOURCES_PATH = "Prefabs/UI";
+    public const string UI_ITEM_RESOURCES_PATH = "Prefabs/UI/UIItem";
 }
