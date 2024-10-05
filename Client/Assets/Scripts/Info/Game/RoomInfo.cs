@@ -10,7 +10,6 @@ public abstract class RoomInfo : IInfo<int>
     public int personnel;
     public int maxPersonnel;
     public int mapId;
-    public List<AccountInfo> players;
 
     protected RoomInfo(Google.Protobuf.Protocol.RoomInfo info)
     {
@@ -19,7 +18,6 @@ public abstract class RoomInfo : IInfo<int>
         personnel = info.Personnel;
         maxPersonnel = info.MaxPersonnel;
         mapId = info.MapId;
-        players = info.Players.ToLocalData();
     }
 
     public int GetKey() => uniqueId;
@@ -29,13 +27,13 @@ public sealed class WaitingRoomInfo : RoomInfo
 {
     public string title;
     public bool password;
-    public AccountInfo chief;
+    public List<WaitingRoomPlayerInfo> players;
 
     public WaitingRoomInfo(Google.Protobuf.Protocol.WaitingRoomInfo info) : base(info.BaseInfo)
     {
         title = info.Title;
         password = info.Password;
-        chief = info.Chief.ToLocalData();
+        players = info.Players.ToLocalData();
     }
 }
 

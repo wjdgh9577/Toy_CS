@@ -61,6 +61,7 @@ public partial class PacketHandler
     {
         S_ReadyWaitingRoom packet = new S_ReadyWaitingRoom();
         packet.Info = new WaitingRoomPlayerInfo();
+        packet.Info.BaseInfo = new RoomPlayerInfo();
         packet.Info.BaseInfo.AccountInfo = accountInfo;
         packet.Info.Ready = ready;
 

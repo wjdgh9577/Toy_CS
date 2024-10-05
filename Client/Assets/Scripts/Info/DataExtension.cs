@@ -33,4 +33,19 @@ public static class DataExtension
 
         return list;
     }
+
+    public static WaitingRoomPlayerInfo ToLocalData(this Google.Protobuf.Protocol.WaitingRoomPlayerInfo waitingRoomPlayerInfo)
+    {
+        return new WaitingRoomPlayerInfo(waitingRoomPlayerInfo);
+    }
+
+    public static List<WaitingRoomPlayerInfo> ToLocalData(this Google.Protobuf.Collections.RepeatedField<Google.Protobuf.Protocol.WaitingRoomPlayerInfo> waitingRoomPlayerInfos)
+    {
+        List<WaitingRoomPlayerInfo> list = new List<WaitingRoomPlayerInfo>();
+
+        foreach (var info in waitingRoomPlayerInfos)
+            list.Add(ToLocalData(info));
+
+        return list;
+    }
 }

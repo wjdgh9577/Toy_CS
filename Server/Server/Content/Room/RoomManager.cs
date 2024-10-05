@@ -24,16 +24,13 @@ public class RoomManager
     int _newUniqueRoomId = 1;
     object _lock = new object();
 
-    public WaitingRoom? CreateWaitingRoom(ClientSession session, int type, int maxPersonnel, string title, string password)
+    public T? CreateRoom<T>(ClientSession session, int type, int maxPersonnel, Action<T> handleRoom = null) where T : RoomBase, new()
     {
-        if (string.IsNullOrEmpty(title))
-            return null;
-
         lock (_lock)
         {
-            WaitingRoom room = MakeRoom<WaitingRoom>(type, maxPersonnel);
-            room.Info.title = title;
-            room.Info.password = password;
+            T room = MakeRoom<T>(type, maxPersonnel);
+
+            handleRoom?.Invoke(room);
 
             room.OnEnter(session);
             session.EnterRoom(room);
@@ -131,7 +128,7 @@ public class RoomManager
         }
     }
 
-    public T MakeRoom<T>(int type, int maxPersonnel) where T : RoomBase, new()
+    T MakeRoom<T>(int type, int maxPersonnel) where T : RoomBase, new()
     {
         lock (_lock)
         {

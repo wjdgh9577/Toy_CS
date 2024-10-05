@@ -26,7 +26,7 @@ public class UIWaitingRoom : UIBase
 
     public void Show(WaitingRoomInfo roomInfo)
     {
-        OnRefresh(roomInfo);
+        OnRefresh();
 
         Clear();
 
@@ -46,24 +46,24 @@ public class UIWaitingRoom : UIBase
         }
     }
 
-    public void OnRefresh(WaitingRoomInfo roomInfo)
+    public void OnRefresh()
     {
-        _roomInfo = roomInfo;
+        _roomInfo = Managers.Instance.GameManager.MyWaitingRoomInfo;
 
         var list = Managers.Instance.UIManager.GetUIItems<UIPlayerItem>(8, _playerItemRoot);
 
         for (int i = 0; i < list.Count; i++)
         {
-            list[i].Init(i < roomInfo.players.Count ? roomInfo.players[i] : null);
+            list[i].Init(i < _roomInfo.players.Count ? _roomInfo.players[i] : null);
         }
     }
 
-    public void OnRefresh(AccountInfo accountInfo)
+    public void OnRefresh(WaitingRoomPlayerInfo info)
     {
-        var info = _roomInfo.players.Find(p => p.Uuid == accountInfo.Uuid);
-        info.Ready = accountInfo.Ready;
+        var player = _roomInfo.players.Find(p => p.accountInfo.Uuid == info.accountInfo.Uuid);
+        player.ready = info.ready;
 
-        OnRefresh(_roomInfo);
+        OnRefresh();
     }
 
     public void Submit()
@@ -82,14 +82,14 @@ public class UIWaitingRoom : UIBase
 
     public void ReadyButton()
     {
-        var ready = AccountInfo.Info.Ready = !AccountInfo.Info.Ready;
-        OnRefresh(AccountInfo.Info);
+        var ready = Managers.Instance.GameManager.MyWaitingRoomPlayerInfo.ready = !Managers.Instance.GameManager.MyWaitingRoomPlayerInfo.ready;
+        OnRefresh();
         Managers.Instance.NetworkManager.Send(PacketHandler.C_ReadyWaitingRoom(ready));
     }
 
     public void ExitButton()
     {
-        if (!AccountInfo.Info.Ready)
+        if (!Managers.Instance.GameManager.MyWaitingRoomPlayerInfo.ready)
             Managers.Instance.NetworkManager.Send(PacketHandler.C_LeaveWaitingRoom(_roomInfo.uniqueId));
     }
 }

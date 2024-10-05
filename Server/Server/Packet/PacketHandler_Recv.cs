@@ -143,7 +143,11 @@ public partial class PacketHandler
 
         RoomManager.Instance.Handle(() =>
         {
-            WaitingRoom? result = RoomManager.Instance.CreateWaitingRoom(clientSession, packet.Type, packet.MaxPersonnel, packet.Title, packet.Password);
+            WaitingRoom? result = RoomManager.Instance.CreateRoom<WaitingRoom>(clientSession, packet.Type, packet.MaxPersonnel, (newRoom) =>
+            {
+                newRoom.Info.title = packet.Title;
+                newRoom.Info.password = packet.Password;
+            });
             WaitingRoomInfo? roomInfo = result?.Info.GetProto();
             bool enterOk = result != null;
             clientSession.Send(S_EnterWaitingRoom(roomInfo, enterOk));

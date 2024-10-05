@@ -41,7 +41,7 @@ public partial class PacketHandler
         S_AccountInfo packet = (S_AccountInfo)message;
         LogHandler.Log(LogCode.CONSOLE, "HandleSAccountInfo", packet.ToString());
 
-        serverSession.SetAccountInfo(packet.Info);
+        Managers.Instance.GameManager.SetAccountInfo(packet.Info);
     }
 
     void HandleSPing(SessionBase session, IMessage message)
@@ -62,6 +62,7 @@ public partial class PacketHandler
         if (packet.EnterOk)
         {
             var roomInfo = packet.RoomInfo.ToLocalData();
+            Managers.Instance.GameManager.SetWaitingRoomInfo(roomInfo);
             Managers.Instance.UIManager.GetUI<UILobby>().Hide();
             Managers.Instance.SceneManager.LoadSceneAsync(SceneName.WaitingRoomScene, () =>
             {
@@ -78,6 +79,7 @@ public partial class PacketHandler
 
         if (packet.LeaveOk)
         {
+            Managers.Instance.GameManager.SetWaitingRoomInfo(null);
             Managers.Instance.UIManager.GetUI<UIWaitingRoom>().Hide();
             Managers.Instance.SceneManager.LoadSceneAsync(SceneName.LobbyScene, () =>
             {
@@ -92,7 +94,8 @@ public partial class PacketHandler
         S_RefreshWaitingRoom packet = (S_RefreshWaitingRoom)message;
         LogHandler.Log(LogCode.CONSOLE, "HandleSRefreshRoom", packet.ToString());
 
-        Managers.Instance.UIManager.GetUI<UIWaitingRoom>().OnRefresh(packet.RoomInfo.ToLocalData());
+        Managers.Instance.GameManager.SetWaitingRoomInfo(packet.RoomInfo.ToLocalData());
+        Managers.Instance.UIManager.GetUI<UIWaitingRoom>().OnRefresh();
     }
 
     void HandleSReadyWaitingRoom(SessionBase session, IMessage message)

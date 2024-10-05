@@ -53,15 +53,4 @@ public class ServerSession : SessionBase
     }
 
     #endregion
-
-    #region content
-
-    public AccountInfo AccountInfo { get; private set; }
-
-    public void SetAccountInfo(Google.Protobuf.Protocol.AccountInfo info)
-    {
-        AccountInfo = new AccountInfo(info);
-    }
-
-    #endregion
 }

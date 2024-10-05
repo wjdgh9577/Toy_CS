@@ -12,7 +12,7 @@ public class UIPlayerItem : UIItemBase
     [SerializeField]
     GameObject _ready;
 
-    public void Init(AccountInfo info)
+    public void Init(WaitingRoomPlayerInfo info)
     {
         if (info == null)
         {
@@ -20,9 +20,9 @@ public class UIPlayerItem : UIItemBase
 
             return;
         }
-        _levelText.text = $"Lv. {info.Level}";
-        _nameText.text = info.Name;
-        _ready.SetActive(info.Ready);
+        _levelText.text = $"Lv. {info.accountInfo.Level}";
+        _nameText.text = info.accountInfo.Name;
+        _ready.SetActive(info.ready);
 
         SetActive(true);
     }
