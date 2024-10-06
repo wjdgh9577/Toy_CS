@@ -99,8 +99,26 @@ public sealed class WaitingRoomInfo : RoomInfo
 
 public sealed class GameRoomInfo : RoomInfo
 {
+    public Dictionary<string, GameRoomPlayerInfo> players;
+
     public GameRoomInfo(int uniqueId, int type, int maxPersonnel) : base(uniqueId, type, maxPersonnel)
     {
+        this.players = new Dictionary<string, GameRoomPlayerInfo>();
+    }
 
+    public override void Enter(AccountInfo info)
+    {
+        base.Enter(info);
+
+        players.Add(info.Uuid, new GameRoomPlayerInfo(info));
+        personnel = players.Count;
+    }
+
+    public override void Leave(AccountInfo info)
+    {
+        base.Leave(info);
+
+        players.Remove(info.Uuid);
+        personnel = players.Count;
     }
 }

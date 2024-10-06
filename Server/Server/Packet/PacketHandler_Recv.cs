@@ -54,7 +54,7 @@ public partial class PacketHandler
 
         RoomManager.Instance.Handle(() =>
         {
-            WaitingRoom? result = RoomManager.Instance.EnterWaitingRoom(clientSession, packet.UniqueId, packet.Password);
+            WaitingRoom? result = RoomManager.Instance.EnterRoom<WaitingRoom>(clientSession, packet.UniqueId, packet.Password);
             WaitingRoomInfo? roomInfo = result?.Info.GetProto();
             bool enterOk = result != null;
             clientSession.Send(S_EnterWaitingRoom(roomInfo, enterOk));
@@ -98,14 +98,13 @@ public partial class PacketHandler
                 }
             }
 
-            if (canStart)
+            if (canStart && room.Info.players.Count > 1)
             {
-                // TODO: 게임 시작
-                //RoomManager.Instance.Broadcast<WaitingRoom>(clientSession, );
+                room.StartGame();
             }
             else
             {
-                RoomManager.Instance.Broadcast<WaitingRoom>(clientSession, S_ReadyWaitingRoom(clientSession.AccountInfo.GetProto(), packet.Ready));
+                room.Broadcast(clientSession, S_ReadyWaitingRoom(clientSession.AccountInfo.GetProto(), packet.Ready));
             }
         });
     }

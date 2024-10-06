@@ -13,7 +13,7 @@ public class SessionManager
     public static SessionManager Instance { get; } = new SessionManager();
     SessionManager() { }
 
-    Dictionary<int, ClientSession> _clientSessions = new Dictionary<int, ClientSession>();
+    public Dictionary<int, ClientSession> ClientSessions { get; } = new Dictionary<int, ClientSession>();
     // 서버간 통신 전용
     //Dictionary<int, ServerSession> _serverSessions = new Dictionary<int, ServerSession>();
 
@@ -35,7 +35,7 @@ public class SessionManager
             // TODO: 토큰 발급
             session.Token = Guid.NewGuid().ToString(); // 테스트
 
-            if (_clientSessions.TryAdd(suid, session) == false)
+            if (ClientSessions.TryAdd(suid, session) == false)
                 LogHandler.LogError(LogCode.SESSION_INVALID_UID, $"SUID ({suid}) is already used.");
 
             CCU += 1;
@@ -48,7 +48,7 @@ public class SessionManager
     {
         lock ( _lock)
         {
-            if (_clientSessions.TryGetValue(suid, out var session))
+            if (ClientSessions.TryGetValue(suid, out var session))
             {
                 return session;
             }
@@ -61,7 +61,7 @@ public class SessionManager
     {
         lock (_lock)
         {
-            if (_clientSessions.Remove(session.SUID) == false)
+            if (ClientSessions.Remove(session.SUID) == false)
                 LogHandler.LogError(LogCode.SESSION_NOT_EXIST, $"Session_{session.SUID} is not exist.");
 
             CCU = Math.Max(CCU - 1, 0);

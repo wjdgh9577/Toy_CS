@@ -27,11 +27,13 @@ public abstract class RoomBase
     public virtual void OnEnter(ClientSession session)
     {
         _info.Enter(session.AccountInfo);
+        _sessions.TryAdd(session.SUID, session);
     }
 
     public virtual void OnLeave(ClientSession session)
     {
         _info.Leave(session.AccountInfo);
+        _sessions.Remove(session.SUID);
     }
 
     public virtual void Broadcast(ClientSession session, IMessage message)

@@ -12,7 +12,7 @@ IF ERRORLEVEL 1 PAUSE
 SET CLIENT_PLUGIN_PATH="../Client/Assets/Plugins"
 SET CLIENT_PACKET_PATH="../Client/Assets/Scripts/Network/Packet"
 
-SET SERVER_PLUGIN_PATH="../Server/TestClient/bin/Debug/net8.0\CoreLibrary.dll"
+SET SERVER_PLUGIN_PATH="../Server/CoreLibrary/bin/Debug/netstandard2.1\CoreLibrary.dll"
 SET SERVER_PACKET_PATH="../Server/Server/Packet"
 SET SERVER_DATA_PATH="../Server/Server/Data/JsonData"
 

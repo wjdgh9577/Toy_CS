@@ -42,5 +42,36 @@ public class WaitingRoomPlayerInfo : RoomPlayerInfo
 
 public class GameRoomPlayerInfo : RoomPlayerInfo
 {
+    [Flags]
+    public enum PlayerState : byte
+    {
+        // System
+        LOADING = 0b00000001,
+        WAITING = 0b00000010,
+        PLAYING = 0b00000100,
 
+        // Behavior
+        IDLE = 0b00010000,
+        WALK = 0b00100000,
+        JUMP = 0b01000000,
+    }
+
+    PlayerState _state;
+    public PlayerState State
+    {
+        get => _state;
+        set
+        {
+            _isDirty = true;
+            _state = value;
+        }
+    }
+
+    bool _isDirty;
+
+    public GameRoomPlayerInfo(AccountInfo info)
+    {
+        _state = PlayerState.LOADING;
+        _isDirty = false;
+    }
 }

@@ -28,6 +28,9 @@ namespace CoreLibrary.Log
         ROOM_SESSION_INVALID_UID,
         ROOM_SESSION_NOT_EXIST,
 
+        // Game
+        GAME_INVALID_MAPID,
+
         // Exception
         EXCEPTION,
     }

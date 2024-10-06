@@ -58,15 +58,15 @@ public class RoomManager
         }
     }
 
-    public WaitingRoom? EnterWaitingRoom(ClientSession session, int uniqueId, string password = null)
+    public T? EnterRoom<T>(ClientSession session, int uniqueId, string password = null) where T : RoomBase
     {
         lock (_lock)
         {
-            var room = FindRoom<WaitingRoom>(uniqueId);
+            var room = FindRoom<T>(uniqueId);
 
             if (room == null)
             {
-                LogHandler.Log(LogCode.ROOM_NOT_EXIST, $"WaitingRoom_{uniqueId} is not exist.");
+                LogHandler.Log(LogCode.ROOM_NOT_EXIST, $"{typeof(T)}_{uniqueId} is not exist.");
                 return null;
             }
             else if (room.ContainsSession(session.SUID))
@@ -76,10 +76,10 @@ public class RoomManager
             }
             else if (!room.Accessible)
             {
-                LogHandler.Log(LogCode.CONSOLE, $"WaitingRoom_{uniqueId} is already full.");
+                LogHandler.Log(LogCode.CONSOLE, $"{typeof(T)}_{uniqueId} is already full.");
                 return null;
             }
-            else if (room.Info.Verification(password) == false)
+            else if (room is WaitingRoom waitingRoom && waitingRoom.Info.Verification(password) == false)
             {
                 LogHandler.Log(LogCode.CONSOLE, $"Password fail: {password}");
                 return null;
