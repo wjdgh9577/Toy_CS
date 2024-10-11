@@ -27,27 +27,16 @@ public class GameRoom : RoomBase
     {
         base.OnUpdate();
 
-        if (_info.personnel == 0)
-        {
-            RoomManager.Instance.DestroyRoom(_info.uniqueId);
-        }
-
         GameLogic();
+
+        RefreshGameRoom();
     }
 
     public override void OnDestroy() => base.OnDestroy();
 
-    public override void OnEnter(ClientSession session)
-    {
-        base.OnEnter(session);
-    }
+    public override void OnEnter(ClientSession session) => base.OnEnter(session);
 
-    public override void OnLeave(ClientSession session)
-    {
-        base.OnLeave(session);
-    }
-
-    public override void Broadcast(ClientSession session, IMessage message) => base.Broadcast(session, message);
+    public override void OnLeave(ClientSession session) => base.OnLeave(session);
 
     public void SetGame(int mapId)
     {
@@ -59,16 +48,37 @@ public class GameRoom : RoomBase
             return;
         }
 
-        // TODO: Broadcast
+        Broadcast(PacketHandler.S_EnterGameRoom(Info.GetProto()));
+    }
+
+    public void WaitGame(ClientSession session)
+    {
+        Info.ReadyPlayer(session.AccountInfo.Uuid);
+
+        if (Info.IsReady)
+        {
+            StartGame();
+        }
     }
 
     public void StartGame()
     {
+        Info.StartGame();
 
+        Broadcast(PacketHandler.S_StartGame());
     }
 
     public void GameLogic()
     {
+        // TODO: 플레이어 위치 무결성 검증
+    }
 
+    public void RefreshGameRoom()
+    {
+        if (Info.IsDirty)
+        {
+            // TODO: 동기화 패킷 전송
+            //Broadcast();
+        }
     }
 }

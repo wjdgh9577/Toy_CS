@@ -56,22 +56,35 @@ public class GameRoomPlayerInfo : RoomPlayerInfo
         JUMP = 0b01000000,
     }
 
-    PlayerState _state;
-    public PlayerState State
+    public PlayerState SystemState { get; set; }
+
+    PlayerState _behaviorState;
+    public PlayerState BehaviorState
     {
-        get => _state;
+        get => _behaviorState;
         set
         {
-            _isDirty = true;
-            _state = value;
+            IsDirty = true;
+            _behaviorState = value;
         }
     }
 
-    bool _isDirty;
+    public bool IsDirty { get; private set; }
 
     public GameRoomPlayerInfo(AccountInfo info)
     {
-        _state = PlayerState.LOADING;
-        _isDirty = false;
+        AccountInfo = info;
+        SystemState = PlayerState.LOADING;
+        BehaviorState = PlayerState.IDLE;
+    }
+
+    public new Google.Protobuf.Protocol.GameRoomPlayerInfo GetProto()
+    {
+        Google.Protobuf.Protocol.GameRoomPlayerInfo info = new Google.Protobuf.Protocol.GameRoomPlayerInfo();
+        info.BaseInfo = base.GetProto();
+
+        IsDirty = false;
+
+        return info;
     }
 }

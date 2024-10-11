@@ -39,8 +39,10 @@ public sealed class WaitingRoomInfo : RoomInfo
 
 public sealed class GameRoomInfo : RoomInfo
 {
-    public GameRoomInfo() : base(null)
-    {
+    public List<GameRoomPlayerInfo> players;
 
+    public GameRoomInfo(Google.Protobuf.Protocol.GameRoomInfo info) : base(info.BaseInfo)
+    {
+        players = info.Players.ToLocalData();
     }
 }

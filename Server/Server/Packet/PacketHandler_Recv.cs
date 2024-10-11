@@ -98,7 +98,7 @@ public partial class PacketHandler
                 }
             }
 
-            if (canStart && room.Info.players.Count > 1)
+            if (canStart/* && room.Info.players.Count > 1*/)
             {
                 room.StartGame();
             }
@@ -160,6 +160,22 @@ public partial class PacketHandler
         LogHandler.Log(LogCode.CONSOLE, $"Chat: {packet.Chat}");
 
         RoomManager.Instance.Broadcast<WaitingRoom>(clientSession, S_Chat(clientSession.AccountInfo.GetProto(), packet.Chat));
+    }
+
+    void HandleCEnterGameRoom(SessionBase session, IMessage message)
+    {
+        ClientSession clientSession = (ClientSession)session;
+        C_EnterGameRoom packet = (C_EnterGameRoom)message;
+        LogHandler.Log(LogCode.CONSOLE, $"HandleCEnterGameRoom", packet.ToString());
+
+        RoomManager.Instance.Handle(() =>
+        {
+            GameRoom? result = RoomManager.Instance.FindRoom<GameRoom>(clientSession);
+            if (result != null)
+            {
+                result.WaitGame(clientSession);
+            }
+        });
     }
 
     #endregion

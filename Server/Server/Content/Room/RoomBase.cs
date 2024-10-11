@@ -20,7 +20,13 @@ public abstract class RoomBase
 
     public abstract void OnStart(int uniqueId, int type, int maxPersonnel);
 
-    public virtual void OnUpdate() { }
+    public virtual void OnUpdate()
+    {
+        if (_info.personnel == 0)
+        {
+            RoomManager.Instance.DestroyRoom(_info.uniqueId);
+        }
+    }
 
     public virtual void OnDestroy() { }
 
@@ -36,12 +42,21 @@ public abstract class RoomBase
         _sessions.Remove(session.SUID);
     }
 
-    public virtual void Broadcast(ClientSession session, IMessage message)
+    public void Broadcast(ClientSession session, IMessage message)
     {
         foreach (var _session in _sessions.Values)
         {
             if (_session == session)
                 continue;
+
+            _session.Send(message);
+        }
+    }
+
+    public void Broadcast(IMessage message)
+    {
+        foreach (var _session in _sessions.Values)
+        {
             _session.Send(message);
         }
     }

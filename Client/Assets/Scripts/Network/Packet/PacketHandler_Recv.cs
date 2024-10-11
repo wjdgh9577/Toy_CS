@@ -125,5 +125,24 @@ public partial class PacketHandler
         Managers.Instance.UIManager.GetUI<UIWaitingRoom>().OnChat(packet.Info.ToLocalData(), packet.Chat);
     }
 
+    void HandleSEnterGameRoom(SessionBase session, IMessage message)
+    {
+        ServerSession serverSession = (ServerSession)session;
+        S_EnterGameRoom packet = (S_EnterGameRoom)message;
+        LogHandler.Log(LogCode.CONSOLE, "S_EnterGameRoom", packet.ToString());
+
+        // TODO: 씬 전환 후 패킷 전송
+        Managers.Instance.NetworkManager.Send(PacketHandler.C_EnterGameRoom());
+    }
+
+    void HandleSStartGame(SessionBase session, IMessage message)
+    {
+        ServerSession serverSession = (ServerSession)session;
+        S_StartGame packet = (S_StartGame)message;
+        LogHandler.Log(LogCode.CONSOLE, "S_StartGame", packet.ToString());
+
+        // TODO: 게임 시작
+    }
+
     #endregion
 }

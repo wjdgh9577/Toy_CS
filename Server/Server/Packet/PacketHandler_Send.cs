@@ -85,4 +85,19 @@ public partial class PacketHandler
 
         return packet;
     }
+
+    public static S_EnterGameRoom S_EnterGameRoom(GameRoomInfo? roomInfo)
+    {
+        S_EnterGameRoom packet = new S_EnterGameRoom();
+        packet.RoomInfo = roomInfo;
+
+        return packet;
+    }
+
+    public static S_StartGame S_StartGame()
+    {
+        S_StartGame packet = new S_StartGame();
+
+        return packet;
+    }
 }

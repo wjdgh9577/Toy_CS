@@ -47,7 +47,7 @@ public class DataManager
     #endregion
 
     // Data Dictionary
-    public Dictionary<int, MapData> MapDataDic { get; private set; }
+    public Dictionary<int, MapData> MapDataDic { get; private set; } = new Dictionary<int, MapData>();
 
     public void Init()
     {
@@ -56,7 +56,6 @@ public class DataManager
 
     void Deserialize<TKey, TValue>(Dictionary<TKey, TValue> dic) where TValue : IData<TKey>
     {
-        dic = new Dictionary<TKey, TValue>();
         string json = LoadJsonData(typeof(TValue).Name);
 
         if (string.IsNullOrEmpty(json))

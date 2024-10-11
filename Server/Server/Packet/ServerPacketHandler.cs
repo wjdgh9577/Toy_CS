@@ -36,7 +36,9 @@ public partial class PacketHandler
 		_deserializers.Add((ushort)MsgId.CCreateWaitingRoom, Deserialize<C_CreateWaitingRoom>);
         _handlers.Add((ushort)MsgId.CCreateWaitingRoom, HandleCCreateWaitingRoom);		
 		_deserializers.Add((ushort)MsgId.CChat, Deserialize<C_Chat>);
-        _handlers.Add((ushort)MsgId.CChat, HandleCChat);
+        _handlers.Add((ushort)MsgId.CChat, HandleCChat);		
+		_deserializers.Add((ushort)MsgId.CEnterGameRoom, Deserialize<C_EnterGameRoom>);
+        _handlers.Add((ushort)MsgId.CEnterGameRoom, HandleCEnterGameRoom);
 	}
 
 	public static void HandlePacket(SessionBase session, ArraySegment<byte> buffer)

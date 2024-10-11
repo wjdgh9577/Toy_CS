@@ -23,3 +23,11 @@ public class WaitingRoomPlayerInfo : RoomPlayerInfo
         ready = info.Ready;
     }
 }
+
+public class GameRoomPlayerInfo : RoomPlayerInfo
+{
+    public GameRoomPlayerInfo(Google.Protobuf.Protocol.GameRoomPlayerInfo info) : base (info.BaseInfo)
+    {
+        
+    }
+}

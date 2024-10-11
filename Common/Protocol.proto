@@ -25,6 +25,9 @@ enum MsgId
 	S_CHAT = 15;
 	C_CHAT = 16;
 	S_ACCOUNT_INFO = 17;
+	S_ENTER_GAME_ROOM = 18;
+	C_ENTER_GAME_ROOM = 19;
+	S_START_GAME = 20;
 }
 
 message S_Connected
@@ -123,6 +126,21 @@ message C_Chat
 	string chat = 2;
 }
 
+message S_EnterGameRoom
+{
+	GameRoomInfo roomInfo = 1;
+}
+
+message C_EnterGameRoom
+{
+	
+}
+
+message S_StartGame
+{
+
+}
+
 message AccountInfo
 {
 	string uuid = 1;
@@ -147,6 +165,12 @@ message WaitingRoomInfo
 	repeated WaitingRoomPlayerInfo players = 4;
 }
 
+message GameRoomInfo
+{
+	RoomInfo baseInfo = 1;
+	repeated GameRoomPlayerInfo players = 2;
+}
+
 message RoomPlayerInfo
 {
 	AccountInfo accountInfo = 1;
@@ -156,4 +180,9 @@ message WaitingRoomPlayerInfo
 {
 	RoomPlayerInfo baseInfo = 1;
 	bool ready = 2;
+}
+
+message GameRoomPlayerInfo
+{
+	RoomPlayerInfo baseInfo = 1;
 }

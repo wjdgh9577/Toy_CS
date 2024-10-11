@@ -82,6 +82,7 @@ public sealed class WaitingRoomInfo : RoomInfo
     public new Google.Protobuf.Protocol.WaitingRoomInfo GetProto()
     {
         Google.Protobuf.Protocol.WaitingRoomInfo info = new Google.Protobuf.Protocol.WaitingRoomInfo();
+
         info.BaseInfo = base.GetProto();
         info.Title = title;
         info.Password = !string.IsNullOrEmpty(password);
@@ -100,6 +101,36 @@ public sealed class WaitingRoomInfo : RoomInfo
 public sealed class GameRoomInfo : RoomInfo
 {
     public Dictionary<string, GameRoomPlayerInfo> players;
+
+    public bool IsDirty
+    {
+        get
+        {
+            bool isDirty = false;
+
+            foreach (var p in players.Values)
+            {
+                isDirty |= p.IsDirty;
+            }
+
+            return isDirty;
+        }
+    }
+
+    public bool IsReady
+    {
+        get
+        {
+            bool isReady = true;
+
+            foreach (var p in players.Values)
+            {
+                isReady &= p.SystemState.HasFlag(GameRoomPlayerInfo.PlayerState.WAITING);
+            }
+
+            return isReady;
+        }
+    }
 
     public GameRoomInfo(int uniqueId, int type, int maxPersonnel) : base(uniqueId, type, maxPersonnel)
     {
@@ -120,5 +151,33 @@ public sealed class GameRoomInfo : RoomInfo
 
         players.Remove(info.Uuid);
         personnel = players.Count;
+    }
+
+    public new Google.Protobuf.Protocol.GameRoomInfo GetProto()
+    {
+        Google.Protobuf.Protocol.GameRoomInfo info = new Google.Protobuf.Protocol.GameRoomInfo();
+
+        info.BaseInfo = base.GetProto();
+        foreach (var p in players)
+            if (p.Value.IsDirty)
+                info.Players.Add(p.Value.GetProto());
+
+        return info;
+    }
+
+    public void ReadyPlayer(string uuid)
+    {
+        if (players.TryGetValue(uuid, out GameRoomPlayerInfo info))
+        {
+            info.SystemState = GameRoomPlayerInfo.PlayerState.WAITING;
+        }
+    }
+
+    public void StartGame()
+    {
+        foreach (var p in players)
+        {
+            p.Value.SystemState = GameRoomPlayerInfo.PlayerState.PLAYING;
+        }
     }
 }

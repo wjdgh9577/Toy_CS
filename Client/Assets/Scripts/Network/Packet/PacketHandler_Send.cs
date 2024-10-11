@@ -75,4 +75,11 @@ public partial class PacketHandler
 
         return packet;
     }
+
+    public static C_EnterGameRoom C_EnterGameRoom()
+    {
+        C_EnterGameRoom packet = new C_EnterGameRoom();
+
+        return packet;
+    }
 }

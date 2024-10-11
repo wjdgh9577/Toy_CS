@@ -19,15 +19,7 @@ public class WaitingRoom : RoomBase
         _info = new WaitingRoomInfo(uniqueId, type, maxPersonnel);
     }
 
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
-
-        if (Info.personnel == 0)
-        {
-            RoomManager.Instance.DestroyRoom(Info.uniqueId);
-        }
-    }
+    public override void OnUpdate() => base.OnUpdate();
 
     public override void OnDestroy() => base.OnDestroy();
 
@@ -44,8 +36,6 @@ public class WaitingRoom : RoomBase
 
         Broadcast(session, PacketHandler.S_RefreshWaitingRoom(Info.GetProto()));
     }
-
-    public override void Broadcast(ClientSession session, IMessage message) => base.Broadcast(session, message);
 
     public void StartGame()
     {
