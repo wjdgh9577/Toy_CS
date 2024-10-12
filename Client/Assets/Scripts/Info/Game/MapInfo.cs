@@ -8,6 +8,7 @@ public class MapInfo : ScriptableObject, IInfo<int>
 {
     public int uniqueId;
     public string mapName;
+    public string prefabName;
 
     public int GetKey() => uniqueId;
 }

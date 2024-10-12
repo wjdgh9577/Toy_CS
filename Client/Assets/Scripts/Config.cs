@@ -15,4 +15,6 @@ public static class Config
 
     public const string UI_RESOURCES_PATH = "Prefabs/UI";
     public const string UI_ITEM_RESOURCES_PATH = "Prefabs/UI/UIItem";
+
+    public const string ENTITY_PLAYER_PREFAB_PATH = "Prefabs/Entity";
 }

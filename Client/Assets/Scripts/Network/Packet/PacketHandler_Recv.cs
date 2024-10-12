@@ -131,8 +131,12 @@ public partial class PacketHandler
         S_EnterGameRoom packet = (S_EnterGameRoom)message;
         LogHandler.Log(LogCode.CONSOLE, "S_EnterGameRoom", packet.ToString());
 
-        // TODO: 씬 전환 후 패킷 전송
-        Managers.Instance.NetworkManager.Send(PacketHandler.C_EnterGameRoom());
+        Managers.Instance.GameManager.SetGameRoomInfo(packet.RoomInfo.ToLocalData());
+        Managers.Instance.SceneManager.LoadSceneAsync(SceneName.GameScene, () =>
+        {
+            Managers.Instance.UIManager.GetUI<UIWaitingRoom>().Hide();
+            Managers.Instance.NetworkManager.Send(PacketHandler.C_EnterGameRoom());
+        });
     }
 
     void HandleSStartGame(SessionBase session, IMessage message)

@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uniqueId: 1
   mapName: Test Map
+  prefabName: TestMap

@@ -46,6 +46,7 @@ public abstract class RoomInfo
         baseInfo.Type = type;
         baseInfo.Personnel = personnel;
         baseInfo.MaxPersonnel = maxPersonnel;
+        baseInfo.MapId = mapId;
 
         return baseInfo;
     }

@@ -28,4 +28,18 @@ public class ResourceManager : MonoBehaviour
             infos.Add(resource.GetKey(), resource);
         }
     }
+
+    public T Load<T>(string path) where T : UnityEngine.Object
+    {
+        T obj = Resources.Load<T>(path);
+
+        return obj;
+    }
+
+    public void Instantiate<T>(string path, string name) where T : UnityEngine.Object
+    {
+        T obj = Load<T>($"{path}/{name}");
+
+        Instantiate(obj);
+    }
 }
