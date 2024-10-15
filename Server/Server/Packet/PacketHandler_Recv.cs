@@ -178,5 +178,14 @@ public partial class PacketHandler
         });
     }
 
+    void HandleCSyncPlayer(SessionBase session, IMessage message)
+    {
+        ClientSession clientSession = (ClientSession)session;
+        C_SyncPlayer packet = (C_SyncPlayer)message;
+        LogHandler.Log(LogCode.CONSOLE, $"HandleCSyncPlayer", packet.ToString());
+
+        // TODO: Sync
+    }
+
     #endregion
 }

@@ -28,6 +28,8 @@ enum MsgId
 	S_ENTER_GAME_ROOM = 18;
 	C_ENTER_GAME_ROOM = 19;
 	S_START_GAME = 20;
+	S_SYNC_PLAYER = 21;
+	C_SYNC_PLAYER = 22;
 }
 
 message S_Connected
@@ -141,6 +143,17 @@ message S_StartGame
 
 }
 
+message S_SyncPlayer
+{
+	GameRoomPlayerInfo info = 1;
+	bool isValid = 2;
+}
+
+message C_SyncPlayer
+{
+	GameRoomPlayerInfo info = 1;
+}
+
 message AccountInfo
 {
 	string uuid = 1;
@@ -185,4 +198,11 @@ message WaitingRoomPlayerInfo
 message GameRoomPlayerInfo
 {
 	RoomPlayerInfo baseInfo = 1;
+	Transform transform = 2;
+}
+
+message Transform
+{
+	int32 xPos = 1;
+	int32 yPos = 2;
 }

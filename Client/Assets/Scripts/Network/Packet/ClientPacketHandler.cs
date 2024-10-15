@@ -40,7 +40,9 @@ public partial class PacketHandler
 		_deserializers.Add((ushort)MsgId.SEnterGameRoom, Deserialize<S_EnterGameRoom>);
         _handlers.Add((ushort)MsgId.SEnterGameRoom, HandleSEnterGameRoom);		
 		_deserializers.Add((ushort)MsgId.SStartGame, Deserialize<S_StartGame>);
-        _handlers.Add((ushort)MsgId.SStartGame, HandleSStartGame);
+        _handlers.Add((ushort)MsgId.SStartGame, HandleSStartGame);		
+		_deserializers.Add((ushort)MsgId.SSyncPlayer, Deserialize<S_SyncPlayer>);
+        _handlers.Add((ushort)MsgId.SSyncPlayer, HandleSSyncPlayer);
 	}
 
 	public static void HandlePacket(SessionBase session, ArraySegment<byte> buffer)

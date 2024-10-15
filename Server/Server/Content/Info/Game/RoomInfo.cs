@@ -40,13 +40,14 @@ public abstract class RoomInfo
 
     protected Google.Protobuf.Protocol.RoomInfo GetProto()
     {
-        var baseInfo = new Google.Protobuf.Protocol.RoomInfo();
-
-        baseInfo.UniqueId = uniqueId;
-        baseInfo.Type = type;
-        baseInfo.Personnel = personnel;
-        baseInfo.MaxPersonnel = maxPersonnel;
-        baseInfo.MapId = mapId;
+        var baseInfo = new Google.Protobuf.Protocol.RoomInfo()
+        {
+            UniqueId = uniqueId,
+            Type = type,
+            Personnel = personnel,
+            MaxPersonnel = maxPersonnel,
+            MapId = mapId
+        };
 
         return baseInfo;
     }
@@ -82,13 +83,13 @@ public sealed class WaitingRoomInfo : RoomInfo
 
     public new Google.Protobuf.Protocol.WaitingRoomInfo GetProto()
     {
-        Google.Protobuf.Protocol.WaitingRoomInfo info = new Google.Protobuf.Protocol.WaitingRoomInfo();
-
-        info.BaseInfo = base.GetProto();
-        info.Title = title;
-        info.Password = !string.IsNullOrEmpty(password);
-        foreach (var p in players)
-            info.Players.Add(p.Value.GetProto());
+        var info = new Google.Protobuf.Protocol.WaitingRoomInfo()
+        {
+            BaseInfo = base.GetProto(),
+            Title = title,
+            Password = !string.IsNullOrEmpty(password),
+        };
+        info.Players.AddRange(players.Select(player => player.Value.GetProto()));
 
         return info;
     }
@@ -156,12 +157,11 @@ public sealed class GameRoomInfo : RoomInfo
 
     public new Google.Protobuf.Protocol.GameRoomInfo GetProto()
     {
-        Google.Protobuf.Protocol.GameRoomInfo info = new Google.Protobuf.Protocol.GameRoomInfo();
-
-        info.BaseInfo = base.GetProto();
-        foreach (var p in players)
-            if (p.Value.IsDirty)
-                info.Players.Add(p.Value.GetProto());
+        var info = new Google.Protobuf.Protocol.GameRoomInfo()
+        {
+            BaseInfo = base.GetProto()
+        };
+        info.Players.AddRange(players.Where(player => player.Value.IsDirty).Select(player => player.Value.GetProto()));
 
         return info;
     }

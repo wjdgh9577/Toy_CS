@@ -15,6 +15,18 @@ public class AccountInfo
         this.Level = info.Level;
     }
 
+    public Google.Protobuf.Protocol.AccountInfo GetProto()
+    {
+        var info = new Google.Protobuf.Protocol.AccountInfo()
+        {
+            Uuid = this.Uuid,
+            Name = this.Name,
+            Level = this.Level
+        };
+
+        return info;
+    }
+
     public static AccountInfo Info
     {
         get

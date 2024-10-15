@@ -13,8 +13,10 @@ public abstract class RoomPlayerInfo
 
     protected Google.Protobuf.Protocol.RoomPlayerInfo GetProto()
     {
-        var info = new Google.Protobuf.Protocol.RoomPlayerInfo();
-        info.AccountInfo = AccountInfo.GetProto();
+        var info = new Google.Protobuf.Protocol.RoomPlayerInfo()
+        {
+            AccountInfo = AccountInfo.GetProto()
+        };
 
         return info;
     }
@@ -32,9 +34,11 @@ public class WaitingRoomPlayerInfo : RoomPlayerInfo
 
     public new Google.Protobuf.Protocol.WaitingRoomPlayerInfo GetProto()
     {
-        Google.Protobuf.Protocol.WaitingRoomPlayerInfo info = new Google.Protobuf.Protocol.WaitingRoomPlayerInfo();
-        info.BaseInfo = base.GetProto();
-        info.Ready = Ready;
+        var info = new Google.Protobuf.Protocol.WaitingRoomPlayerInfo()
+        {
+            BaseInfo = base.GetProto(),
+            Ready = Ready
+        };
 
         return info;
     }
@@ -80,8 +84,10 @@ public class GameRoomPlayerInfo : RoomPlayerInfo
 
     public new Google.Protobuf.Protocol.GameRoomPlayerInfo GetProto()
     {
-        Google.Protobuf.Protocol.GameRoomPlayerInfo info = new Google.Protobuf.Protocol.GameRoomPlayerInfo();
-        info.BaseInfo = base.GetProto();
+        var info = new Google.Protobuf.Protocol.GameRoomPlayerInfo()
+        {
+            BaseInfo = base.GetProto()
+        };
 
         IsDirty = false;
 

@@ -148,5 +148,14 @@ public partial class PacketHandler
         // TODO: 게임 시작
     }
 
+    void HandleSSyncPlayer(SessionBase session, IMessage message)
+    {
+        ServerSession serverSession = (ServerSession)session;
+        S_SyncPlayer packet = (S_SyncPlayer)message;
+        LogHandler.Log(LogCode.CONSOLE, $"HandleSSyncPlayer", packet.ToString());
+
+        // TODO: Sync
+    }
+
     #endregion
 }
