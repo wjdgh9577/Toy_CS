@@ -12,11 +12,6 @@ public class ServerSession : SessionBase
 {
     #region Network
 
-    const int TICKS_TO_MILLISECONDS = 10000;
-
-    public DateTime ServerTime => DateTime.UtcNow - new TimeSpan(ping * TICKS_TO_MILLISECONDS);
-    long ping;
-
     public override void OnConnected()
     {
         LogHandler.Log(LogCode.CONSOLE, "Connected");
@@ -42,14 +37,6 @@ public class ServerSession : SessionBase
         ArraySegment<byte> packet = PacketHandler.Serialize(Token, message);
 
         Send(packet);
-    }
-
-    public void OnPing(DateTime serverTime)
-    {
-        DateTime localTime = DateTime.UtcNow;
-        ping = localTime.Subtract(serverTime).Ticks / TICKS_TO_MILLISECONDS;
-
-        Managers.Instance.NetworkManager.Send(PacketHandler.C_Ping());
     }
 
     #endregion

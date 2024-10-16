@@ -13,8 +13,16 @@ public class GameScene : SceneBase
 
         // TODO: GameManager의 GameRoomInfo를 참조하여 씬 구성
         var mapId = Managers.Instance.GameManager.MyGameRoomInfo.mapId;
+        var players = Managers.Instance.GameManager.MyGameRoomInfo.players;
         var prefabName = Managers.Instance.ResourceManager.MapInfos[mapId].prefabName;
+        
         Managers.Instance.ResourceManager.Instantiate<Map>(Config.MAP_PREFAB_PATH, prefabName);
-        Managers.Instance.ResourceManager.Instantiate<Player>(Config.ENTITY_PLAYER_PREFAB_PATH, "Player");
+
+        foreach (var p in players)
+        {
+            var player = Managers.Instance.ResourceManager.Instantiate<Player>(Config.ENTITY_PLAYER_PREFAB_PATH, "Player");
+            player.PlayerInfo = p;
+            player.SetPosition(p.Position.x, p.Position.y);
+        }
     }
 }

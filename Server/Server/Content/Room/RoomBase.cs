@@ -34,12 +34,14 @@ public abstract class RoomBase
     {
         _info.Enter(session.AccountInfo);
         _sessions.TryAdd(session.SUID, session);
+        session.EnterRoom(this);
     }
 
     public virtual void OnLeave(ClientSession session)
     {
         _info.Leave(session.AccountInfo);
         _sessions.Remove(session.SUID);
+        session.LeaveRoom(this);
     }
 
     public void Broadcast(ClientSession session, IMessage message)

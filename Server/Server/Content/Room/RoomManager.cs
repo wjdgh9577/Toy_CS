@@ -33,7 +33,6 @@ public class RoomManager
             handleRoom?.Invoke(room);
 
             room.OnEnter(session);
-            session.EnterRoom(room);
 
             return room;
         }
@@ -51,7 +50,6 @@ public class RoomManager
             if (room != null)
             {
                 room.OnEnter(session);
-                session.EnterRoom(room);
             }
 
             return room;
@@ -86,7 +84,6 @@ public class RoomManager
             }
 
             room.OnEnter(session);
-            session.EnterRoom(room);
 
             return room;
         }
@@ -110,7 +107,6 @@ public class RoomManager
             }
 
             room.OnLeave(session);
-            session.LeaveRoom(room);
 
             return room;
         }
@@ -123,7 +119,6 @@ public class RoomManager
             foreach (var room in roomList)
             {
                 room.OnLeave(session);
-                session.LeaveRoom(room);
             }
         }
     }

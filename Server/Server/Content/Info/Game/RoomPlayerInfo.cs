@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoreLibrary.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -68,12 +69,25 @@ public class GameRoomPlayerInfo : RoomPlayerInfo
         get => _behaviorState;
         set
         {
-            IsDirty = true;
+            if (_behaviorState != value)
+                IsDirty = true;
             _behaviorState = value;
         }
     }
 
-    public bool IsDirty { get; private set; }
+    CustomVector2 _position = new CustomVector2();
+    public CustomVector2 Position
+    {
+        get => _position;
+        set
+        {
+            if (_position != value)
+                IsDirty = true;
+            _position = value;
+        }
+    }
+
+    public bool IsDirty { get; private set; } = false;
 
     public GameRoomPlayerInfo(AccountInfo info)
     {
@@ -86,7 +100,12 @@ public class GameRoomPlayerInfo : RoomPlayerInfo
     {
         var info = new Google.Protobuf.Protocol.GameRoomPlayerInfo()
         {
-            BaseInfo = base.GetProto()
+            BaseInfo = base.GetProto(),
+            Transform = new Google.Protobuf.Protocol.Transform()
+            {
+                XPos = Position.x,
+                YPos = Position.y
+            }
         };
 
         IsDirty = false;

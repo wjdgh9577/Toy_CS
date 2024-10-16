@@ -203,6 +203,6 @@ message GameRoomPlayerInfo
 
 message Transform
 {
-	int32 xPos = 1;
-	int32 yPos = 2;
+	float xPos = 1;
+	float yPos = 2;
 }

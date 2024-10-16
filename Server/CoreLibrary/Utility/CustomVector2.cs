@@ -18,9 +18,13 @@ namespace CoreLibrary.Utility
         }
 
         public bool Equals(CustomVector2 other)
-        {
-            return this.x == other.x && this.y == other.y;
-        }
+            => this.x == other.x && this.y == other.y;
+
+        public static bool operator ==(CustomVector2 a, CustomVector2 b)
+            => a.Equals(b);
+
+        public static bool operator !=(CustomVector2 a, CustomVector2 b)
+            => !a.Equals(b);
     }
 
     public class CustomVector2Int : IEquatable<CustomVector2>
@@ -43,8 +47,12 @@ namespace CoreLibrary.Utility
         }
 
         public bool Equals(CustomVector2 other)
-        {
-            return this.x == other.x && this.y == other.y;
-        }
+            => this.x == other.x && this.y == other.y;
+
+        public static bool operator ==(CustomVector2Int a, CustomVector2Int b)
+            => a.Equals(b);
+
+        public static bool operator !=(CustomVector2Int a, CustomVector2Int b)
+            => !a.Equals(b);
     }
 }

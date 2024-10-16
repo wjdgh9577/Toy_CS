@@ -48,9 +48,9 @@ public partial class PacketHandler
     {
         ServerSession serverSession = (ServerSession)session;
         S_Ping packet = (S_Ping)message;
-        //LogHandler.Log(LogCode.CONSOLE, "HandleSPing", packet.ServerTime.ToDateTime());
+        LogHandler.Log(LogCode.CONSOLE, "HandleSPing", packet.ServerTime.ToDateTime());
 
-        serverSession.OnPing(packet.ServerTime.ToDateTime());
+        Managers.Instance.NetworkManager.OnPing(packet.ServerTime.ToDateTime());
     }
 
     void HandleSEnterWaitingRoom(SessionBase session, IMessage message)

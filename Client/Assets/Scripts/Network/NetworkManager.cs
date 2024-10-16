@@ -76,7 +76,7 @@ public class NetworkManager : JobSerializer
 
     public void Disconnect()
     {
-        Session.Disconnect();
+        Session?.Disconnect();
     }
 
     #endregion
@@ -89,4 +89,17 @@ public class NetworkManager : JobSerializer
     }
 
     #endregion
+
+    const int TICKS_TO_MILLISECONDS = 10000;
+
+    public DateTime ServerTime => DateTime.UtcNow - new TimeSpan(ping * TICKS_TO_MILLISECONDS);
+    public long ping { get; private set; }
+
+    public void OnPing(DateTime serverTime)
+    {
+        DateTime localTime = DateTime.UtcNow;
+        ping = localTime.Subtract(serverTime).Ticks / TICKS_TO_MILLISECONDS;
+
+        Send(PacketHandler.C_Ping());
+    }
 }

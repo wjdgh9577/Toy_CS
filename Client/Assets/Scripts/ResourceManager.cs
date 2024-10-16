@@ -36,10 +36,10 @@ public class ResourceManager : MonoBehaviour
         return obj;
     }
 
-    public void Instantiate<T>(string path, string name) where T : UnityEngine.Object
+    public T Instantiate<T>(string path, string name) where T : UnityEngine.Object
     {
         T obj = Load<T>($"{path}/{name}");
 
-        Instantiate(obj);
+        return Instantiate(obj);
     }
 }

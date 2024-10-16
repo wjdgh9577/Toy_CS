@@ -64,7 +64,7 @@ namespace Google.Protobuf.Protocol {
             "GAIgASgIImgKEkdhbWVSb29tUGxheWVySW5mbxIqCghiYXNlSW5mbxgBIAEo",
             "CzIYLlByb3RvY29sLlJvb21QbGF5ZXJJbmZvEiYKCXRyYW5zZm9ybRgCIAEo",
             "CzITLlByb3RvY29sLlRyYW5zZm9ybSInCglUcmFuc2Zvcm0SDAoEeFBvcxgB",
-            "IAEoBRIMCgR5UG9zGAIgASgFKvADCgVNc2dJZBIKCgZTX1BJTkcQABIKCgZD",
+            "IAEoAhIMCgR5UG9zGAIgASgCKvADCgVNc2dJZBIKCgZTX1BJTkcQABIKCgZD",
             "X1BJTkcQARIPCgtTX0NPTk5FQ1RFRBACEg8KC0NfQ09OTkVDVEVEEAMSGAoU",
             "U19FTlRFUl9XQUlUSU5HX1JPT00QBBIYChRDX0VOVEVSX1dBSVRJTkdfUk9P",
             "TRAFEhgKFFNfTEVBVkVfV0FJVElOR19ST09NEAYSGAoUQ19MRUFWRV9XQUlU",
@@ -6680,10 +6680,10 @@ namespace Google.Protobuf.Protocol {
 
     /// <summary>Field number for the "xPos" field.</summary>
     public const int XPosFieldNumber = 1;
-    private int xPos_;
+    private float xPos_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int XPos {
+    public float XPos {
       get { return xPos_; }
       set {
         xPos_ = value;
@@ -6692,10 +6692,10 @@ namespace Google.Protobuf.Protocol {
 
     /// <summary>Field number for the "yPos" field.</summary>
     public const int YPosFieldNumber = 2;
-    private int yPos_;
+    private float yPos_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int YPos {
+    public float YPos {
       get { return yPos_; }
       set {
         yPos_ = value;
@@ -6717,8 +6717,8 @@ namespace Google.Protobuf.Protocol {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (XPos != other.XPos) return false;
-      if (YPos != other.YPos) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(XPos, other.XPos)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(YPos, other.YPos)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -6726,8 +6726,8 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (XPos != 0) hash ^= XPos.GetHashCode();
-      if (YPos != 0) hash ^= YPos.GetHashCode();
+      if (XPos != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(XPos);
+      if (YPos != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(YPos);
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -6746,13 +6746,13 @@ namespace Google.Protobuf.Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (XPos != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(XPos);
+      if (XPos != 0F) {
+        output.WriteRawTag(13);
+        output.WriteFloat(XPos);
       }
-      if (YPos != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(YPos);
+      if (YPos != 0F) {
+        output.WriteRawTag(21);
+        output.WriteFloat(YPos);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -6764,13 +6764,13 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (XPos != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(XPos);
+      if (XPos != 0F) {
+        output.WriteRawTag(13);
+        output.WriteFloat(XPos);
       }
-      if (YPos != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(YPos);
+      if (YPos != 0F) {
+        output.WriteRawTag(21);
+        output.WriteFloat(YPos);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -6782,11 +6782,11 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (XPos != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(XPos);
+      if (XPos != 0F) {
+        size += 1 + 4;
       }
-      if (YPos != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(YPos);
+      if (YPos != 0F) {
+        size += 1 + 4;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -6800,10 +6800,10 @@ namespace Google.Protobuf.Protocol {
       if (other == null) {
         return;
       }
-      if (other.XPos != 0) {
+      if (other.XPos != 0F) {
         XPos = other.XPos;
       }
-      if (other.YPos != 0) {
+      if (other.YPos != 0F) {
         YPos = other.YPos;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -6825,12 +6825,12 @@ namespace Google.Protobuf.Protocol {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 8: {
-            XPos = input.ReadInt32();
+          case 13: {
+            XPos = input.ReadFloat();
             break;
           }
-          case 16: {
-            YPos = input.ReadInt32();
+          case 21: {
+            YPos = input.ReadFloat();
             break;
           }
         }
@@ -6852,12 +6852,12 @@ namespace Google.Protobuf.Protocol {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 8: {
-            XPos = input.ReadInt32();
+          case 13: {
+            XPos = input.ReadFloat();
             break;
           }
-          case 16: {
-            YPos = input.ReadInt32();
+          case 21: {
+            YPos = input.ReadFloat();
             break;
           }
         }

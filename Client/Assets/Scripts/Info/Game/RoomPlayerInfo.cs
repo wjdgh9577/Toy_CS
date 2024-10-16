@@ -36,9 +36,23 @@ public class WaitingRoomPlayerInfo : RoomPlayerInfo
 
 public class GameRoomPlayerInfo : RoomPlayerInfo
 {
+    Vector2 _position;
+    public Vector2 Position
+    {
+        get => _position;
+        set
+        {
+            if (_position != value)
+                IsDirty = true;
+            _position = value;
+        }
+    }
+
+    public bool IsDirty { get; private set; } = false;
+
     public GameRoomPlayerInfo(Google.Protobuf.Protocol.GameRoomPlayerInfo info) : base (info.BaseInfo)
     {
-        
+        _position = new Vector2(info.Transform.XPos, info.Transform.YPos);
     }
 
     public new Google.Protobuf.Protocol.GameRoomPlayerInfo GetProto()
@@ -46,7 +60,14 @@ public class GameRoomPlayerInfo : RoomPlayerInfo
         var info = new Google.Protobuf.Protocol.GameRoomPlayerInfo()
         {
             BaseInfo = base.GetProto(),
+            Transform = new Google.Protobuf.Protocol.Transform()
+            {
+                XPos = Position.x,
+                YPos = Position.y
+            }
         };
+
+        IsDirty = false;
 
         return info;
     }
