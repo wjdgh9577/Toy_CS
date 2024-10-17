@@ -22,7 +22,8 @@ public class GameScene : SceneBase
         {
             var player = Managers.Instance.ResourceManager.Instantiate<Player>(Config.ENTITY_PLAYER_PREFAB_PATH, "Player");
             player.PlayerInfo = p;
-            player.SetPosition(p.Position.x, p.Position.y);
+            p.Player = player;
+            player.SetPosition(p.Position);
         }
     }
 }

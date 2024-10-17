@@ -1,5 +1,6 @@
 ﻿using CoreLibrary.Log;
 using CoreLibrary.Network;
+using CoreLibrary.Utility;
 using Google.Protobuf;
 using Server.Content.Info;
 using Server.Data;
@@ -70,7 +71,7 @@ public class GameRoom : RoomBase
 
     public void GameLogic()
     {
-        // TODO: 플레이어 위치 무결성 검증
+        
     }
 
     public void RefreshGameRoom()
@@ -78,7 +79,25 @@ public class GameRoom : RoomBase
         if (Info.IsDirty)
         {
             // TODO: 동기화 패킷 전송
-            //Broadcast();
+            Broadcast(PacketHandler.S_SyncPlayer(Info.GetProto().Players));
         }
+    }
+
+    public void UpdatePlayerInfo(Google.Protobuf.Protocol.GameRoomPlayerInfo info)
+    {
+        var player = Info.players[info.BaseInfo.AccountInfo.Uuid];
+
+        if (VerifyPosition(info))
+            player.SetProto(info);
+    }
+
+    bool VerifyPosition(Google.Protobuf.Protocol.GameRoomPlayerInfo info)
+    {
+        // TODO: 플레이어 위치 무결성 검증
+        var position = new CustomVector2(info.Transform.XPos, info.Transform.YPos);
+        // var colider = info.
+        var colliderPaths = map.colliderPaths;
+
+        return true;
     }
 }

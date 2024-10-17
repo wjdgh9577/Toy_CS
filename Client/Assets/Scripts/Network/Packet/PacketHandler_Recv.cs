@@ -154,7 +154,7 @@ public partial class PacketHandler
         S_SyncPlayer packet = (S_SyncPlayer)message;
         LogHandler.Log(LogCode.CONSOLE, $"HandleSSyncPlayer", packet.ToString());
 
-        // TODO: Sync
+        Managers.Instance.GameManager.UpdatePlayers(packet.Infos.ToLocalData());
     }
 
     #endregion

@@ -21,6 +21,11 @@ public abstract class RoomPlayerInfo
 
         return info;
     }
+
+    protected void SetProto(Google.Protobuf.Protocol.RoomPlayerInfo info)
+    {
+        AccountInfo.SetProto(info.AccountInfo);
+    }
 }
 
 public class WaitingRoomPlayerInfo : RoomPlayerInfo
@@ -42,6 +47,12 @@ public class WaitingRoomPlayerInfo : RoomPlayerInfo
         };
 
         return info;
+    }
+
+    public void SetProto(Google.Protobuf.Protocol.WaitingRoomPlayerInfo info)
+    {
+        SetProto(info.BaseInfo);
+        Ready = info.Ready;
     }
 }
 
@@ -67,7 +78,7 @@ public class GameRoomPlayerInfo : RoomPlayerInfo
     public PlayerState BehaviorState
     {
         get => _behaviorState;
-        set
+        private set
         {
             if (_behaviorState != value)
                 IsDirty = true;
@@ -75,11 +86,11 @@ public class GameRoomPlayerInfo : RoomPlayerInfo
         }
     }
 
-    CustomVector2 _position = new CustomVector2();
+    CustomVector2 _position;
     public CustomVector2 Position
     {
         get => _position;
-        set
+        private set
         {
             if (_position != value)
                 IsDirty = true;
@@ -87,13 +98,15 @@ public class GameRoomPlayerInfo : RoomPlayerInfo
         }
     }
 
-    public bool IsDirty { get; private set; } = false;
+    public bool IsDirty { get; private set; }
 
     public GameRoomPlayerInfo(AccountInfo info)
     {
         AccountInfo = info;
         SystemState = PlayerState.LOADING;
         BehaviorState = PlayerState.IDLE;
+
+        IsDirty = true;
     }
 
     public new Google.Protobuf.Protocol.GameRoomPlayerInfo GetProto()
@@ -111,5 +124,11 @@ public class GameRoomPlayerInfo : RoomPlayerInfo
         IsDirty = false;
 
         return info;
+    }
+
+    public void SetProto(Google.Protobuf.Protocol.GameRoomPlayerInfo info)
+    {
+        SetProto(info.BaseInfo);
+        Position = new CustomVector2(info.Transform.XPos, info.Transform.YPos);
     }
 }

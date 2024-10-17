@@ -4,12 +4,10 @@ using System.Text;
 
 namespace CoreLibrary.Utility
 {
-    public class CustomVector2 : IEquatable<CustomVector2>
+    public struct CustomVector2 : IEquatable<CustomVector2>
     {
         public float x;
         public float y;
-
-        public CustomVector2() : this(0, 0) { }
 
         public CustomVector2(float x, float y)
         {
@@ -27,12 +25,10 @@ namespace CoreLibrary.Utility
             => !a.Equals(b);
     }
 
-    public class CustomVector2Int : IEquatable<CustomVector2>
+    public struct CustomVector2Int : IEquatable<CustomVector2>
     {
         public int x;
         public int y;
-
-        public CustomVector2Int() : this(0, 0) { }
 
         public CustomVector2Int(int x, int y)
         {

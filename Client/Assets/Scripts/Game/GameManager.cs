@@ -38,4 +38,13 @@ public class GameManager : MonoBehaviour
         MyGameRoomInfo = info;
         MyGameRoomPlayerInfo = info?.players.Find(p => p.accountInfo.Uuid == AccountInfo?.Uuid);
     }
+
+    public void UpdatePlayers(List<GameRoomPlayerInfo> infos)
+    {
+        foreach (var info in infos)
+        {
+            var player = MyGameRoomInfo.players.Find(p => p.accountInfo.Uuid == info.accountInfo.Uuid).Player;
+            player.SetPosition(info.Position);
+        }
+    }
 }

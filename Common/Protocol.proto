@@ -145,8 +145,7 @@ message S_StartGame
 
 message S_SyncPlayer
 {
-	GameRoomPlayerInfo info = 1;
-	bool isValid = 2;
+	repeated GameRoomPlayerInfo infos = 1;
 }
 
 message C_SyncPlayer

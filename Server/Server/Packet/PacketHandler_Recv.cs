@@ -184,7 +184,14 @@ public partial class PacketHandler
         C_SyncPlayer packet = (C_SyncPlayer)message;
         LogHandler.Log(LogCode.CONSOLE, $"HandleCSyncPlayer", packet.ToString());
 
-        // TODO: Sync
+        RoomManager.Instance.Handle(() =>
+        {
+            GameRoom? result = RoomManager.Instance.FindRoom<GameRoom>(clientSession);
+            if (result != null)
+            {
+                result.UpdatePlayerInfo(packet.Info);
+            }
+        });
     }
 
     #endregion

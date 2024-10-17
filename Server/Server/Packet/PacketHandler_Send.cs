@@ -1,4 +1,5 @@
-﻿using Google.Protobuf.Protocol;
+﻿using Google.Protobuf.Collections;
+using Google.Protobuf.Protocol;
 using Google.Protobuf.WellKnownTypes;
 using Server.Content.Room;
 using System;
@@ -120,13 +121,10 @@ public partial class PacketHandler
         return packet;
     }
 
-    public static S_SyncPlayer S_SyncPlayer(GameRoomPlayerInfo info, bool isValid)
+    public static S_SyncPlayer S_SyncPlayer(RepeatedField<GameRoomPlayerInfo> infos)
     {
-        S_SyncPlayer packet = new S_SyncPlayer()
-        {
-            Info = info,
-            IsValid = isValid
-        };
+        S_SyncPlayer packet = new S_SyncPlayer();
+        packet.Infos.AddRange(infos);
 
         return packet;
     }

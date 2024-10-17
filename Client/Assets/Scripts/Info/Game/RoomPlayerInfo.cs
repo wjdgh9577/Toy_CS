@@ -50,6 +50,8 @@ public class GameRoomPlayerInfo : RoomPlayerInfo
 
     public bool IsDirty { get; private set; } = false;
 
+    public Player Player { get; set; }
+
     public GameRoomPlayerInfo(Google.Protobuf.Protocol.GameRoomPlayerInfo info) : base (info.BaseInfo)
     {
         _position = new Vector2(info.Transform.XPos, info.Transform.YPos);

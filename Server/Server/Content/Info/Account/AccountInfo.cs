@@ -28,4 +28,11 @@ public class AccountInfo
 
         return info;
     }
+
+    public void SetProto(Google.Protobuf.Protocol.AccountInfo info)
+    {
+        Uuid = info.Uuid;
+        Name = info.Name;
+        Level = info.Level;
+    }
 }
