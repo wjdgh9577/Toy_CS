@@ -98,6 +98,8 @@ public class GameRoomPlayerInfo : RoomPlayerInfo
         }
     }
 
+    public ColliderInfo Collider { get; private set; }
+
     public bool IsDirty { get; private set; }
 
     public GameRoomPlayerInfo(AccountInfo info)
@@ -118,7 +120,15 @@ public class GameRoomPlayerInfo : RoomPlayerInfo
             {
                 XPos = Position.x,
                 YPos = Position.y
-            }
+            },
+            Collider = new Google.Protobuf.Protocol.Collider()
+            {
+                XOffset = Collider.Offset.x,
+                YOffset = Collider.Offset.y,
+                Width = Collider.Width,
+                Height = Collider.Height
+            },
+            IsValid = true
         };
 
         IsDirty = false;
@@ -130,5 +140,9 @@ public class GameRoomPlayerInfo : RoomPlayerInfo
     {
         SetProto(info.BaseInfo);
         Position = new CustomVector2(info.Transform.XPos, info.Transform.YPos);
+        Collider = Collider
+                    .SetOffset(new CustomVector2(info.Collider.XOffset, info.Collider.YOffset))
+                    .SetWidth(info.Collider.Width)
+                    .SetHeight(info.Collider.Height);
     }
 }

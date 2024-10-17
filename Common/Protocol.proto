@@ -135,7 +135,7 @@ message S_EnterGameRoom
 
 message C_EnterGameRoom
 {
-	
+	GameRoomPlayerInfo info = 1;
 }
 
 message S_StartGame
@@ -198,10 +198,20 @@ message GameRoomPlayerInfo
 {
 	RoomPlayerInfo baseInfo = 1;
 	Transform transform = 2;
+	Collider collider = 3;
+	bool isValid = 4;
 }
 
 message Transform
 {
 	float xPos = 1;
 	float yPos = 2;
+}
+
+message Collider
+{
+	float xOffset = 1;
+	float yOffset = 2;
+	float width = 3;
+	float height = 4;
 }

@@ -1,7 +1,6 @@
 ﻿using CoreLibrary.Log;
 using CoreLibrary.Network;
 using CoreLibrary.Utility;
-using Google.Protobuf;
 using Server.Content.Info;
 using Server.Data;
 using Server.Data.Map;
@@ -78,7 +77,6 @@ public class GameRoom : RoomBase
     {
         if (Info.IsDirty)
         {
-            // TODO: 동기화 패킷 전송
             Broadcast(PacketHandler.S_SyncPlayer(Info.GetProto().Players));
         }
     }
@@ -89,15 +87,25 @@ public class GameRoom : RoomBase
 
         if (VerifyPosition(info))
             player.SetProto(info);
+        else
+        {
+            var proto = player.GetProto();
+            proto.IsValid = false;
+            _sessions.Values
+                .First(s => s.AccountInfo.Uuid == info.BaseInfo.AccountInfo.Uuid)
+                .Send(PacketHandler.S_SyncPlayer(new Google.Protobuf.Collections.RepeatedField<Google.Protobuf.Protocol.GameRoomPlayerInfo>() { proto }));
+        }
     }
 
     bool VerifyPosition(Google.Protobuf.Protocol.GameRoomPlayerInfo info)
     {
+        bool isValid = true;
+
         // TODO: 플레이어 위치 무결성 검증
         var position = new CustomVector2(info.Transform.XPos, info.Transform.YPos);
         // var colider = info.
         var colliderPaths = map.colliderPaths;
 
-        return true;
+        return isValid;
     }
 }

@@ -173,6 +173,7 @@ public partial class PacketHandler
             GameRoom? result = RoomManager.Instance.FindRoom<GameRoom>(clientSession);
             if (result != null)
             {
+                result.UpdatePlayerInfo(packet.Info);
                 result.WaitGame(clientSession);
             }
         });

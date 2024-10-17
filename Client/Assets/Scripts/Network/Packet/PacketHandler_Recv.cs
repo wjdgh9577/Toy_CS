@@ -135,7 +135,7 @@ public partial class PacketHandler
         Managers.Instance.SceneManager.LoadSceneAsync(SceneName.GameScene, () =>
         {
             Managers.Instance.UIManager.GetUI<UIWaitingRoom>().Hide();
-            Managers.Instance.NetworkManager.Send(PacketHandler.C_EnterGameRoom());
+            Managers.Instance.NetworkManager.Send(PacketHandler.C_EnterGameRoom(Managers.Instance.GameManager.MyGameRoomPlayerInfo));
         });
     }
 

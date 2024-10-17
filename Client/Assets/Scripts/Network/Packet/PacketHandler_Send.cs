@@ -86,9 +86,12 @@ public partial class PacketHandler
         return packet;
     }
 
-    public static C_EnterGameRoom C_EnterGameRoom()
+    public static C_EnterGameRoom C_EnterGameRoom(GameRoomPlayerInfo info)
     {
-        C_EnterGameRoom packet = new C_EnterGameRoom();
+        C_EnterGameRoom packet = new C_EnterGameRoom()
+        {
+            Info = info.GetProto()
+        };
 
         return packet;
     }

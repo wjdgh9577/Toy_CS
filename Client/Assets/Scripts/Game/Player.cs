@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     SpriteRenderer _spriteRenderer;
 
     public GameRoomPlayerInfo PlayerInfo { get; set; }
+    public CapsuleCollider2D Collider => _capsuleCollider;
 
     public bool IsLocalPlayer
         => PlayerInfo.accountInfo.Uuid == Managers.Instance.GameManager.AccountInfo.Uuid;

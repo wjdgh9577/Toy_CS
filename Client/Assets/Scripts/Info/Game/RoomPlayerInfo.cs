@@ -48,6 +48,12 @@ public class GameRoomPlayerInfo : RoomPlayerInfo
         }
     }
 
+    public Vector2 ColliderOffset
+        => Player.Collider.offset;
+
+    public Vector2 ColliderSize
+        => Player.Collider.size;
+
     public bool IsDirty { get; private set; } = false;
 
     public Player Player { get; set; }
@@ -66,9 +72,16 @@ public class GameRoomPlayerInfo : RoomPlayerInfo
             {
                 XPos = Position.x,
                 YPos = Position.y
+            },
+            Collider = new Google.Protobuf.Protocol.Collider()
+            {
+                XOffset = ColliderOffset.x,
+                YOffset = ColliderOffset.y,
+                Width = ColliderSize.x,
+                Height = ColliderSize.y
             }
         };
-
+        
         IsDirty = false;
 
         return info;
