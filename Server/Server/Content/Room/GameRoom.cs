@@ -5,11 +5,13 @@ using Server.Content.Info;
 using Server.Data;
 using Server.Data.Map;
 using Server.Session;
+using Server.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Server.Content.Room;
 
@@ -47,6 +49,9 @@ public class GameRoom : RoomBase
             LogHandler.LogError(LogCode.GAME_INVALID_MAPID, $"Invalid map id: {mapId}");
             return;
         }
+
+        // 플레이어 위치 초기화 필요시 여기서
+        //Info.players
 
         Broadcast(PacketHandler.S_EnterGameRoom(Info.GetProto()));
     }
@@ -99,13 +104,97 @@ public class GameRoom : RoomBase
 
     bool VerifyPosition(Google.Protobuf.Protocol.GameRoomPlayerInfo info)
     {
-        bool isValid = true;
-
-        // TODO: 플레이어 위치 무결성 검증
         var position = new CustomVector2(info.Transform.XPos, info.Transform.YPos);
-        // var colider = info.
-        var colliderPaths = map.colliderPaths;
+        var colider = new ColliderInfo()
+            .SetOffset(new CustomVector2(position.x + info.Collider.XOffset, position.y + info.Collider.YOffset))
+            .SetWidth(info.Collider.Width)
+            .SetHeight(info.Collider.Height);
+        var rectVertices = colider.RectVertices;
+        var mapColliderPaths = map.colliderPaths;
 
-        return isValid;
+        // 독립된 지형별 검증
+        foreach (var mapColliderPath in mapColliderPaths)
+        {
+            var mapColliderPathCount = mapColliderPath.Count;
+
+            // rectangle - ray casting
+            foreach (var vertex in rectVertices)
+            {
+                var crossCount = 0;
+
+                for (int i = 0; i < mapColliderPathCount; i++)
+                {
+                    var current = mapColliderPath[i];
+                    var next = mapColliderPath[(i + 1) % mapColliderPathCount];
+
+                    if (vertex.y.IsBetween(current.y, next.y) && GetX(current, next, vertex.y) > vertex.x)
+                        crossCount++;
+                }
+
+                if (crossCount % 2 == 1)
+                    return false;
+            }
+
+            // half circle - radius
+            var radius = colider.Radius;
+            var lower = colider.LowerCenter;
+            var upper = colider.UpperCenter;
+            
+            for (int i = 0; i < mapColliderPathCount; i++)
+            {
+                var current = mapColliderPath[i];
+                var next = mapColliderPath[(i + 1) % mapColliderPathCount];
+                var currentToNext = (CustomVector2)(next - current);
+
+                // lower
+                if (CheckCircleCollision(current, next, lower, radius))
+                    return false;
+
+                // upper
+                if (CheckCircleCollision(current, next, upper, radius))
+                    return false;
+            }
+        }
+
+        return true;
+
+        float GetX(CustomVector2 a, CustomVector2 b, float y)
+        {
+            return (y - a.y) * (b.x - a.x) / (b.y - a.y) + a.x;
+        }
+
+        bool CheckCircleCollision(CustomVector2 a, CustomVector2 b, CustomVector2 center, float radius)
+        {
+            var ab = b - a;
+            var dot = ab.Dot(center - a);
+            var toCurrentSquare = (a - center).Square();
+            var toNextSquare = (b - center).Square();
+
+            var distanceSquare = 0f;
+            // 수선이 두 점 사이인 경우
+            if (dot > 0 && dot <= ab.Square())
+            {
+                distanceSquare = DistanceSquare(a, b, center);
+            }
+            // 수선이 두 점 바깥인 경우
+            else
+            {
+                distanceSquare = Math.Min(toCurrentSquare, toNextSquare);
+            }
+
+            if (distanceSquare < radius * radius)
+                return true;
+
+            return false;
+        }
+
+        float DistanceSquare(CustomVector2 a, CustomVector2 b, CustomVector2 t)
+        {
+            float _a = a.y - b.y;
+            float _b = b.x - a.x;
+            float _c = a.x * b.y - a.y * b.x;
+            
+            return (_a * t.x + _b * t.y + _c) * ((_a * t.x + _b * t.y + _c) / (_a * _a + _b * _b));
+        }
     }
 }

@@ -140,7 +140,7 @@ public class GameRoomPlayerInfo : RoomPlayerInfo
     {
         SetProto(info.BaseInfo);
         Position = new CustomVector2(info.Transform.XPos, info.Transform.YPos);
-        Collider = Collider
+        Collider = new ColliderInfo()
                     .SetOffset(new CustomVector2(info.Collider.XOffset, info.Collider.YOffset))
                     .SetWidth(info.Collider.Width)
                     .SetHeight(info.Collider.Height);

@@ -14,9 +14,17 @@ public struct ColliderInfo
     public float Width {  get; set; }
     public float Height { get; set; }
 
+    public readonly CustomVector2[] RectVertices => new CustomVector2[]
+    {
+        new CustomVector2(Offset.x - Width / 2, Offset.y - Height / 2 + Radius),
+        new CustomVector2(Offset.x - Width / 2, Offset.y + Height / 2 - Radius),
+        new CustomVector2(Offset.x + Width / 2, Offset.y + Height / 2 - Radius),
+        new CustomVector2(Offset.x + Width / 2, Offset.y - Height / 2 + Radius)
+    };
+
     public readonly float Radius => Width / 2;
-    public readonly CustomVector2 UpperCenter => new CustomVector2(Offset.x, Offset.y + Height / 2);
-    public readonly CustomVector2 LowerCenter => new CustomVector2(Offset.x, Offset.y - Height / 2);
+    public readonly CustomVector2 UpperCenter => new CustomVector2(Offset.x, Offset.y + Height / 2 - Radius);
+    public readonly CustomVector2 LowerCenter => new CustomVector2(Offset.x, Offset.y - Height / 2 + Radius);
 
     public ColliderInfo SetOffset(CustomVector2 offset)
         => new ColliderInfo() { Offset = offset, Width = this.Width, Height = this.Height };

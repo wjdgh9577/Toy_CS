@@ -152,7 +152,7 @@ public partial class PacketHandler
     {
         ServerSession serverSession = (ServerSession)session;
         S_SyncPlayer packet = (S_SyncPlayer)message;
-        LogHandler.Log(LogCode.CONSOLE, $"HandleSSyncPlayer", packet.ToString());
+        LogHandler.Log(LogCode.CONSOLE, ("x", packet.Infos[0].Transform.XPos), ("y", packet.Infos[0].Transform.YPos));
 
         Managers.Instance.GameManager.UpdatePlayers(packet.Infos.ToLocalData());
     }

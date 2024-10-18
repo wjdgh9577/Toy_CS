@@ -55,12 +55,14 @@ public class GameRoomPlayerInfo : RoomPlayerInfo
         => Player.Collider.size;
 
     public bool IsDirty { get; private set; } = false;
+    public bool IsValid { get; private set; } = true;
 
     public Player Player { get; set; }
 
     public GameRoomPlayerInfo(Google.Protobuf.Protocol.GameRoomPlayerInfo info) : base (info.BaseInfo)
     {
         _position = new Vector2(info.Transform.XPos, info.Transform.YPos);
+        IsValid = info.IsValid;
     }
 
     public new Google.Protobuf.Protocol.GameRoomPlayerInfo GetProto()

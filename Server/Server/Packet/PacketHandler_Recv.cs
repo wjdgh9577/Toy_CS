@@ -183,7 +183,11 @@ public partial class PacketHandler
     {
         ClientSession clientSession = (ClientSession)session;
         C_SyncPlayer packet = (C_SyncPlayer)message;
-        LogHandler.Log(LogCode.CONSOLE, $"HandleCSyncPlayer", packet.ToString());
+        LogHandler.Log(LogCode.CONSOLE,
+            $"HandleCSyncPlayer",
+            ("Name", packet.Info.BaseInfo.AccountInfo.Name),
+            ("x", packet.Info.Transform.XPos),
+            ("y", packet.Info.Transform.YPos));
 
         RoomManager.Instance.Handle(() =>
         {

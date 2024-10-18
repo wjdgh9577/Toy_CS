@@ -1,3 +1,4 @@
+using CoreLibrary.Log;
 using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
@@ -102,7 +103,7 @@ public partial class PacketHandler
         {
             Info = info.GetProto()
         };
-
+        LogHandler.LogError(LogCode.CONSOLE, ("x", packet.Info.Transform.XPos), ("y", packet.Info.Transform.YPos));
         return packet;
     }
 }

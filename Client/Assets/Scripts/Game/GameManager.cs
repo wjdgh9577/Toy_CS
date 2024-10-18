@@ -44,7 +44,11 @@ public class GameManager : MonoBehaviour
         foreach (var info in infos)
         {
             if (info.accountInfo.Uuid == AccountInfo.Uuid)
+            {
+                if (!info.IsValid)
+                    MyGameRoomPlayerInfo.Player.SetPosition(info.Position);
                 continue;
+            }
 
             var player = MyGameRoomInfo.players.Find(p => p.accountInfo.Uuid == info.accountInfo.Uuid).Player;
             player.SetPosition(info.Position);
