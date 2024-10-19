@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using CoreLibrary.Log;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,19 +7,18 @@ using UnityEngine;
 
 public class TestCollider : MonoBehaviour
 {
+    [SerializeField]
     private CompositeCollider2D compositeCollider;
 
-    void Start()
+    GUIStyle guiStyle = new GUIStyle();
+
+    private void Reset()
     {
         compositeCollider = GetComponent<CompositeCollider2D>();
     }
 
-#if UNITY_EDITOR
-    void OnDrawGizmos()
+    void OnDrawGizmosSelected()
     {
-        if (compositeCollider == null)
-            return;
-
         Gizmos.color = Color.red;
 
         for (int i = 0; i < compositeCollider.pathCount; i++)
@@ -29,12 +29,14 @@ public class TestCollider : MonoBehaviour
             for (int j = 0; j < path.Length; j++)
             {
                 Vector2 point = path[j];
-                Gizmos.DrawSphere(point, 0.1f);
+                Gizmos.DrawSphere(point, 0.2f);
 
                 // 숫자 라벨 추가
-                Handles.Label(point, $"{j}");
+                guiStyle.fontSize = 20;
+                guiStyle.normal.textColor = Color.white;
+                Handles.Label(point, $"{j}", guiStyle);
             }
         }
     }
-#endif
 }
+#endif

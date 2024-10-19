@@ -144,7 +144,6 @@ public class GameRoom : RoomBase
             {
                 var current = mapColliderPath[i];
                 var next = mapColliderPath[(i + 1) % mapColliderPathCount];
-                var currentToNext = (CustomVector2)(next - current);
 
                 // lower
                 if (CheckCircleCollision(current, next, lower, radius))
